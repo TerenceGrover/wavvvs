@@ -21,10 +21,12 @@ export default function Profile() {
           </p>
         </section>
         <hr className="w-full border-neutral-800 my-6" />
-        <section>
+        <section className="w-full">
           <div className="w-full">
             <h2 className="text-white text-xl text-left">Tracks</h2>
           </div>
+          <Track />
+          <Track />
           <Track />
         </section>
       </div>

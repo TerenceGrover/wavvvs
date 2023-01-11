@@ -9,8 +9,12 @@ export default function Track() {
     if (waveformRef.current) {
       const wavesurfer = WaveSurfer.create({
         container: waveformRef.current,
+        barHeight: 1.5,
+        barWidth: 2,
+        height: 32,
       });
       wavesurfer.on('ready', function () {
+        console.log('Track ready!');
         // wavesurfer.play();
       });
       wavesurfer.load(
@@ -21,7 +25,8 @@ export default function Track() {
   }, []);
 
   return (
-    <div>
+    <div className='w-full'>
+      <h4 className="text-white">Title</h4>
       <div className="w-64" ref={waveformRef}></div>
     </div>
   );
