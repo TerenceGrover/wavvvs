@@ -14,6 +14,7 @@ export default function Track() {
         barHeight: 3,
         barWidth: 2,
         height: 32,
+        normalize: true,
       });
       wavesurfer.on('ready', function () {
         console.log('Track ready!');
@@ -22,11 +23,17 @@ export default function Track() {
       wavesurfer.load(
         'https://actions.google.com/sounds/v1/science_fiction/creature_distortion_white_noise.ogg'
       );
+      waveformRef.wavesurfer = wavesurfer;
       return () => wavesurfer.destroy();
     }
   }, []);
 
   const handleClick = () => {
+    if (!isPlaying) {
+      waveformRef.wavesurfer.play();
+    } else {
+      waveformRef.wavesurfer.stop();
+    }
     setIsPlaying(!isPlaying);
   };
 
