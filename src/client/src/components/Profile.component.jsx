@@ -23,11 +23,11 @@ export default function Profile() {
         <hr className="w-full border-neutral-800 my-6" />
         <section className="w-full">
           <div className="w-full">
-            <h2 className="text-white text-xl text-left">Tracks</h2>
+            <h2 className="text-white text-xl text-left mb-3">Tracks</h2>
           </div>
           <Track />
-          <Track />
-          <Track />
+          {/* <Track />
+          <Track /> */}
         </section>
       </div>
     </div>
