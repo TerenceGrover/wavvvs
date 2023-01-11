@@ -38,7 +38,7 @@ export default function Track() {
   };
 
   return (
-    <div className="mb-9">
+    <div className="mb-9  h-12 ">
       <h4 className="text-white text-xs pl-6 mb-2">Chopin - Nocturne op.2</h4>
       <div className="flex align-center items-center">
         {isPlaying ? (

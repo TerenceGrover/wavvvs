@@ -12,7 +12,7 @@ export default function Profile() {
             alt="profile-pic"
           />
           <h1 className="text-white text-2xl mt-7 mb-1">Mateo Presa</h1>
-          <p className="text-neutral-400">@mateopresa</p>
+          <p className="text-neutral-400">@mateo_presa</p>
         </section>
         <hr className="w-full border-neutral-800 my-6" />
         <section>
@@ -26,8 +26,10 @@ export default function Profile() {
           <div className="w-full">
             <h2 className="text-white text-xl text-left mb-3">Tracks</h2>
           </div>
+
           <Track />
-          <Track />
+          {/* <UploadTrack /> */}
+          <UploadTrack />
           <UploadTrack />
         </section>
       </div>
