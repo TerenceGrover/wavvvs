@@ -1,4 +1,5 @@
 import Track from './Track.component.jsx';
+import UploadTrack from './UploadTrack.component.jsx';
 
 export default function Profile() {
   return (
@@ -26,8 +27,8 @@ export default function Profile() {
             <h2 className="text-white text-xl text-left mb-3">Tracks</h2>
           </div>
           <Track />
-          {/* <Track />
-          <Track /> */}
+          <Track />
+          <UploadTrack />
         </section>
       </div>
     </div>

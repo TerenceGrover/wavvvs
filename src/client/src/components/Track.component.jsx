@@ -13,7 +13,7 @@ export default function Track() {
         container: waveformRef.current,
         barHeight: 3,
         barWidth: 2,
-        height: 32,
+        height: 18,
         normalize: true,
       });
       wavesurfer.on('ready', function () {
@@ -38,15 +38,15 @@ export default function Track() {
   };
 
   return (
-    <div className="">
-      <h4 className="text-white text-sm pl-6">Title</h4>
+    <div className="mb-9">
+      <h4 className="text-white text-xs pl-6 mb-2">Chopin - Nocturne op.2</h4>
       <div className="flex align-center items-center">
         {isPlaying ? (
           <IoStop onClick={handleClick} color="white" />
         ) : (
           <IoPlay onClick={handleClick} color="white" />
         )}
-        <div className="w-80" ref={waveformRef}></div>
+        <div className="w-96 max-w-full" ref={waveformRef}></div>
       </div>
     </div>
   );
