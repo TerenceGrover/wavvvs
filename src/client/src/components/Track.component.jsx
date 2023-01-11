@@ -16,6 +16,7 @@ export default function Track() {
       wavesurfer.load(
         'https://actions.google.com/sounds/v1/science_fiction/creature_distortion_white_noise.ogg'
       );
+      return () => wavesurfer.destroy();
     }
   }, []);
 
