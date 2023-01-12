@@ -4,11 +4,24 @@ import { IoPlay, IoStop } from 'react-icons/io5';
 import { TbPlayerSkipBack, TbPlayerSkipForward } from 'react-icons/tb';
 import { FiVolume2, FiVolumeX } from 'react-icons/fi';
 
-export default function MediaController({ isPlaying, setIsPlaying }) {
+import _ from 'lodash';
+
+export default function MediaController({
+  activeTrack,
+  setReferencesToTracksAndPlayingStatus,
+}) {
   const [isMuted, setIsMuted] = useState(false);
 
-  const handleClick = () => {
-    setIsPlaying(!isPlaying);
+  const handlePlayClick = () => {
+    setReferencesToTracksAndPlayingStatus((refsAndStatus) =>
+      refsAndStatus.map((track) => {
+        if (_.isEqual(track, activeTrack)) {
+          return { ...track, isPlaying: track.isPlaying ? false : true };
+        } else {
+          return track;
+        }
+      })
+    );
   };
 
   const handleMuteClick = () => {
@@ -21,14 +34,14 @@ export default function MediaController({ isPlaying, setIsPlaying }) {
         <div className=" flex h-full justify-between items-center">
           <div className="flex w-28 justify-between items-center ml-14">
             <TbPlayerSkipBack className="text-neutral-200 h-10 w-10 mr-3" />
-            {!isPlaying ? (
+            {!activeTrack?.isPlaying ? (
               <IoPlay
-                onClick={handleClick}
+                onClick={handlePlayClick}
                 className="text-neutral-200 h-12 w-12 mr-3"
               />
             ) : (
               <IoStop
-                onClick={handleClick}
+                onClick={handlePlayClick}
                 className="text-neutral-200 h-12 w-12 mr-3"
               />
             )}

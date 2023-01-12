@@ -5,13 +5,33 @@ import Header from './components/Header.component.jsx';
 import MediaController from './components/MediaController.component.jsx';
 
 function App() {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [
+    referencesToTracksAndPlayingStatus,
+    setReferencesToTracksAndPlayingStatus,
+  ] = useState([
+    {
+      ref: {},
+      isPlaying: false,
+    },
+  ]);
 
   return (
     <div className="h-screen w-screen bg-neutral-900 flex flex-col">
       <Header />
-      <Profile isPlaying={isPlaying} setIsPlaying={setIsPlaying}/>
-      <MediaController isPlaying={isPlaying} setIsPlaying={setIsPlaying}/>
+      <Profile
+        referencesToTracksAndPlayingStatus={referencesToTracksAndPlayingStatus}
+        setReferencesToTracksAndPlayingStatus={
+          setReferencesToTracksAndPlayingStatus
+        }
+      />
+      <MediaController
+        activeTrack={referencesToTracksAndPlayingStatus.find(
+          (t) => t.isPlaying === true
+        )}
+        setReferencesToTracksAndPlayingStatus={
+          setReferencesToTracksAndPlayingStatus
+        }
+      />
     </div>
   );
 }
