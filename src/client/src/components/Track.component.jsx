@@ -19,9 +19,7 @@ export default function Track() {
       wavesurfer.on('ready', function () {
         console.log('Track ready!');
       });
-      wavesurfer.load(
-        'https://actions.google.com/sounds/v1/science_fiction/creature_distortion_white_noise.ogg'
-      );
+      wavesurfer.load('http://localhost:3001/audio.wav');
       waveformRef.wavesurfer = wavesurfer;
       return () => wavesurfer.destroy();
     }
