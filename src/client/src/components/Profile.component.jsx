@@ -3,8 +3,11 @@ import { useState, useEffect } from 'react';
 import Track from './Track.component.jsx';
 import UploadTrack from './UploadTrack.component.jsx';
 
-export default function Profile({isPlaying, setIsPlaying}) {
-  const [userTracks, setUserTracks] = useState([]);
+export default function Profile({
+  referencesToTracksAndPlayingStatus,
+  setReferencesToTracksAndPlayingStatus,
+}) {
+  const [userTracksFileNames, setUserTracksFileNames] = useState([]);
 
   useEffect(() => {
     //todo: get the tracks from this user.
@@ -32,20 +35,44 @@ export default function Profile({isPlaying, setIsPlaying}) {
         </section>
         <hr className="w-full border-neutral-800 my-6" />
         <section className="w-full">
-          {userTracks[0] ? (
-            <Track track={userTracks[0]} isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
+          {userTracksFileNames[0] ? (
+            <Track
+              fileName={userTracksFileNames[0]}
+              referenceToTracksAndPlayingStatus={
+                referencesToTracksAndPlayingStatus[0]
+              }
+              setReferencesToTracksAndPlayingStatus={
+                setReferencesToTracksAndPlayingStatus
+              }
+            />
           ) : (
-            <UploadTrack setUserTracks={setUserTracks} />
+            <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
           )}
-          {userTracks[1] ? (
-            <Track track={userTracks[1]} isPlaying={isPlaying} setIsPlaying={setIsPlaying}/>
+          {userTracksFileNames[1] ? (
+            <Track
+              fileName={userTracksFileNames[1]}
+              referenceToTracksAndPlayingStatus={
+                referencesToTracksAndPlayingStatus[1]
+              }
+              setReferencesToTracksAndPlayingStatus={
+                setReferencesToTracksAndPlayingStatus
+              }
+            />
           ) : (
-            <UploadTrack setUserTracks={setUserTracks} />
+            <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
           )}
-          {userTracks[2] ? (
-            <Track track={userTracks[2]} isPlaying={isPlaying} setIsPlaying={setIsPlaying}/>
+          {userTracksFileNames[2] ? (
+            <Track
+              fileName={userTracksFileNames[2]}
+              referenceToTracksAndPlayingStatus={
+                referencesToTracksAndPlayingStatus[2]
+              }
+              setReferencesToTracksAndPlayingStatus={
+                setReferencesToTracksAndPlayingStatus
+              }
+            />
           ) : (
-            <UploadTrack setUserTracks={setUserTracks} />
+            <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
           )}
         </section>
       </div>

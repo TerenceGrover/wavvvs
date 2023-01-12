@@ -8,12 +8,7 @@ function App() {
   const [
     referencesToTracksAndPlayingStatus,
     setReferencesToTracksAndPlayingStatus,
-  ] = useState([
-    {
-      ref: {},
-      isPlaying: false,
-    },
-  ]);
+  ] = useState([{ ref: {}, isPlaying: false }]);
 
   return (
     <div className="h-screen w-screen bg-neutral-900 flex flex-col">
@@ -25,9 +20,8 @@ function App() {
         }
       />
       <MediaController
-        activeTrack={referencesToTracksAndPlayingStatus.find(
-          (t) => t.isPlaying === true
-        )}
+        // activeTrack={referencesToTracksAndPlayingStatus.find((t) => t.isPlaying === true)}
+        activeTrack={referencesToTracksAndPlayingStatus[0]}
         setReferencesToTracksAndPlayingStatus={
           setReferencesToTracksAndPlayingStatus
         }

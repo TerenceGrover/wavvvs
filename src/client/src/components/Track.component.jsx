@@ -5,7 +5,11 @@ import WaveSurfer from 'wavesurfer.js';
 
 const staticTrackURL = 'http://localhost:3001/tracks/';
 
-export default function Track({ track, isPlaying, setIsPlaying }) {
+export default function Track({
+  fileName,
+  referenceToTracksAndPlayingStatus,
+  setReferencesToTracksAndPlayingStatus,
+}) {
   const waveformRef = useRef();
 
   useEffect(() => {
@@ -20,26 +24,39 @@ export default function Track({ track, isPlaying, setIsPlaying }) {
       wavesurfer.on('ready', function () {
         console.log('Track ready!');
       });
-      wavesurfer.load(staticTrackURL + track.filename);
+      wavesurfer.load(staticTrackURL + fileName.filename);
       waveformRef.wavesurfer = wavesurfer;
+      setReferencesToTracksAndPlayingStatus((refsAndStatus) => [
+        ...refsAndStatus,
+        { ref: {...waveformRef}, isPlaying: false },
+      ]);
+      console.log(referenceToTracksAndPlayingStatus);
       return () => wavesurfer.destroy();
     }
-  }, [track.filename]);
+  }, [
+    fileName.filename,
+    setReferencesToTracksAndPlayingStatus,
+    referenceToTracksAndPlayingStatus,
+  ]);
 
   useEffect(() => {
-    isPlaying ? waveformRef.wavesurfer.play() : waveformRef.wavesurfer.stop();
-  }, [isPlaying]);
+    referenceToTracksAndPlayingStatus?.isPlaying
+      ? waveformRef.wavesurfer.play()
+      : waveformRef.wavesurfer.stop();
+  }, [referenceToTracksAndPlayingStatus.isPlaying]);
 
   const handleClick = () => {
-    setIsPlaying(!isPlaying);
+    setReferencesToTracksAndPlayingStatus(
+      referenceToTracksAndPlayingStatus?.isPlaying ? true : false
+    );
   };
 
   return (
     <div className="mb-9  h-12 ">
-      <h4 className="text-white text-xs pl-9 mb-2">{track.originalname}</h4>
+      <h4 className="text-white text-xs pl-9 mb-2">{fileName.originalname}</h4>
       <div className="flex align-center items-center overflow-hidden">
         <div className="mr-2">
-          {isPlaying ? (
+          {referenceToTracksAndPlayingStatus?.isPlaying ? (
             <IoStop onClick={handleClick} className="text-white w-5 h-5" />
           ) : (
             <IoPlay onClick={handleClick} className="text-white w-5 h-5" />
