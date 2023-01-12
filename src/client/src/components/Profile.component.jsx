@@ -35,17 +35,17 @@ export default function Profile() {
           {userTracksFilePaths[0] ? (
             <Track filePath={userTracksFilePaths[0]} />
           ) : (
-            <UploadTrack setUserTracks={setUserTracksFilePaths} />
+            <UploadTrack setUserTracksFilePaths={setUserTracksFilePaths} />
           )}
           {userTracksFilePaths[1] ? (
             <Track filePath={userTracksFilePaths[1]} />
           ) : (
-            <UploadTrack setUserTracks={setUserTracksFilePaths} />
+            <UploadTrack setUserTracksFilePaths={setUserTracksFilePaths} />
           )}
           {userTracksFilePaths[2] ? (
             <Track filePath={userTracksFilePaths[2]} />
           ) : (
-            <UploadTrack setUserTracks={setUserTracksFilePaths} />
+            <UploadTrack setUserTracksFilePaths={setUserTracksFilePaths} />
           )}
         </section>
       </div>
