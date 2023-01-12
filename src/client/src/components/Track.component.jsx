@@ -3,6 +3,8 @@ import { IoPlay, IoStop } from 'react-icons/io5';
 
 import WaveSurfer from 'wavesurfer.js';
 
+const staticTrackURL = 'http://localhost:3001/tracks/';
+
 export default function Track() {
   const [isPlaying, setIsPlaying] = useState(false);
   const waveformRef = useRef();
@@ -19,7 +21,7 @@ export default function Track() {
       wavesurfer.on('ready', function () {
         console.log('Track ready!');
       });
-      wavesurfer.load('http://localhost:3001/tracks/audio.wav');
+      wavesurfer.load(staticTrackURL + '5a64e171b152c24a6e739dd33025e797');
       waveformRef.wavesurfer = wavesurfer;
       return () => wavesurfer.destroy();
     }
