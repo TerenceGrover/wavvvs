@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
+import { IoPlay, IoStop } from 'react-icons/io5';
 
 import WaveSurfer from 'wavesurfer.js';
-import { IoPlay, IoStop } from 'react-icons/io5';
 
 export default function Track() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -18,7 +18,6 @@ export default function Track() {
       });
       wavesurfer.on('ready', function () {
         console.log('Track ready!');
-        // wavesurfer.play();
       });
       wavesurfer.load(
         'https://actions.google.com/sounds/v1/science_fiction/creature_distortion_white_noise.ogg'
@@ -39,14 +38,17 @@ export default function Track() {
 
   return (
     <div className="mb-9  h-12 ">
-      <h4 className="text-white text-xs pl-6 mb-2">I can't feel my face</h4>
+      <h4 className="text-white text-xs pl-6 mb-2">Audio test</h4>
       <div className="flex align-center items-center">
         {isPlaying ? (
-          <IoStop onClick={handleClick} color="white" />
+          <IoStop onClick={handleClick} className="text-white w-5 h-5" />
         ) : (
-          <IoPlay onClick={handleClick} color="white" />
+          <IoPlay onClick={handleClick} className="text-white w-5 h-5" />
         )}
-        <div className="w-96 max-w-full" ref={waveformRef}></div>
+        <div
+          className="w-full max-w-full overflow-hidden"
+          ref={waveformRef}
+        ></div>
       </div>
     </div>
   );
