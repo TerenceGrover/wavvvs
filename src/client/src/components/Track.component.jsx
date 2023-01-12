@@ -19,7 +19,7 @@ export default function Track() {
       wavesurfer.on('ready', function () {
         console.log('Track ready!');
       });
-      wavesurfer.load('http://localhost:3001/audio.wav');
+      wavesurfer.load('http://localhost:3001/tracks/audio.wav');
       waveformRef.wavesurfer = wavesurfer;
       return () => wavesurfer.destroy();
     }
