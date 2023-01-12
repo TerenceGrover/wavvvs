@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { useState, useEffect, useRef } from 'react';
 import { IoPlay, IoStop } from 'react-icons/io5';
 
@@ -10,45 +11,56 @@ export default function Track({
   referenceToTracksAndPlayingStatus,
   setReferencesToTracksAndPlayingStatus,
 }) {
-  const waveformRef = useRef();
+  const waveformRef = useRef(null);
 
   useEffect(() => {
+    const options = {
+      container: waveformRef.current,
+      barHeight: 3,
+      barWidth: 2,
+      height: 18,
+      normalize: true,
+    };
+
     if (waveformRef.current) {
-      const wavesurfer = WaveSurfer.create({
-        container: waveformRef.current,
-        barHeight: 3,
-        barWidth: 2,
-        height: 18,
-        normalize: true,
-      });
+      const wavesurfer = WaveSurfer.create(options);
       wavesurfer.on('ready', function () {
         console.log('Track ready!');
       });
+
       wavesurfer.load(staticTrackURL + fileName.filename);
       waveformRef.wavesurfer = wavesurfer;
-      setReferencesToTracksAndPlayingStatus((refsAndStatus) => [
-        ...refsAndStatus,
-        { ref: {...waveformRef}, isPlaying: false },
-      ]);
-      console.log(referenceToTracksAndPlayingStatus);
+
+      setReferencesToTracksAndPlayingStatus((refsAndStatus) => {
+        return [...refsAndStatus, { waveformRef, isPlaying: false }];
+      });
+
       return () => wavesurfer.destroy();
     }
-  }, [
-    fileName.filename,
-    setReferencesToTracksAndPlayingStatus,
-    referenceToTracksAndPlayingStatus,
-  ]);
+  }, [fileName.filename, setReferencesToTracksAndPlayingStatus]);
 
-  useEffect(() => {
-    referenceToTracksAndPlayingStatus?.isPlaying
-      ? waveformRef.wavesurfer.play()
-      : waveformRef.wavesurfer.stop();
-  }, [referenceToTracksAndPlayingStatus.isPlaying]);
+  // useEffect(() => {
+  //   if (referenceToTracksAndPlayingStatus?.waveformRef?.current) {
+  //     if (referenceToTracksAndPlayingStatus?.isPlaying) {
+  //       referenceToTracksAndPlayingStatus?.waveformRef?.wavesurfer.play();
+  //     } else {
+  //       referenceToTracksAndPlayingStatus?.waveformRef?.wavesurfer.stop();
+  //     }
+  //   }
+  //   return () =>
+  //     referenceToTracksAndPlayingStatus?.waveformRef?.wavesurfer.destroy();
+  // }, [referenceToTracksAndPlayingStatus?.isPlaying]);
 
   const handleClick = () => {
-    setReferencesToTracksAndPlayingStatus(
-      referenceToTracksAndPlayingStatus?.isPlaying ? true : false
-    );
+    setReferencesToTracksAndPlayingStatus((refsAndStatus) => {
+      refsAndStatus.map((refAndStatus) => {
+        if (_.isEqual(refAndStatus, referenceToTracksAndPlayingStatus)) {
+          return { ...refAndStatus, isPlaying: !refAndStatus.isPlaying };
+        }
+        return refAndStatus;
+      });
+    });
+    referenceToTracksAndPlayingStatus.waveformRef.wavesurfer.play();
   };
 
   return (

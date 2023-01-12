@@ -39,7 +39,7 @@ export default function Profile({
             <Track
               fileName={userTracksFileNames[0]}
               referenceToTracksAndPlayingStatus={
-                referencesToTracksAndPlayingStatus[0]
+                referencesToTracksAndPlayingStatus?.['0']
               }
               setReferencesToTracksAndPlayingStatus={
                 setReferencesToTracksAndPlayingStatus
@@ -52,7 +52,7 @@ export default function Profile({
             <Track
               fileName={userTracksFileNames[1]}
               referenceToTracksAndPlayingStatus={
-                referencesToTracksAndPlayingStatus[1]
+                referencesToTracksAndPlayingStatus?.['1']
               }
               setReferencesToTracksAndPlayingStatus={
                 setReferencesToTracksAndPlayingStatus
@@ -65,7 +65,7 @@ export default function Profile({
             <Track
               fileName={userTracksFileNames[2]}
               referenceToTracksAndPlayingStatus={
-                referencesToTracksAndPlayingStatus[2]
+                referencesToTracksAndPlayingStatus?.['2']
               }
               setReferencesToTracksAndPlayingStatus={
                 setReferencesToTracksAndPlayingStatus
