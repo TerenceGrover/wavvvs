@@ -10,4 +10,4 @@ const postTrack = async (selectedFile) => {
   return result.data;
 };
 
-export {postTrack}
+export { postTrack };

@@ -4,11 +4,11 @@ import Track from './Track.component.jsx';
 import UploadTrack from './UploadTrack.component.jsx';
 
 export default function Profile() {
-  const [userTracksFilePaths, setUserTracksFilePaths] = useState(['audio.wav']);
+  const [userTracks, setUserTracks] = useState([]);
 
   useEffect(() => {
     //todo: get the tracks from this user.
-    // fetch all 3 filepaths from this user.
+    // fetch all 3  from this user.
   }, []);
 
   return (
@@ -32,20 +32,20 @@ export default function Profile() {
         </section>
         <hr className="w-full border-neutral-800 my-6" />
         <section className="w-full">
-          {userTracksFilePaths[0] ? (
-            <Track filePath={userTracksFilePaths[0]} />
+          {userTracks[0] ? (
+            <Track track={userTracks[0]} />
           ) : (
-            <UploadTrack setUserTracksFilePaths={setUserTracksFilePaths} />
+            <UploadTrack setUserTracks={setUserTracks} />
           )}
-          {userTracksFilePaths[1] ? (
-            <Track filePath={userTracksFilePaths[1]} />
+          {userTracks[1] ? (
+            <Track track={userTracks[1]} />
           ) : (
-            <UploadTrack setUserTracksFilePaths={setUserTracksFilePaths} />
+            <UploadTrack setUserTracks={setUserTracks} />
           )}
-          {userTracksFilePaths[2] ? (
-            <Track filePath={userTracksFilePaths[2]} />
+          {userTracks[2] ? (
+            <Track track={userTracks[2]} />
           ) : (
-            <UploadTrack setUserTracksFilePaths={setUserTracksFilePaths} />
+            <UploadTrack setUserTracks={setUserTracks} />
           )}
         </section>
       </div>

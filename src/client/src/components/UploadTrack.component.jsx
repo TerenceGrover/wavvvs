@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { FiUpload } from 'react-icons/fi';
 import { postTrack } from '../apiService/api-service.js';
 
-export default function UploadTrack({ setUserTracksFilePaths }) {
+export default function UploadTrack({ setUserTracks }) {
   const [selectedFile, setSelectedFile] = useState();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await postTrack(selectedFile);
-    setUserTracksFilePaths((files) => [...files, result.filename]);
+    const newTrack = await postTrack(selectedFile);
+    setUserTracks((tracks) => [...tracks, newTrack]);
   };
 
   const handleFileChange = (e) => {
