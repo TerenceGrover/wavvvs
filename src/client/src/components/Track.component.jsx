@@ -1,5 +1,4 @@
-import _ from 'lodash';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { IoPlay, IoStop } from 'react-icons/io5';
 
 import WaveSurfer from 'wavesurfer.js';
@@ -8,8 +7,8 @@ const staticTrackURL = 'http://localhost:3001/tracks/';
 
 export default function Track({
   fileName,
-  referenceToTracksAndPlayingStatus,
-  setReferencesToTracksAndPlayingStatus,
+  trackRefsAndPlayingStatus,
+  setTrackRefsAndPlayingStatus,
 }) {
   const waveformRef = useRef(null);
 
@@ -32,13 +31,13 @@ export default function Track({
       waveformRef.id = fileName.filename;
       waveformRef.wavesurfer = wavesurfer;
 
-      setReferencesToTracksAndPlayingStatus((refsAndStatus) => [
+      setTrackRefsAndPlayingStatus((refsAndStatus) => [
         ...refsAndStatus,
         { waveformRef, isPlaying: false },
       ]);
 
       return () => {
-        setReferencesToTracksAndPlayingStatus((refsAndStatus) => {
+        setTrackRefsAndPlayingStatus((refsAndStatus) => {
           return refsAndStatus.filter(
             (ref) => ref.waveformRef.id !== fileName.filename
           );
@@ -46,23 +45,20 @@ export default function Track({
         wavesurfer.destroy();
       };
     }
-  }, [fileName.filename, setReferencesToTracksAndPlayingStatus]);
+  }, [fileName.filename, setTrackRefsAndPlayingStatus]);
 
   useEffect(() => {
-    if (referenceToTracksAndPlayingStatus) {
-      if (referenceToTracksAndPlayingStatus.isPlaying) {
-        referenceToTracksAndPlayingStatus.waveformRef?.wavesurfer.play();
+    if (trackRefsAndPlayingStatus) {
+      if (trackRefsAndPlayingStatus.isPlaying) {
+        trackRefsAndPlayingStatus.waveformRef?.wavesurfer.play();
       } else {
-        referenceToTracksAndPlayingStatus.waveformRef?.wavesurfer.stop();
+        trackRefsAndPlayingStatus.waveformRef?.wavesurfer.stop();
       }
     }
-  }, [
-    referenceToTracksAndPlayingStatus?.isPlaying,
-    referenceToTracksAndPlayingStatus,
-  ]);
+  }, [trackRefsAndPlayingStatus?.isPlaying, trackRefsAndPlayingStatus]);
 
   const handleClick = () => {
-    setReferencesToTracksAndPlayingStatus((refsAndStatus) => {
+    setTrackRefsAndPlayingStatus((refsAndStatus) => {
       const stateWithToggledState = refsAndStatus.map((refAndStatus) => {
         if (refAndStatus.waveformRef.id === fileName.filename) {
           return { ...refAndStatus, isPlaying: !refAndStatus.isPlaying };
@@ -85,7 +81,7 @@ export default function Track({
       <h4 className="text-white text-xs pl-9 mb-2">{fileName.originalname}</h4>
       <div className="flex align-center items-center overflow-hidden">
         <div className="mr-2">
-          {referenceToTracksAndPlayingStatus?.isPlaying ? (
+          {trackRefsAndPlayingStatus?.isPlaying ? (
             <IoStop onClick={handleClick} className="text-white w-5 h-5" />
           ) : (
             <IoPlay onClick={handleClick} className="text-white w-5 h-5" />

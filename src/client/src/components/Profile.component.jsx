@@ -4,8 +4,8 @@ import Track from './Track.component.jsx';
 import UploadTrack from './UploadTrack.component.jsx';
 
 export default function Profile({
-  referencesToTracksAndPlayingStatus,
-  setReferencesToTracksAndPlayingStatus,
+  trackRefsAndPlayingStatus,
+  setTrackRefsAndPlayingStatus,
 }) {
   const [userTracksFileNames, setUserTracksFileNames] = useState([]);
 
@@ -39,10 +39,10 @@ export default function Profile({
             <Track
               fileName={userTracksFileNames[0]}
               referenceToTracksAndPlayingStatus={
-                referencesToTracksAndPlayingStatus?.['0']
+                trackRefsAndPlayingStatus?.['0']
               }
-              setReferencesToTracksAndPlayingStatus={
-                setReferencesToTracksAndPlayingStatus
+              setTrackRefsAndPlayingStatus={
+                setTrackRefsAndPlayingStatus
               }
             />
           ) : (
@@ -52,10 +52,10 @@ export default function Profile({
             <Track
               fileName={userTracksFileNames[1]}
               referenceToTracksAndPlayingStatus={
-                referencesToTracksAndPlayingStatus?.['1']
+                trackRefsAndPlayingStatus?.['1']
               }
-              setReferencesToTracksAndPlayingStatus={
-                setReferencesToTracksAndPlayingStatus
+              setTrackRefsAndPlayingStatus={
+                setTrackRefsAndPlayingStatus
               }
             />
           ) : (
@@ -65,10 +65,10 @@ export default function Profile({
             <Track
               fileName={userTracksFileNames[2]}
               referenceToTracksAndPlayingStatus={
-                referencesToTracksAndPlayingStatus?.['2']
+                trackRefsAndPlayingStatus?.['2']
               }
-              setReferencesToTracksAndPlayingStatus={
-                setReferencesToTracksAndPlayingStatus
+              setTrackRefsAndPlayingStatus={
+                setTrackRefsAndPlayingStatus
               }
             />
           ) : (

@@ -1,10 +1,8 @@
 import { useState } from 'react';
-
 import { IoPlay, IoStop } from 'react-icons/io5';
 import { TbPlayerSkipBack, TbPlayerSkipForward } from 'react-icons/tb';
 import { FiVolume2, FiVolumeX } from 'react-icons/fi';
 
-import _ from 'lodash';
 
 export default function MediaController({
   activeTrack,
@@ -13,15 +11,10 @@ export default function MediaController({
   const [isMuted, setIsMuted] = useState(false);
 
   const handlePlayClick = () => {
-    setReferencesToTracksAndPlayingStatus((refsAndStatus) =>
-      refsAndStatus.map((track) => {
-        if (_.isEqual(track, activeTrack)) {
-          return { ...track, isPlaying: track.isPlaying ? false : true };
-        } else {
-          return track;
-        }
-      })
-    );
+    // setReferencesToTracksAndPlayingStatus((refsAndStatus) => [
+    //   ...refsAndStatus,
+    //   { ...activeTrack, isPlaying: !activeTrack.isPlaying },
+    // ]);
   };
 
   const handleMuteClick = () => {
