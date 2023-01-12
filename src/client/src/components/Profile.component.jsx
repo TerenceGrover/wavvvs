@@ -38,12 +38,8 @@ export default function Profile({
           {userTracksFileNames[0] ? (
             <Track
               fileName={userTracksFileNames[0]}
-              referenceToTracksAndPlayingStatus={
-                trackRefsAndPlayingStatus?.['0']
-              }
-              setTrackRefsAndPlayingStatus={
-                setTrackRefsAndPlayingStatus
-              }
+              trackRefsAndPlayingStatus={trackRefsAndPlayingStatus?.['0']}
+              setTrackRefsAndPlayingStatus={setTrackRefsAndPlayingStatus}
             />
           ) : (
             <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
@@ -51,12 +47,8 @@ export default function Profile({
           {userTracksFileNames[1] ? (
             <Track
               fileName={userTracksFileNames[1]}
-              referenceToTracksAndPlayingStatus={
-                trackRefsAndPlayingStatus?.['1']
-              }
-              setTrackRefsAndPlayingStatus={
-                setTrackRefsAndPlayingStatus
-              }
+              trackRefsAndPlayingStatus={trackRefsAndPlayingStatus?.['1']}
+              setTrackRefsAndPlayingStatus={setTrackRefsAndPlayingStatus}
             />
           ) : (
             <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
@@ -64,12 +56,8 @@ export default function Profile({
           {userTracksFileNames[2] ? (
             <Track
               fileName={userTracksFileNames[2]}
-              referenceToTracksAndPlayingStatus={
-                trackRefsAndPlayingStatus?.['2']
-              }
-              setTrackRefsAndPlayingStatus={
-                setTrackRefsAndPlayingStatus
-              }
+              trackRefsAndPlayingStatus={trackRefsAndPlayingStatus?.['2']}
+              setTrackRefsAndPlayingStatus={setTrackRefsAndPlayingStatus}
             />
           ) : (
             <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
