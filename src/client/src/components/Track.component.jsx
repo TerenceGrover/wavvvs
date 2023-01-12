@@ -38,7 +38,7 @@ export default function Track({ track }) {
 
   return (
     <div className="mb-9  h-12 ">
-      <h4 className="text-white text-xs pl-6 mb-2">{track.originalname}</h4>
+      <h4 className="text-white text-xs pl-9 mb-2">{track.originalname}</h4>
       <div className="flex align-center items-center">
         <div className="mr-2">
           {isPlaying ? (
