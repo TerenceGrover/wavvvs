@@ -32,13 +32,13 @@ export default function Track({
       waveformRef.id = fileName.filename;
       waveformRef.wavesurfer = wavesurfer;
 
-      setReferencesToTracksAndPlayingStatus((refsAndStatus) => {
-        return [...refsAndStatus, { waveformRef, isPlaying: false }];
-      });
+      setReferencesToTracksAndPlayingStatus((refsAndStatus) => [
+        ...refsAndStatus,
+        { waveformRef, isPlaying: false },
+      ]);
 
       return () => {
         setReferencesToTracksAndPlayingStatus((refsAndStatus) => {
-          console.log(refsAndStatus);
           return refsAndStatus.filter(
             (ref) => ref.waveformRef.id !== fileName.filename
           );
@@ -63,9 +63,17 @@ export default function Track({
 
   const handleClick = () => {
     setReferencesToTracksAndPlayingStatus((refsAndStatus) => {
-      return refsAndStatus.map((refAndStatus) => {
+      const stateWithToggledState = refsAndStatus.map((refAndStatus) => {
         if (refAndStatus.waveformRef.id === fileName.filename) {
           return { ...refAndStatus, isPlaying: !refAndStatus.isPlaying };
+        }
+        return refAndStatus;
+      });
+      return stateWithToggledState.map((refAndStatus) => {
+        if (refAndStatus.isPlaying) {
+          if (refAndStatus.waveformRef.id !== fileName.filename) {
+            refAndStatus.isPlaying = !refAndStatus.isPlaying;
+          }
         }
         return refAndStatus;
       });
