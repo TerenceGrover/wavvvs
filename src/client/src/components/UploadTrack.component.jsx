@@ -1,13 +1,9 @@
 import { useState } from 'react';
-import axios from 'axios';
 
 import { FiUpload } from 'react-icons/fi';
 
 export default function UploadTrack() {
-  const [selectedFile, setSelectedFile] = useState({
-    fileName: '',
-    selectedFile: '',
-  });
+  const [selectedFile, setSelectedFile] = useState({});
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
@@ -15,18 +11,14 @@ export default function UploadTrack() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const formData = new FormData();
     formData.append('file', selectedFile);
-    const config = {
-      headers: { 'content-type': 'multipart/form-data' },
-    };
 
-    axios
-      .post('http://localhost:3001/1/tracks', formData, config)
-      .then((res) => {
-        console.log(res.data);
-        console.log(formData);
-      });
+    // fetch()
+    // const config = {
+    //   headers: { 'content-type': 'multipart/form-data' },
+    // };
   };
 
   return (
