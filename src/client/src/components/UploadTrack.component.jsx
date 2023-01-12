@@ -14,8 +14,8 @@ export default function UploadTrack() {
 
     const formData = new FormData();
     formData.append('track', selectedFile);
-    
-    const result = await axios.post(
+
+    const response = await axios.post(
       'http://localhost:3001/1/tracks',
       formData,
       {

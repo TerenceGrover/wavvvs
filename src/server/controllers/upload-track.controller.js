@@ -1,5 +1,6 @@
 export default async function uploadTrack(req, res) {
-  console.log('im here');
-  console.log(req.file, req.body);
-  res.sendStatus(200);
+  console.log('posted?');
+  const { userID } = req.params;
+  res.status(200);
+  res.send({ success: 'it works' });
 }
