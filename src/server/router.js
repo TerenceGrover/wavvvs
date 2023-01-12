@@ -2,11 +2,13 @@ import express from 'express';
 import multer from 'multer';
 import uploadTrack from './controllers/upload-track.controller.js';
 
-// const upload = multer({ dest: './public/tracks' });
+const upload = multer({ dest: './public/tracks' });
 
 const router = express.Router();
 
-router.get('/tracks', (req, res) => {
+router.post('/:userID/tracks', upload.single('track'), (req, res) => {
+  console.log('posted?');
+  const { userID } = req.params;
   res.status(200);
   res.send('Post works');
 });

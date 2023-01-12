@@ -1,24 +1,27 @@
 import { useState } from 'react';
-
+import axios from 'axios';
 import { FiUpload } from 'react-icons/fi';
 
 export default function UploadTrack() {
-  const [selectedFile, setSelectedFile] = useState({});
+  const [selectedFile, setSelectedFile] = useState();
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append('file', selectedFile);
-
-    // fetch()
-    // const config = {
-    //   headers: { 'content-type': 'multipart/form-data' },
-    // };
+    formData.append('track', selectedFile);
+    
+    const result = await axios.post(
+      'http://localhost:3001/1/tracks',
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }
+    );
   };
 
   return (

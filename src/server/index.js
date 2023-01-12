@@ -10,9 +10,9 @@ app.use(cors());
 app.use(express.static('./public'));
 app.use(router);
 
-app.get('/', (req, res) => {
-  res.status(200);
-  res.send('ok');
+app.get('*', (req, res) => {
+  res.status(404);
+  res.send('Not Found');
 });
 
 app.listen(port, () => {
