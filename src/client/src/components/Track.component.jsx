@@ -38,13 +38,15 @@ export default function Track() {
     <div className="mb-9  h-12 ">
       <h4 className="text-white text-xs pl-6 mb-2">Audio test</h4>
       <div className="flex align-center items-center">
-        {isPlaying ? (
-          <IoStop onClick={handleClick} className="text-white w-5 h-5" />
-        ) : (
-          <IoPlay onClick={handleClick} className="text-white w-5 h-5" />
-        )}
+        <div className="mr-2">
+          {isPlaying ? (
+            <IoStop onClick={handleClick} className="text-white w-5 h-5" />
+          ) : (
+            <IoPlay onClick={handleClick} className="text-white w-5 h-5" />
+          )}
+        </div>
         <div
-          className="w-full max-w-full overflow-hidden"
+          className="w-full max-w-full overflow-hidden ml-2"
           ref={waveformRef}
         ></div>
       </div>
