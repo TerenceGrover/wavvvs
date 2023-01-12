@@ -1,13 +1,39 @@
+import { useState } from 'react';
+import axios from 'axios';
+
 import { FiUpload } from 'react-icons/fi';
 
 export default function UploadTrack() {
-  // Todo: put the id of the user in the action attribute of the form tag e.g: action="2134567/tracks"
+  const [selectedFile, setSelectedFile] = useState({
+    fileName: '',
+    selectedFile: '',
+  });
+
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    const config = {
+      headers: { 'content-type': 'multipart/form-data' },
+    };
+
+    axios
+      .post('http://localhost:3001/1/tracks', formData, config)
+      .then((res) => {
+        console.log(res.data);
+        console.log(formData);
+      });
+  };
+
   return (
     <form
-      action="/1/tracks"
-      method="POST"
       encType="multipart/form-data"
       className="h-20"
+      onSubmit={handleSubmit}
     >
       <div className="flex items-center justify-center w-full mb-9 ">
         <label
@@ -23,6 +49,7 @@ export default function UploadTrack() {
             className="hidden"
             accept=".wav,.mp3"
             name="uploaded_track"
+            onChange={handleFileChange}
           />
           <input
             type="submit"
