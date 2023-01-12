@@ -12,8 +12,7 @@ export default function Track({
   setReferencesToTracksAndPlayingStatus,
 }) {
   const waveformRef = useRef(null);
-  waveformRef.id = fileName.filename;
-  console.log(fileName.filename);
+
   useEffect(() => {
     const options = {
       container: waveformRef.current,
@@ -30,26 +29,33 @@ export default function Track({
       });
 
       wavesurfer.load(staticTrackURL + fileName.filename);
+      waveformRef.id = fileName.filename;
       waveformRef.wavesurfer = wavesurfer;
 
       setReferencesToTracksAndPlayingStatus((refsAndStatus) => {
         return [...refsAndStatus, { waveformRef, isPlaying: false }];
       });
 
-      return () => wavesurfer.destroy();
+      return () => {
+        setReferencesToTracksAndPlayingStatus((refsAndStatus) => {
+          console.log(refsAndStatus);
+          return refsAndStatus.filter(
+            (ref) => ref.waveformRef.id !== fileName.filename
+          );
+        });
+        wavesurfer.destroy();
+      };
     }
   }, [fileName.filename, setReferencesToTracksAndPlayingStatus]);
 
   useEffect(() => {
     if (referenceToTracksAndPlayingStatus) {
       if (referenceToTracksAndPlayingStatus.isPlaying) {
-        referenceToTracksAndPlayingStatus.waveformRef.wavesurfer.play();
+        referenceToTracksAndPlayingStatus.waveformRef?.wavesurfer.play();
       } else {
-        referenceToTracksAndPlayingStatus.waveformRef.wavesurfer.stop();
+        referenceToTracksAndPlayingStatus.waveformRef?.wavesurfer.stop();
       }
-      console.log('log from useEffect: ', referenceToTracksAndPlayingStatus);
     }
-    // return () => waveformRef.wavesurfer.destroy();
   }, [
     referenceToTracksAndPlayingStatus?.isPlaying,
     referenceToTracksAndPlayingStatus,
