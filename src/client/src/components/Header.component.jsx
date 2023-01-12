@@ -5,8 +5,8 @@ const placeholderImgUrl =
 
 export default function Header() {
   return (
-    <div className="relative">
-      <header className="fixed top-0 left-0 right-0 text-white bg-neutral-800 z-10">
+    <div className="fixed top-0 left-0 right-0 z-10">
+      <header className="h-14  text-white bg-neutral-800">
         <div className="p-3.5 flex justify-between">
           <AiOutlineMenu className="text-neutral-200 h-7 w-7" />
           <div className="flex w-16 justify-between items-center">

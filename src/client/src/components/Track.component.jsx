@@ -5,8 +5,7 @@ import WaveSurfer from 'wavesurfer.js';
 
 const staticTrackURL = 'http://localhost:3001/tracks/';
 
-export default function Track({ track }) {
-  const [isPlaying, setIsPlaying] = useState(false);
+export default function Track({ track, isPlaying, setIsPlaying }) {
   const waveformRef = useRef();
 
   useEffect(() => {
@@ -27,19 +26,18 @@ export default function Track({ track }) {
     }
   }, [track.filename]);
 
+  useEffect(() => {
+    isPlaying ? waveformRef.wavesurfer.play() : waveformRef.wavesurfer.stop();
+  }, [isPlaying]);
+
   const handleClick = () => {
-    if (!isPlaying) {
-      waveformRef.wavesurfer.play();
-    } else {
-      waveformRef.wavesurfer.stop();
-    }
     setIsPlaying(!isPlaying);
   };
 
   return (
     <div className="mb-9  h-12 ">
       <h4 className="text-white text-xs pl-9 mb-2">{track.originalname}</h4>
-      <div className="flex align-center items-center">
+      <div className="flex align-center items-center overflow-hidden">
         <div className="mr-2">
           {isPlaying ? (
             <IoStop onClick={handleClick} className="text-white w-5 h-5" />
@@ -47,10 +45,7 @@ export default function Track({ track }) {
             <IoPlay onClick={handleClick} className="text-white w-5 h-5" />
           )}
         </div>
-        <div
-          className="w-full max-w-full overflow-hidden ml-2"
-          ref={waveformRef}
-        ></div>
+        <div className="w-full overflow-hidden ml-2" ref={waveformRef}></div>
       </div>
     </div>
   );

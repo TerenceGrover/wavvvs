@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Track from './Track.component.jsx';
 import UploadTrack from './UploadTrack.component.jsx';
 
-export default function Profile() {
+export default function Profile({isPlaying, setIsPlaying}) {
   const [userTracks, setUserTracks] = useState([]);
 
   useEffect(() => {
@@ -12,11 +12,11 @@ export default function Profile() {
   }, []);
 
   return (
-    <div className="h-screen w-screen">
-      <div className="h-full w-full flex flex-col justify-center items-center p-6">
-        <section className="flex flex-col justify-center items-center">
+    <div className="flex-1 h-screen w-screen ">
+      <div className="h-screen w-screen flex flex-col justify-center items-center p-6">
+        <section className="flex flex-col justify-center items-center mt-28">
           <img
-            className="w-56 h-56 rounded"
+            className="w-72 h-72 rounded"
             src="https://img.freepik.com/free-photo/vivid-blurred-colorful-background_58702-2563.jpg?w=2000"
             alt="profile-pic"
           />
@@ -33,17 +33,17 @@ export default function Profile() {
         <hr className="w-full border-neutral-800 my-6" />
         <section className="w-full">
           {userTracks[0] ? (
-            <Track track={userTracks[0]} />
+            <Track track={userTracks[0]} isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
           ) : (
             <UploadTrack setUserTracks={setUserTracks} />
           )}
           {userTracks[1] ? (
-            <Track track={userTracks[1]} />
+            <Track track={userTracks[1]} isPlaying={isPlaying} setIsPlaying={setIsPlaying}/>
           ) : (
             <UploadTrack setUserTracks={setUserTracks} />
           )}
           {userTracks[2] ? (
-            <Track track={userTracks[2]} />
+            <Track track={userTracks[2]} isPlaying={isPlaying} setIsPlaying={setIsPlaying}/>
           ) : (
             <UploadTrack setUserTracks={setUserTracks} />
           )}
