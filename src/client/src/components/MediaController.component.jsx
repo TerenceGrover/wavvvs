@@ -59,16 +59,16 @@ export default function MediaController({ activeTrack, setTrackList }) {
               )}
               <TbPlayerSkipForward className="text-neutral-200 h-5 w-5 mr-3" />
             </div>
-            <div className="flex w-14 justify-between items-center">
+            <div className="flex w-14 justify-end items-center">
               {isMuted ? (
                 <FiVolumeX
                   onClick={handleMuteClick}
-                  className="text-neutral-200 h-5 w-7 ml-3"
+                  className="text-neutral-200 h-5 w-7"
                 />
               ) : (
                 <FiVolume2
                   onClick={handleMuteClick}
-                  className="text-neutral-200 h-5 w-7 ml-3"
+                  className="text-neutral-200 h-5 w-7"
                 />
               )}
             </div>
