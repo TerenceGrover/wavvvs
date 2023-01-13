@@ -1,14 +1,24 @@
 import { useState, useEffect } from 'react';
-
 import Track from './Track.component.jsx';
 import UploadTrack from './UploadTrack.component.jsx';
 
-export default function Profile({ trackList, setTrackList, playOrPauseTrackByID}) {
+const serverUrl = 'http://localhost:3001';
+
+export default function Profile({
+  trackList,
+  setTrackList,
+  playOrPauseTrackByID,
+}) {
   const [userTracksFileNames, setUserTracksFileNames] = useState([]);
+  const [userData, setUserData] = useState({});
 
   useEffect(() => {
-    //todo: get the tracks from this user.
-    // fetch all 3  from this user.
+    (async () => {
+      const incomingUserData = await fetch(`${serverUrl}/user`).then((res) =>
+        res.json()
+      );
+      setUserData(incomingUserData);
+    })();
   }, []);
 
   return (
