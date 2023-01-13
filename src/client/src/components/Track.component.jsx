@@ -52,30 +52,30 @@ export default function Track({ fileName, track, setTrackList }) {
   }
 
   const handleClick = () => {
-    setTrackList((refsAndStatus) => {
-      const stateWithToggledState = refsAndStatus.map((ref) => {
-        if (ref.waveformRef.id === fileName.filename) {
+    setTrackList((tracks) => {
+      const stateWithToggledState = tracks.map((track) => {
+        if (track.waveformRef.id === fileName.filename) {
           return {
-            ...ref,
-            isPlaying: !ref.isPlaying,
-            isActive: ref.isPlaying || true,
+            ...track,
+            isPlaying: !track.isPlaying,
+            isActive: track.isPlaying || true,
           };
         }
-        return ref;
+        return track;
       });
 
-      return stateWithToggledState.map((ref) => {
-        if (ref.isPlaying) {
-          if (ref.waveformRef.id !== fileName.filename) {
-            ref.isPlaying = !ref.isPlaying;
+      return stateWithToggledState.map((track) => {
+        if (track.isPlaying) {
+          if (track.waveformRef.id !== fileName.filename) {
+            track.isPlaying = !track.isPlaying;
           }
         }
-        if (ref.isActive) {
-          if (ref.waveformRef.id !== fileName.filename) {
-            ref.isActive = !ref.isActive;
+        if (track.isActive) {
+          if (track.waveformRef.id !== fileName.filename) {
+            track.isActive = !track.isActive;
           }
         }
-        return ref;
+        return track;
       });
     });
   };

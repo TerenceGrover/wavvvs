@@ -7,7 +7,7 @@ import MediaController from './components/MediaController.component.jsx';
 function App() {
   const [trackList, setTrackList] = useState([]);
 
-  const [activeTrack, setActiveTrack] = useState({});
+  const [activeTrack, setActiveTrack] = useState(null);
 
   useEffect(() => {
     const newActiveTrack = trackList.find((track) => track.isActive === true);
@@ -18,7 +18,12 @@ function App() {
     <div className="h-screen w-screen bg-neutral-900 flex flex-col">
       <Header />
       <Profile trackList={trackList} setTrackList={setTrackList} />
-      <MediaController activeTrack={activeTrack} setTrackList={setTrackList} />
+      {activeTrack && (
+        <MediaController
+          activeTrack={activeTrack}
+          setTrackList={setTrackList}
+        />
+      )}
     </div>
   );
 }
