@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 
-
 import Profile from './components/Profile.component.jsx';
 import Header from './components/Header.component.jsx';
 import MediaController from './components/MediaController.component.jsx';
-import LandingPage from './components/Landing.page.jsx';
+import LandingPage from './components/LandingPage.component.jsx';
 
 function App() {
   const [trackList, setTrackList] = useState([]);
@@ -50,7 +49,7 @@ function App() {
     <div className="h-screen w-screen bg-neutral-900 flex flex-col">
       {!isAuthenticated ? (
         <>
-          <LandingPage/>
+          <LandingPage />
         </>
       ) : (
         <>
