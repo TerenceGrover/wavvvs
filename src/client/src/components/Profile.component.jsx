@@ -22,27 +22,29 @@ export default function Profile({
   }, []);
 
   return (
-    <div className="flex-1 h-screen w-screen ">
-      <div className="h-screen w-screen flex flex-col justify-center items-center p-6">
-        <section className="flex flex-col justify-center items-center mt-28">
-          <img
-            className="w-72 h-72 rounded"
-            src="https://img.freepik.com/free-photo/vivid-blurred-colorful-background_58702-2563.jpg?w=2000"
-            alt="profile-pic"
-          />
-          <h1 className="text-white text-2xl mt-7 mb-1">Mateo Presa</h1>
-          <p className="text-neutral-400">@mateo_presa</p>
-        </section>
-        <hr className="w-96 border-neutral-800 my-6" />
-        <section className="w-96">
-          <p className="text-xs text-neutral-400 text-left w-full">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            id neque at nulla suscipit dapibus. Lorem ipsum dolor sit amet,
-            consectetur adipiscing elit. Suspendisse id neque at nulla suscipit
-            dapibus.
-          </p>
-        </section>
-        <hr className="w-96 border-neutral-800 my-6" />
+    <div className="h-screen w-screen ">
+      <div className="flex flex-col justify-start mt-14 items-center content-start p-6">
+        <div className="">
+          <section className="flex flex-col justify-center items-center mt-3">
+            <img
+              className="w-72 h-72 rounded"
+              src="https://img.freepik.com/free-photo/vivid-blurred-colorful-background_58702-2563.jpg?w=2000"
+              alt="profile-pic"
+            />
+            <h1 className="text-white text-2xl mt-7 mb-1">Mateo Presa</h1>
+            <p className="text-neutral-400">@mateo_presa</p>
+          </section>
+          <hr className="w-96 border-neutral-800 my-6" />
+          <section className="w-96">
+            <p className="text-xs text-neutral-400 text-left w-full">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              Suspendisse id neque at nulla suscipit dapibus. Lorem ipsum dolor
+              sit amet, consectetur adipiscing elit. Suspendisse id neque at
+              nulla suscipit dapibus.
+            </p>
+          </section>
+          <hr className="w-96 border-neutral-800 my-6" />
+        </div>
         <div className="w-full flex justify-center items-center">
           <section className="w-96">
             {userTracksFileNames[0] ? (
