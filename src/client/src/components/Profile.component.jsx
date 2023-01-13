@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Track from './Track.component.jsx';
 import UploadTrack from './UploadTrack.component.jsx';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const serverUrl = 'http://localhost:3001';
 
@@ -11,6 +12,10 @@ export default function Profile({
 }) {
   const [userTracksFileNames, setUserTracksFileNames] = useState([]);
   const [userData, setUserData] = useState({});
+  const { user, isAuthenticated, isLoading } = useAuth0();
+  console.log({ user });
+  console.log({ isAuthenticated });
+  console.log({ isLoading });
 
   useEffect(() => {
     (async () => {
