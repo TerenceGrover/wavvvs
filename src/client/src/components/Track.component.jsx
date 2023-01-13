@@ -33,7 +33,7 @@ export default function Track({
 
       setTrackRefsAndPlayingStatus((refsAndStatus) => [
         ...refsAndStatus,
-        { waveformRef, isPlaying: false },
+        { waveformRef, isPlaying: false, isActive: false },
       ]);
 
       return () => {
@@ -47,15 +47,13 @@ export default function Track({
     }
   }, [fileName.filename, setTrackRefsAndPlayingStatus]);
 
-  useEffect(() => {
-    if (trackRefsAndPlayingStatus) {
-      if (trackRefsAndPlayingStatus.isPlaying) {
-        trackRefsAndPlayingStatus.waveformRef?.wavesurfer.play();
-      } else {
-        trackRefsAndPlayingStatus.waveformRef?.wavesurfer.stop();
-      }
+  if (trackRefsAndPlayingStatus) {
+    if (trackRefsAndPlayingStatus.isPlaying) {
+      trackRefsAndPlayingStatus.waveformRef?.wavesurfer.play();
+    } else {
+      trackRefsAndPlayingStatus.waveformRef?.wavesurfer.stop();
     }
-  }, [trackRefsAndPlayingStatus?.isPlaying, trackRefsAndPlayingStatus]);
+  }
 
   const handleClick = () => {
     setTrackRefsAndPlayingStatus((refsAndStatus) => {
