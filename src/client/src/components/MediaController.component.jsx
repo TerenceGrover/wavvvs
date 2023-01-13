@@ -3,36 +3,11 @@ import { IoPlay, IoStop } from 'react-icons/io5';
 import { TbPlayerSkipBack, TbPlayerSkipForward } from 'react-icons/tb';
 import { FiVolume2, FiVolumeX } from 'react-icons/fi';
 
-export default function MediaController({ activeTrack, setTrackList }) {
+export default function MediaController({ activeTrack, playOrPauseTrackByID}) {
   const [isMuted, setIsMuted] = useState(false);
 
-  const handlePlayClick = () => {
-    setTrackList((tracks) => {
-      const stateWithToggledState = tracks.map((track) => {
-        if (track.waveformRef.id === activeTrack.waveformRef.id) {
-          return {
-            ...track,
-            isPlaying: !track.isPlaying,
-            isActive: track.isPlaying || true,
-          };
-        }
-        return track;
-      });
-
-      return stateWithToggledState.map((track) => {
-        if (track.isPlaying) {
-          if (track.waveformRef.id !== activeTrack.waveformRef.id) {
-            track.isPlaying = !track.isPlaying;
-          }
-        }
-        if (track.isActive) {
-          if (track.waveformRef.id !== activeTrack.waveformRef.id) {
-            track.isActive = !track.isActive;
-          }
-        }
-        return track;
-      });
-    });
+  const handlePlayClick = () => { //
+    playOrPauseTrackByID(activeTrack.waveformRef.id)
   };
 
   const handleMuteClick = () => {

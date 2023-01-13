@@ -5,7 +5,12 @@ import WaveSurfer from 'wavesurfer.js';
 
 const staticTrackURL = 'http://localhost:3001/tracks/';
 
-export default function Track({ fileName, track, setTrackList }) {
+export default function Track({
+  fileName,
+  track,
+  setTrackList,
+  playOrPauseTrackByID,
+}) {
   const waveformRef = useRef(null);
 
   useEffect(() => {
@@ -23,6 +28,7 @@ export default function Track({ fileName, track, setTrackList }) {
         console.log('Track ready!');
       });
 
+      //Fetch data with load method
       wavesurfer.load(staticTrackURL + fileName.filename);
       waveformRef.id = fileName.filename;
       waveformRef.wavesurfer = wavesurfer;
@@ -52,32 +58,7 @@ export default function Track({ fileName, track, setTrackList }) {
   }
 
   const handleClick = () => {
-    setTrackList((tracks) => {
-      const stateWithToggledState = tracks.map((track) => {
-        if (track.waveformRef.id === fileName.filename) {
-          return {
-            ...track,
-            isPlaying: !track.isPlaying,
-            isActive: track.isPlaying || true,
-          };
-        }
-        return track;
-      });
-
-      return stateWithToggledState.map((track) => {
-        if (track.isPlaying) {
-          if (track.waveformRef.id !== fileName.filename) {
-            track.isPlaying = !track.isPlaying;
-          }
-        }
-        if (track.isActive) {
-          if (track.waveformRef.id !== fileName.filename) {
-            track.isActive = !track.isActive;
-          }
-        }
-        return track;
-      });
-    });
+    playOrPauseTrackByID(fileName.filename);
   };
 
   return (

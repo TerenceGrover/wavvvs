@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Track from './Track.component.jsx';
 import UploadTrack from './UploadTrack.component.jsx';
 
-export default function Profile({ trackList, setTrackList }) {
+export default function Profile({ trackList, setTrackList, playOrPauseTrackByID}) {
   const [userTracksFileNames, setUserTracksFileNames] = useState([]);
 
   useEffect(() => {
@@ -40,6 +40,7 @@ export default function Profile({ trackList, setTrackList }) {
                 fileName={userTracksFileNames[0]}
                 track={trackList?.['0']}
                 setTrackList={setTrackList}
+                playOrPauseTrackByID={playOrPauseTrackByID}
               />
             ) : (
               <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
@@ -49,6 +50,7 @@ export default function Profile({ trackList, setTrackList }) {
                 fileName={userTracksFileNames[1]}
                 track={trackList?.['1']}
                 setTrackList={setTrackList}
+                playOrPauseTrackByID={playOrPauseTrackByID}
               />
             ) : (
               <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
@@ -58,6 +60,7 @@ export default function Profile({ trackList, setTrackList }) {
                 fileName={userTracksFileNames[2]}
                 track={trackList?.['2']}
                 setTrackList={setTrackList}
+                playOrPauseTrackByID={playOrPauseTrackByID}
               />
             ) : (
               <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
