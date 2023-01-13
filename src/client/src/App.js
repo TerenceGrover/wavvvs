@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Profile from './components/Profile.component.jsx';
 import Header from './components/Header.component.jsx';
@@ -9,6 +9,19 @@ function App() {
     []
   );
 
+  const [activeTrack, setActiveTrack] = useState({});
+
+  useEffect(() => {
+    console.log('useState from App: ', activeTrack)
+    let trackThatIsPlaying = trackRefsAndPlayingStatus.find(
+      (track) => track?.isPlaying === true
+    );
+
+    if (trackThatIsPlaying) {
+      setActiveTrack(trackThatIsPlaying)
+    }
+  }, [activeTrack, trackRefsAndPlayingStatus]);
+
   return (
     <div className="h-screen w-screen bg-neutral-900 flex flex-col">
       <Header />
@@ -17,9 +30,7 @@ function App() {
         setTrackRefsAndPlayingStatus={setTrackRefsAndPlayingStatus}
       />
       <MediaController
-        activeTrack={trackRefsAndPlayingStatus.find(
-          (track) => track.isPlaying === true
-        )}
+        activeTrack={activeTrack}
         setTrackRefsAndPlayingStatus={setTrackRefsAndPlayingStatus}
       />
     </div>
