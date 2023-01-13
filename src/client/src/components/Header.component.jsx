@@ -1,5 +1,4 @@
 import { AiOutlineMenu, AiOutlineSearch } from 'react-icons/ai';
-import LoginButton from './LoginButton.component.jsx';
 
 const placeholderImgUrl =
   'https://img.freepik.com/free-photo/vivid-blurred-colorful-background_58702-2563.jpg?w=2000';
@@ -10,7 +9,6 @@ export default function Header() {
       <header className="flex justify-center h-14 text-white bg-neutral-800">
         <div className="w-96 py-3.5 flex justify-between">
           <AiOutlineMenu className="text-neutral-200 h-7 w-7" />
-          <LoginButton />
           <div className="flex w-26 justify-between items-center">
             <AiOutlineSearch className="text-neutral-200 h-7 w-7" />
             <img

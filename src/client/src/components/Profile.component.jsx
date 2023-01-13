@@ -13,10 +13,6 @@ export default function Profile({
   const [userTracksFileNames, setUserTracksFileNames] = useState([]);
   const [userData, setUserData] = useState({});
   const { user, isAuthenticated, isLoading } = useAuth0();
-  console.log({ user });
-  console.log({ isAuthenticated });
-  console.log({ isLoading });
-
   useEffect(() => {
     (async () => {
       const incomingUserData = await fetch(`${serverUrl}/user`).then((res) =>

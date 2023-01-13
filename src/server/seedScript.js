@@ -11,7 +11,7 @@ export default async function () {
   const fakeUser = {
     name: 'Mateo Presa',
     user_name: 'mateopresa',
-    email: 'mateo@personalbar.com',
+    email: 'mateopresacastro@gmail.com',
     password: 'secret',
     bio: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse id neque at nulla suscipit dapibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse id neque at nulla suscipit dapibus.`,
     profile_pic_path: 'mateo_pic.jpeg',
