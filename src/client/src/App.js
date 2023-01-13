@@ -5,30 +5,20 @@ import Header from './components/Header.component.jsx';
 import MediaController from './components/MediaController.component.jsx';
 
 function App() {
-  const [trackRefsAndPlayingStatus, setTrackRefsAndPlayingStatus] = useState(
-    []
-  );
+  const [trackList, setTrackList] = useState([]);
 
   const [activeTrack, setActiveTrack] = useState({});
 
   useEffect(() => {
-    const newActiveTrack = trackRefsAndPlayingStatus.find(
-      (track) => track.isActive === true
-    );
+    const newActiveTrack = trackList.find((track) => track.isActive === true);
     setActiveTrack(newActiveTrack);
-  }, [activeTrack, trackRefsAndPlayingStatus]);
+  }, [activeTrack, trackList]);
 
   return (
     <div className="h-screen w-screen bg-neutral-900 flex flex-col">
       <Header />
-      <Profile
-        trackRefsAndPlayingStatus={trackRefsAndPlayingStatus}
-        setTrackRefsAndPlayingStatus={setTrackRefsAndPlayingStatus}
-      />
-      <MediaController
-        activeTrack={activeTrack}
-        setTrackRefsAndPlayingStatus={setTrackRefsAndPlayingStatus}
-      />
+      <Profile trackList={trackList} setTrackList={setTrackList} />
+      <MediaController activeTrack={activeTrack} setTrackList={setTrackList} />
     </div>
   );
 }

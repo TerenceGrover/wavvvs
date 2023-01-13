@@ -3,10 +3,7 @@ import { useState, useEffect } from 'react';
 import Track from './Track.component.jsx';
 import UploadTrack from './UploadTrack.component.jsx';
 
-export default function Profile({
-  trackRefsAndPlayingStatus,
-  setTrackRefsAndPlayingStatus,
-}) {
+export default function Profile({ trackList, setTrackList }) {
   const [userTracksFileNames, setUserTracksFileNames] = useState([]);
 
   useEffect(() => {
@@ -38,8 +35,8 @@ export default function Profile({
           {userTracksFileNames[0] ? (
             <Track
               fileName={userTracksFileNames[0]}
-              trackRefsAndPlayingStatus={trackRefsAndPlayingStatus?.['0']}
-              setTrackRefsAndPlayingStatus={setTrackRefsAndPlayingStatus}
+              track={trackList?.['0']}
+              setTrackList={setTrackList}
             />
           ) : (
             <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
@@ -47,8 +44,8 @@ export default function Profile({
           {userTracksFileNames[1] ? (
             <Track
               fileName={userTracksFileNames[1]}
-              trackRefsAndPlayingStatus={trackRefsAndPlayingStatus?.['1']}
-              setTrackRefsAndPlayingStatus={setTrackRefsAndPlayingStatus}
+              track={trackList?.['1']}
+              setTrackList={setTrackList}
             />
           ) : (
             <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
@@ -56,8 +53,8 @@ export default function Profile({
           {userTracksFileNames[2] ? (
             <Track
               fileName={userTracksFileNames[2]}
-              trackRefsAndPlayingStatus={trackRefsAndPlayingStatus?.['2']}
-              setTrackRefsAndPlayingStatus={setTrackRefsAndPlayingStatus}
+              track={trackList?.['2']}
+              setTrackList={setTrackList}
             />
           ) : (
             <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />

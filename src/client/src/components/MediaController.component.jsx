@@ -3,10 +3,7 @@ import { IoPlay, IoStop } from 'react-icons/io5';
 import { TbPlayerSkipBack, TbPlayerSkipForward } from 'react-icons/tb';
 import { FiVolume2, FiVolumeX } from 'react-icons/fi';
 
-export default function MediaController({
-  activeTrack,
-  setTrackRefsAndPlayingStatus,
-}) {
+export default function MediaController({ activeTrack, setTrackList }) {
   const [isMuted, setIsMuted] = useState(false);
 
   useEffect(() => {
@@ -14,30 +11,30 @@ export default function MediaController({
   }, [activeTrack]);
 
   const handlePlayClick = () => {
-    setTrackRefsAndPlayingStatus((refsAndStatus) => {
-      const stateWithToggledState = refsAndStatus.map((ref) => {
-        if (ref.waveformRef.id === activeTrack.waveformRef.id) {
+    setTrackList((tracks) => {
+      const stateWithToggledState = tracks.map((track) => {
+        if (track.waveformRef.id === activeTrack.waveformRef.id) {
           return {
-            ...ref,
-            isPlaying: !ref.isPlaying,
-            isActive: ref.isPlaying || true,
+            ...track,
+            isPlaying: !track.isPlaying,
+            isActive: track.isPlaying || true,
           };
         }
-        return ref;
+        return track;
       });
 
-      return stateWithToggledState.map((ref) => {
-        if (ref.isPlaying) {
-          if (ref.waveformRef.id !== activeTrack.waveformRef.id) {
-            ref.isPlaying = !ref.isPlaying;
+      return stateWithToggledState.map((track) => {
+        if (track.isPlaying) {
+          if (track.waveformRef.id !== activeTrack.waveformRef.id) {
+            track.isPlaying = !track.isPlaying;
           }
         }
-        if (ref.isActive) {
-          if (ref.waveformRef.id !== activeTrack.waveformRef.id) {
-            ref.isActive = !ref.isActive;
+        if (track.isActive) {
+          if (track.waveformRef.id !== activeTrack.waveformRef.id) {
+            track.isActive = !track.isActive;
           }
         }
-        return ref;
+        return track;
       });
     });
   };

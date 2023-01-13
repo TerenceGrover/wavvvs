@@ -5,11 +5,7 @@ import WaveSurfer from 'wavesurfer.js';
 
 const staticTrackURL = 'http://localhost:3001/tracks/';
 
-export default function Track({
-  fileName,
-  trackRefsAndPlayingStatus,
-  setTrackRefsAndPlayingStatus,
-}) {
+export default function Track({ fileName, track, setTrackList }) {
   const waveformRef = useRef(null);
 
   useEffect(() => {
@@ -31,32 +27,32 @@ export default function Track({
       waveformRef.id = fileName.filename;
       waveformRef.wavesurfer = wavesurfer;
 
-      setTrackRefsAndPlayingStatus((refsAndStatus) => [
-        ...refsAndStatus,
+      setTrackList((tracks) => [
+        ...tracks,
         { waveformRef, isPlaying: false, isActive: false },
       ]);
 
       return () => {
-        setTrackRefsAndPlayingStatus((refsAndStatus) => {
-          return refsAndStatus.filter(
-            (ref) => ref.waveformRef.id !== fileName.filename
+        setTrackList((tracks) => {
+          return tracks.filter(
+            (track) => track.waveformRef.id !== fileName.filename
           );
         });
         wavesurfer.destroy();
       };
     }
-  }, [fileName.filename, setTrackRefsAndPlayingStatus]);
+  }, [fileName.filename, setTrackList]);
 
-  if (trackRefsAndPlayingStatus) {
-    if (trackRefsAndPlayingStatus.isPlaying) {
-      trackRefsAndPlayingStatus.waveformRef?.wavesurfer.play();
+  if (track) {
+    if (track.isPlaying) {
+      track.waveformRef?.wavesurfer.play();
     } else {
-      trackRefsAndPlayingStatus.waveformRef?.wavesurfer.stop();
+      track.waveformRef?.wavesurfer.stop();
     }
   }
 
   const handleClick = () => {
-    setTrackRefsAndPlayingStatus((refsAndStatus) => {
+    setTrackList((refsAndStatus) => {
       const stateWithToggledState = refsAndStatus.map((ref) => {
         if (ref.waveformRef.id === fileName.filename) {
           return {
@@ -89,7 +85,7 @@ export default function Track({
       <h4 className="text-white text-xs pl-9 mb-2">{fileName.originalname}</h4>
       <div className="flex align-center items-center overflow-hidden">
         <div className="mr-2">
-          {trackRefsAndPlayingStatus?.isPlaying ? (
+          {track?.isPlaying ? (
             <IoStop onClick={handleClick} className="text-white w-5 h-5" />
           ) : (
             <IoPlay onClick={handleClick} className="text-white w-5 h-5" />
