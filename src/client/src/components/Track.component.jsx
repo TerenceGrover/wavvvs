@@ -68,18 +68,18 @@ export default function Track({
         return ref;
       });
 
-      return stateWithToggledState.map((refAndStatus) => {
-        if (refAndStatus.isPlaying) {
-          if (refAndStatus.waveformRef.id !== fileName.filename) {
-            refAndStatus.isPlaying = !refAndStatus.isPlaying;
+      return stateWithToggledState.map((ref) => {
+        if (ref.isPlaying) {
+          if (ref.waveformRef.id !== fileName.filename) {
+            ref.isPlaying = !ref.isPlaying;
           }
         }
-        if (refAndStatus.isActive) {
-          if (refAndStatus.waveformRef.id !== fileName.filename) {
-            refAndStatus.isActive = !refAndStatus.isActive;
+        if (ref.isActive) {
+          if (ref.waveformRef.id !== fileName.filename) {
+            ref.isActive = !ref.isActive;
           }
         }
-        return refAndStatus;
+        return ref;
       });
     });
   };

@@ -12,14 +12,10 @@ function App() {
   const [activeTrack, setActiveTrack] = useState({});
 
   useEffect(() => {
-    console.log('Whole state', trackRefsAndPlayingStatus)
-    let trackThatIsPlaying = trackRefsAndPlayingStatus.find(
-      (track) => track?.isPlaying === true
+    const newActiveTrack = trackRefsAndPlayingStatus.find(
+      (track) => track.isActive === true
     );
-
-    if (trackThatIsPlaying) {
-      setActiveTrack(trackThatIsPlaying)
-    }
+    setActiveTrack(newActiveTrack);
   }, [activeTrack, trackRefsAndPlayingStatus]);
 
   return (

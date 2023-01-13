@@ -10,25 +10,34 @@ export default function MediaController({
   const [isMuted, setIsMuted] = useState(false);
 
   useEffect(() => {
-    // console.log(activeTrack);
+    console.log({ activeTrack });
   }, [activeTrack]);
 
   const handlePlayClick = () => {
     setTrackRefsAndPlayingStatus((refsAndStatus) => {
-      const stateWithToggledState = refsAndStatus.map((refAndStatus) => {
-        if (refAndStatus.waveformRef.id === activeTrack?.id) {
-          return { ...refAndStatus, isPlaying: !refAndStatus.isPlaying };
+      const stateWithToggledState = refsAndStatus.map((ref) => {
+        if (ref.waveformRef.id === activeTrack.waveformRef.id) {
+          return {
+            ...ref,
+            isPlaying: !ref.isPlaying,
+            isActive: ref.isPlaying || true,
+          };
         }
-        return refAndStatus;
+        return ref;
       });
-      return stateWithToggledState.map((refAndStatus) => {
-        if (refAndStatus.isPlaying) {
-          if (refAndStatus.waveformRef.id !== activeTrack?.id) {
-            refAndStatus.isPlaying = !refAndStatus.isPlaying;
+
+      return stateWithToggledState.map((ref) => {
+        if (ref.isPlaying) {
+          if (ref.waveformRef.id !== activeTrack.waveformRef.id) {
+            ref.isPlaying = !ref.isPlaying;
           }
         }
-
-        return refAndStatus;
+        if (ref.isActive) {
+          if (ref.waveformRef.id !== activeTrack.waveformRef.id) {
+            ref.isActive = !ref.isActive;
+          }
+        }
+        return ref;
       });
     });
   };
