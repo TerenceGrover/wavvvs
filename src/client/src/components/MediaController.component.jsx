@@ -1,14 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { IoPlay, IoStop } from 'react-icons/io5';
 import { TbPlayerSkipBack, TbPlayerSkipForward } from 'react-icons/tb';
 import { FiVolume2, FiVolumeX } from 'react-icons/fi';
 
 export default function MediaController({ activeTrack, setTrackList }) {
   const [isMuted, setIsMuted] = useState(false);
-
-  useEffect(() => {
-    console.log({ activeTrack });
-  }, [activeTrack]);
 
   const handlePlayClick = () => {
     setTrackList((tracks) => {

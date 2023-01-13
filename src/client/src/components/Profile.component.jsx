@@ -23,7 +23,7 @@ export default function Profile({ trackList, setTrackList }) {
           <h1 className="text-white text-2xl mt-7 mb-1">Mateo Presa</h1>
           <p className="text-neutral-400">@mateo_presa</p>
         </section>
-        <hr className="w-full border-neutral-800 my-6" />
+        <hr className="w-96 border-neutral-800 my-6" />
         <section className="w-96">
           <p className="text-xs text-neutral-400 text-left w-full">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
@@ -32,7 +32,7 @@ export default function Profile({ trackList, setTrackList }) {
             dapibus.
           </p>
         </section>
-        <hr className="w-full border-neutral-800 my-6" />
+        <hr className="w-96 border-neutral-800 my-6" />
         <div className="w-full flex justify-center items-center">
           <section className="w-96">
             {userTracksFileNames[0] ? (
