@@ -1,7 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { IoPlay, IoStop } from 'react-icons/io5';
-// import DotLoader from 'react-spinners/DotLoader.js';
-
 import WaveSurfer from 'wavesurfer.js';
 
 const staticTrackURL = 'http://localhost:3001/tracks/';
