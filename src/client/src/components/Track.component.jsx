@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { IoPlay, IoStop } from 'react-icons/io5';
+// import DotLoader from 'react-spinners/DotLoader.js';
 
 import WaveSurfer from 'wavesurfer.js';
 
@@ -11,6 +12,7 @@ export default function Track({
   setTrackList,
   playOrPauseTrackByID,
 }) {
+  const trackID = fileName.filename;
   const waveformRef = useRef(null);
 
   useEffect(() => {
@@ -24,13 +26,13 @@ export default function Track({
 
     if (waveformRef.current) {
       const wavesurfer = WaveSurfer.create(options);
-      wavesurfer.on('ready', function () {
-        console.log('Track ready!');
+      wavesurfer.on('waveform-ready', function () {
+        console.log('here');
       });
 
       //Fetch data with load method
-      wavesurfer.load(staticTrackURL + fileName.filename);
-      waveformRef.id = fileName.filename;
+      wavesurfer.load(staticTrackURL + trackID);
+      waveformRef.id = trackID;
       waveformRef.wavesurfer = wavesurfer;
 
       setTrackList((tracks) => [
@@ -40,14 +42,12 @@ export default function Track({
 
       return () => {
         setTrackList((tracks) => {
-          return tracks.filter(
-            (track) => track.waveformRef.id !== fileName.filename
-          );
+          return tracks.filter((track) => track.waveformRef.id !== trackID);
         });
         wavesurfer.destroy();
       };
     }
-  }, [fileName.filename, setTrackList]);
+  }, [trackID, setTrackList]);
 
   if (track) {
     if (track.isPlaying) {
@@ -58,22 +58,26 @@ export default function Track({
   }
 
   const handleClick = () => {
-    playOrPauseTrackByID(fileName.filename);
+    playOrPauseTrackByID(trackID);
   };
 
   return (
     <div className="mb-9  h-12 ">
-      <h4 className="text-white text-xs pl-9 mb-2">{fileName.originalname}</h4>
-      <div className="flex align-center items-center overflow-hidden">
-        <div className="mr-2">
-          {track?.isPlaying ? (
-            <IoStop onClick={handleClick} className="text-white w-5 h-5" />
-          ) : (
-            <IoPlay onClick={handleClick} className="text-white w-5 h-5" />
-          )}
+      <>
+        <h4 className="text-white text-xs pl-9 mb-2">
+          {fileName.originalname}
+        </h4>
+        <div className="flex align-center items-center overflow-hidden">
+          <div className="mr-2">
+            {track?.isPlaying ? (
+              <IoStop onClick={handleClick} className="text-white w-5 h-5" />
+            ) : (
+              <IoPlay onClick={handleClick} className="text-white w-5 h-5" />
+            )}
+          </div>
+          <div className="w-full overflow-hidden ml-2" ref={waveformRef}></div>
         </div>
-        <div className="w-full overflow-hidden ml-2" ref={waveformRef}></div>
-      </div>
+      </>
     </div>
   );
 }
