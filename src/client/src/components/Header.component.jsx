@@ -12,7 +12,7 @@ export default function Header() {
           <div className="flex w-26 justify-between items-center">
             <AiOutlineSearch className="text-neutral-200 h-7 w-7" />
             <img
-              className="w-6 h-6 rounded-full"
+              className="w-6 h-6 ml-3 rounded-full"
               src={placeholderImgUrl}
               alt="profile.pic"
             />
