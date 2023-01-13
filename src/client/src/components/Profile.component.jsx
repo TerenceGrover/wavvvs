@@ -24,42 +24,46 @@ export default function Profile({ trackList, setTrackList }) {
           <p className="text-neutral-400">@mateo_presa</p>
         </section>
         <hr className="w-full border-neutral-800 my-6" />
-        <section>
-          <p className="text-xs text-neutral-400 text-left">
+        <section className="w-96">
+          <p className="text-xs text-neutral-400 text-left w-full">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            id neque at nulla suscipit dapibus.
+            id neque at nulla suscipit dapibus. Lorem ipsum dolor sit amet,
+            consectetur adipiscing elit. Suspendisse id neque at nulla suscipit
+            dapibus.
           </p>
         </section>
         <hr className="w-full border-neutral-800 my-6" />
-        <section className="w-full">
-          {userTracksFileNames[0] ? (
-            <Track
-              fileName={userTracksFileNames[0]}
-              track={trackList?.['0']}
-              setTrackList={setTrackList}
-            />
-          ) : (
-            <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
-          )}
-          {userTracksFileNames[1] ? (
-            <Track
-              fileName={userTracksFileNames[1]}
-              track={trackList?.['1']}
-              setTrackList={setTrackList}
-            />
-          ) : (
-            <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
-          )}
-          {userTracksFileNames[2] ? (
-            <Track
-              fileName={userTracksFileNames[2]}
-              track={trackList?.['2']}
-              setTrackList={setTrackList}
-            />
-          ) : (
-            <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
-          )}
-        </section>
+        <div className="w-full flex justify-center items-center">
+          <section className="w-96">
+            {userTracksFileNames[0] ? (
+              <Track
+                fileName={userTracksFileNames[0]}
+                track={trackList?.['0']}
+                setTrackList={setTrackList}
+              />
+            ) : (
+              <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
+            )}
+            {userTracksFileNames[1] ? (
+              <Track
+                fileName={userTracksFileNames[1]}
+                track={trackList?.['1']}
+                setTrackList={setTrackList}
+              />
+            ) : (
+              <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
+            )}
+            {userTracksFileNames[2] ? (
+              <Track
+                fileName={userTracksFileNames[2]}
+                track={trackList?.['2']}
+                setTrackList={setTrackList}
+              />
+            ) : (
+              <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
+            )}
+          </section>
+        </div>
       </div>
     </div>
   );

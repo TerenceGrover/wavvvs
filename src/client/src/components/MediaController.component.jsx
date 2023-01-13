@@ -45,38 +45,40 @@ export default function MediaController({ activeTrack, setTrackList }) {
 
   return (
     <div className="static">
-      <header className="h-20 fixed bottom-0 left-0 right-0 text-white bg-neutral-800 z-10">
-        <div className=" flex h-full justify-between items-center">
-          <div className="flex w-28 justify-between items-center ml-14">
-            <TbPlayerSkipBack className="text-neutral-200 h-10 w-10 mr-3" />
-            {!activeTrack?.isPlaying ? (
-              <IoPlay
-                onClick={handlePlayClick}
-                className="text-neutral-200 h-12 w-12 mr-3"
-              />
-            ) : (
-              <IoStop
-                onClick={handlePlayClick}
-                className="text-neutral-200 h-12 w-12 mr-3"
-              />
-            )}
-            <TbPlayerSkipForward className="text-neutral-200 h-10 w-10 mr-3" />
-          </div>
-          <div className="flex w-14 justify-between items-center">
-            {isMuted ? (
-              <FiVolumeX
-                onClick={handleMuteClick}
-                className="text-neutral-200 h-7 w-7 mr-3"
-              />
-            ) : (
-              <FiVolume2
-                onClick={handleMuteClick}
-                className="text-neutral-200 h-7 w-7 mr-3"
-              />
-            )}
+      <footer className="h-16 fixed bottom-0 left-0 right-0 text-white bg-neutral-800 z-10">
+        <div className="h-full flex justify-center items-center align-center">
+          <div className=" flex w-96 h-full justify-between items-center">
+            <div className="flex w-28 justify-between items-center">
+              <TbPlayerSkipBack className="text-neutral-200 h-10 w-10 mr-3" />
+              {!activeTrack?.isPlaying ? (
+                <IoPlay
+                  onClick={handlePlayClick}
+                  className="text-neutral-200 h-12 w-12 mr-3"
+                />
+              ) : (
+                <IoStop
+                  onClick={handlePlayClick}
+                  className="text-neutral-200 h-12 w-12 mr-3"
+                />
+              )}
+              <TbPlayerSkipForward className="text-neutral-200 h-10 w-10 mr-3" />
+            </div>
+            <div className="flex w-14 justify-between items-center">
+              {isMuted ? (
+                <FiVolumeX
+                  onClick={handleMuteClick}
+                  className="text-neutral-200 h-7 w-7 ml-3"
+                />
+              ) : (
+                <FiVolume2
+                  onClick={handleMuteClick}
+                  className="text-neutral-200 h-7 w-7 ml-3"
+                />
+              )}
+            </div>
           </div>
         </div>
-      </header>
+      </footer>
     </div>
   );
 }
