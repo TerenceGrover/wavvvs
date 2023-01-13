@@ -57,16 +57,26 @@ export default function Track({
 
   const handleClick = () => {
     setTrackRefsAndPlayingStatus((refsAndStatus) => {
-      const stateWithToggledState = refsAndStatus.map((refAndStatus) => {
-        if (refAndStatus.waveformRef.id === fileName.filename) {
-          return { ...refAndStatus, isPlaying: !refAndStatus.isPlaying };
+      const stateWithToggledState = refsAndStatus.map((ref) => {
+        if (ref.waveformRef.id === fileName.filename) {
+          return {
+            ...ref,
+            isPlaying: !ref.isPlaying,
+            isActive: ref.isPlaying || true,
+          };
         }
-        return refAndStatus;
+        return ref;
       });
+
       return stateWithToggledState.map((refAndStatus) => {
         if (refAndStatus.isPlaying) {
           if (refAndStatus.waveformRef.id !== fileName.filename) {
             refAndStatus.isPlaying = !refAndStatus.isPlaying;
+          }
+        }
+        if (refAndStatus.isActive) {
+          if (refAndStatus.waveformRef.id !== fileName.filename) {
+            refAndStatus.isActive = !refAndStatus.isActive;
           }
         }
         return refAndStatus;

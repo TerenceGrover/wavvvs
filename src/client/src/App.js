@@ -12,7 +12,7 @@ function App() {
   const [activeTrack, setActiveTrack] = useState({});
 
   useEffect(() => {
-    console.log('useState from App: ', activeTrack)
+    console.log('Whole state', trackRefsAndPlayingStatus)
     let trackThatIsPlaying = trackRefsAndPlayingStatus.find(
       (track) => track?.isPlaying === true
     );

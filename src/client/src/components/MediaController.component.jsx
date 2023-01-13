@@ -10,7 +10,7 @@ export default function MediaController({
   const [isMuted, setIsMuted] = useState(false);
 
   useEffect(() => {
-    console.log(activeTrack);
+    // console.log(activeTrack);
   }, [activeTrack]);
 
   const handlePlayClick = () => {
@@ -27,6 +27,7 @@ export default function MediaController({
             refAndStatus.isPlaying = !refAndStatus.isPlaying;
           }
         }
+
         return refAndStatus;
       });
     });
