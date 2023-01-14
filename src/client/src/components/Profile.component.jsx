@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import Track from './Track.component.jsx';
 import UploadTrack from './UploadTrack.component.jsx';
 
@@ -51,17 +50,13 @@ export default function Profile({
             ) : (
               <>
                 {currentUser.user === 'mateopresa' && (
-                  <UploadTrack
-                    setCurrentUser={setCurrentUser}
-
-                    // setUserTracksFileNames={setUserTracksFileNames}
-                  />
+                  <UploadTrack setCurrentUser={setCurrentUser} />
                 )}
               </>
             )}
-            {/* {userTracksFileNames[1] ? (
+            {currentUser.tracks[1] ? (
               <Track
-                fileName={userTracksFileNames[1]}
+                trackMetaData={currentUser.tracks[1]}
                 track={trackList[1]}
                 setTrackList={setTrackList}
                 playOrPauseTrackByID={playOrPauseTrackByID}
@@ -69,15 +64,13 @@ export default function Profile({
             ) : (
               <>
                 {currentUser.user === 'mateopresa' && (
-                  <UploadTrack
-                    setUserTracksFileNames={setUserTracksFileNames}
-                  />
+                  <UploadTrack setCurrentUser={setCurrentUser} />
                 )}
               </>
             )}
-            {userTracksFileNames[2] ? (
+            {currentUser.tracks[2] ? (
               <Track
-                fileName={userTracksFileNames[2]}
+                trackMetaData={currentUser.tracks[2]}
                 track={trackList[2]}
                 setTrackList={setTrackList}
                 playOrPauseTrackByID={playOrPauseTrackByID}
@@ -85,12 +78,10 @@ export default function Profile({
             ) : (
               <>
                 {currentUser.user === 'mateopresa' && (
-                  <UploadTrack
-                    setUserTracksFileNames={setUserTracksFileNames}
-                  />
+                  <UploadTrack setCurrentUser={setCurrentUser} />
                 )}
               </>
-            )} */}
+            )}
           </section>
         </div>
       </div>

@@ -10,8 +10,10 @@ export default function UploadTrack({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await postTrack(selectedFile);
+    const result = await postTrack(selectedFile);
+    console.log(result);
   };
+
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
   };
