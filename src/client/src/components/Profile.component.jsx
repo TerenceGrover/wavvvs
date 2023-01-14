@@ -30,7 +30,7 @@ export default function Profile({
         <div className="">
           <section className="flex flex-col justify-center items-center mt-3">
             <img
-              className="w-72 h-72 rounded"
+              className="w-60 h-60 rounded"
               src="https://img.freepik.com/free-photo/vivid-blurred-colorful-background_58702-2563.jpg?w=2000"
               alt="profile-pic"
             />
