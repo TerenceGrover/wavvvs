@@ -25,15 +25,15 @@ function App() {
         if (track.waveformRef.id === id) {
           return {
             ...track,
-            isPlaying: !track.isPlaying,
             isLastActive: track.isPlaying || true, // track.isPlaying being false here means you are clicking play.
             // the last active track is the last track on which you clicked play.
+            isPlaying: !track.isPlaying, // toggle isPlaying flag on or off
           };
         }
         return track;
       });
 
-      // make sure only one track is playing and the same time, and only one track is active.
+      // make sure only one track is playing, and only one track is active at the same time.
       return modifiedTrackList.map((track) => {
         if (track.isPlaying) {
           if (track.waveformRef.id !== id) {
@@ -75,6 +75,7 @@ function App() {
     const prevTrack = trackList.at(lastActiveTrackIndex);
     playOrPauseTrackByID(prevTrack.waveformRef.id);
   };
+
   return (
     <div className="h-screen w-screen bg-neutral-900 flex flex-col">
       {!isAuthenticated ? (

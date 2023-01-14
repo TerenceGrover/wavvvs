@@ -12,7 +12,6 @@ export default function MediaController({
   const [isMuted, setIsMuted] = useState(false);
 
   const handlePlayClick = () => {
-    //
     playOrPauseTrackByID(activeTrack.waveformRef.id);
   };
 
@@ -21,6 +20,7 @@ export default function MediaController({
   };
   const handleMuteClick = () => {
     setIsMuted(!isMuted);
+    activeTrack.waveformRef.wavesurfer.toggleMute();
   };
 
   const handlePrevClick = () => {
