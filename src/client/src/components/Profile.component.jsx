@@ -13,6 +13,7 @@ export default function Profile({
   const [userTracksFileNames, setUserTracksFileNames] = useState([]);
   const [userData, setUserData] = useState({});
   const { user, isAuthenticated, isLoading } = useAuth0();
+
   useEffect(() => {
     // This is just a test for now.
     (async () => {
