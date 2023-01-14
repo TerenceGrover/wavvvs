@@ -50,7 +50,7 @@ export default function Profile({
         </div>
         <div className="w-full flex justify-center items-center">
           <section className="w-96">
-            {userTracksFileNames[0] && trackList[0] ? (
+            {userTracksFileNames[0] ? (
               <Track
                 fileName={userTracksFileNames[0]}
                 track={trackList[0]}
@@ -60,7 +60,7 @@ export default function Profile({
             ) : (
               <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
             )}
-            {userTracksFileNames[1] && trackList[1] ? (
+            {userTracksFileNames[1] ? (
               <Track
                 fileName={userTracksFileNames[1]}
                 track={trackList[1]}
@@ -70,7 +70,7 @@ export default function Profile({
             ) : (
               <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
             )}
-            {userTracksFileNames[2] && trackList[2] ? (
+            {userTracksFileNames[2] ? (
               <Track
                 fileName={userTracksFileNames[2]}
                 track={trackList[2]}

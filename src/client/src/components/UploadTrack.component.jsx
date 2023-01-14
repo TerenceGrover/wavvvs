@@ -31,7 +31,7 @@ export default function UploadTrack({ setUserTracksFileNames }) {
           <input
             type="submit"
             value="Upload track"
-            className="text-xs bg-transparent text-neutral-500 py-1 px-4 border border-neutral-700 rounded "
+            className="cursor-pointer text-xs bg-transparent text-neutral-500 py-1 px-4 border border-neutral-700 rounded "
           />
         </label>
       </div>
