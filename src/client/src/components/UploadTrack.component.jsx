@@ -10,14 +10,7 @@ export default function UploadTrack({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newTrack = await postTrack(selectedFile);
-    console.log({ newTrack });
-    setCurrentUser((user) => {
-      if (!user.track0) return { ...user, track0: {...newTrack} };
-      if (!user.track1) return { ...user, track1: {...newTrack} };
-      if (!user.track2) return { ...user, track2: {...newTrack} };
-    });
-    // setUserTracksFileNames((tracks) => [...tracks, newTrack]);
+    await postTrack(selectedFile);
   };
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);

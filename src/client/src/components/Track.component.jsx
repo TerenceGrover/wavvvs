@@ -5,14 +5,13 @@ import WaveSurfer from 'wavesurfer.js';
 const staticTrackURL = 'http://localhost:3001/tracks/';
 
 export default function Track({
-  fileName,
+  trackMetaData,
   track,
   setTrackList,
   playOrPauseTrackByID,
 }) {
-  const trackID = fileName.filename;
-  console.log(trackID);
   const waveformRef = useRef(null);
+  const { path, title } = trackMetaData;
 
   useEffect(() => {
     const options = {
@@ -24,17 +23,13 @@ export default function Track({
       waveColor: '#383838',
       progressColor: '#999',
     };
-
+    // todo wavesurfer on lading state
     if (waveformRef.current) {
       const wavesurfer = WaveSurfer.create(options);
-      wavesurfer.on('waveform-ready', function () {
-        console.log('here');
-      });
 
       //Fetch data with load method
-      console.log('trackId from effect', trackID);
-      wavesurfer.load(staticTrackURL + trackID);
-      waveformRef.id = trackID;
+      wavesurfer.load(staticTrackURL + path);
+      waveformRef.id = path;
       waveformRef.wavesurfer = wavesurfer;
 
       setTrackList((tracks) => [
@@ -44,12 +39,12 @@ export default function Track({
 
       return () => {
         setTrackList((tracks) => {
-          return tracks.filter((track) => track.waveformRef.id !== trackID);
+          return tracks.filter((track) => track.waveformRef.id !== path);
         });
         wavesurfer.destroy();
       };
     }
-  }, [trackID, setTrackList]);
+  }, [path, setTrackList]);
 
   if (track) {
     if (track.isPlaying) {
@@ -60,15 +55,13 @@ export default function Track({
   }
 
   const handleClick = () => {
-    playOrPauseTrackByID(trackID);
+    playOrPauseTrackByID(path);
   };
 
   return (
     <div className="mb-9  h-12 ">
       <>
-        <h4 className="text-neutral-300 text-xs pl-9 mb-2">
-          {fileName.originalname}
-        </h4>
+        <h4 className="text-neutral-300 text-xs pl-9 mb-2">{title}</h4>
         <div className="flex align-center items-center overflow-hidden">
           <div className="mr-2">
             {track?.isPlaying ? (

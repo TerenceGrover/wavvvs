@@ -11,13 +11,6 @@ export default function Profile({
   playOrPauseTrackByID,
   setCurrentUser,
 }) {
-  // const [userTracksFileNames, setUserTracksFileNames] = useState([]);
-  useEffect(() => {
-    console.log(
-      'currentUser FROM PROFILE COMPONENT SHOUDL HAVE ARRAYA S TRACKS',
-      currentUser
-    );
-  });
   // Todo add spinner for loading state
   if (!currentUser) {
     return <>loading</>;
@@ -48,9 +41,9 @@ export default function Profile({
         </div>
         <div className="w-full flex justify-center items-center">
           <section className="w-96">
-            {currentUser.track0 ? (
+            {currentUser.tracks[0] ? (
               <Track
-                fileName={currentUser.track0}
+                trackMetaData={currentUser.tracks[0]}
                 track={trackList[0]}
                 setTrackList={setTrackList}
                 playOrPauseTrackByID={playOrPauseTrackByID}

@@ -15,9 +15,7 @@ function App() {
   useEffect(() => {
     (async () => {
       const tracksFromBackend = await getTracksFromBackend();
-      console.log({ tracksFromBackend });
       const currentUserData = await getUser(user);
-      console.log({ currentUserData });
 
       if (currentUserData && tracksFromBackend) {
         setCurrentUser((currentUser) => ({
