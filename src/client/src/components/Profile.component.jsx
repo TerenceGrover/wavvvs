@@ -14,6 +14,7 @@ export default function Profile({
   const [userData, setUserData] = useState({});
   const { user, isAuthenticated, isLoading } = useAuth0();
   useEffect(() => {
+    // This is just a test for now.
     (async () => {
       const incomingUserData = await fetch(`${serverUrl}/user`).then((res) =>
         res.json()
