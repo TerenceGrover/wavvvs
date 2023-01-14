@@ -10,8 +10,12 @@ export default function UploadTrack({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await postTrack(selectedFile);
-    console.log(result);
+    const newTrack = await postTrack(selectedFile);
+    setCurrentUser((currentUser) => ({
+      // this is only to trigger a re render
+      ...currentUser,
+      tracks: [...currentUser.tracks, newTrack],
+    }));
   };
 
   const handleFileChange = (e) => {
