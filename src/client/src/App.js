@@ -9,35 +9,40 @@ import LandingPage from './components/LandingPage.component.jsx';
 function App() {
   const [trackList, setTrackList] = useState([]);
   const [activeTrack, setActiveTrack] = useState(null);
-  const { user, isAuthenticated, isLoading } = useAuth0();
+  const { isAuthenticated } = useAuth0();
 
   useEffect(() => {
-    const newActiveTrack = trackList.find((track) => track.isActive === true);
+    const newActiveTrack = trackList.find(
+      (track) => track.isLastActive === true
+    );
     setActiveTrack(newActiveTrack);
   }, [activeTrack, trackList]);
-  console.log(isAuthenticated);
+
   const playOrPauseTrackByID = (id) => {
     setTrackList((tracks) => {
-      const stateWithToggledState = tracks.map((track) => {
+      const modifiedTrackList = tracks.map((track) => {
+        // Loop trough the tracks and find by id the one you want to play/pause.
         if (track.waveformRef.id === id) {
           return {
             ...track,
             isPlaying: !track.isPlaying,
-            isActive: track.isPlaying || true,
+            isLastActive: track.isPlaying || true, // track.isPlaying being false here means you are clicking play.
+            // the last active track is the last track on which you clicked play.
           };
         }
         return track;
       });
 
-      return stateWithToggledState.map((track) => {
+      // make sure only one track is playing and the same time, and only one track is active.
+      return modifiedTrackList.map((track) => {
         if (track.isPlaying) {
           if (track.waveformRef.id !== id) {
             track.isPlaying = !track.isPlaying;
           }
         }
-        if (track.isActive) {
+        if (track.isLastActive) {
           if (track.waveformRef.id !== id) {
-            track.isActive = !track.isActive;
+            track.isLastActive = !track.isLastActive;
           }
         }
         return track;
