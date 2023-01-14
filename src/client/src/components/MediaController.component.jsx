@@ -8,7 +8,6 @@ export default function MediaController({
   playOrPauseTrackByID,
   playNextTrack,
   playPrevTrack,
-  setTrackList,
 }) {
   const [isMuted, setIsMuted] = useState(false);
 
