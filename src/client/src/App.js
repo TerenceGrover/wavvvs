@@ -96,6 +96,7 @@ function App() {
               playOrPauseTrackByID={playOrPauseTrackByID}
               playNextTrack={playNextTrack}
               playPrevTrack={playPrevTrack}
+              setTrackList={setTrackList}
             />
           )}
         </>
