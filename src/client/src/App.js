@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
+
 import { Route, Routes } from 'react-router-dom'
 
 import Profile from './components/Profile.component.jsx';
@@ -12,10 +12,8 @@ function App() {
   const [activeTrack, setActiveTrack] = useState(null);
   const [isAudioMuted, setIsAudioMuted] = useState(false);
 
-  const { isAuthenticated, user } = useAuth0();
 
   useEffect(() => {
-    console.log({user})
     const newActiveTrack = trackList.find(
       (track) => track.isLastActive === true
     );
@@ -86,11 +84,6 @@ function App() {
     //   <Route path="/test" element={<Profile />} />
     // </Routes>)
     <div className="h-screen w-screen bg-neutral-900 flex flex-col">
-      {!isAuthenticated ? (
-        <>
-          <LandingPage />
-        </>
-      ) : (
         <>
           <Header />
           <Profile
