@@ -1,3 +1,4 @@
 /node_modules
 /public/pics/*
 /public/tracks/*
+../.DS_Store
