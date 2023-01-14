@@ -68,9 +68,9 @@ export default function Track({
         <div className="flex align-center items-center overflow-hidden">
           <div className="mr-2">
             {track?.isPlaying ? (
-              <IoStop onClick={handleClick} className="text-white w-5 h-5" />
+              <IoStop onClick={handleClick} className="cursor-pointer text-white w-5 h-5 hover:text-neutral-400 ease-in transition duration-100" />
             ) : (
-              <IoPlay onClick={handleClick} className="text-white w-5 h-5" />
+              <IoPlay onClick={handleClick} className="cursor-pointer text-white w-5 h-5 hover:text-neutral-400 ease-in transition duration-100" />
             )}
           </div>
           <div className="w-full overflow-hidden ml-2" ref={waveformRef}></div>
