@@ -89,7 +89,7 @@ function App() {
   return (
     <div className="h-screen w-screen bg-neutral-900 flex flex-col">
       <>
-        <Header profilePicPath={currentUser.profile_pic_path}/>
+        <Header />
         <Profile
           currentUser={currentUser}
           trackList={trackList}
