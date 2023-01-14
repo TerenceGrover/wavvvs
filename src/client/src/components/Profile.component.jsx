@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Track from './Track.component.jsx';
 import UploadTrack from './UploadTrack.component.jsx';
 
@@ -14,7 +14,7 @@ export default function Profile({
 
   // Todo add spinner for loading state
   if (!currentUser) {
-    return (<>loading</>)
+    return <>loading</>;
   }
 
   return (
@@ -50,7 +50,13 @@ export default function Profile({
                 playOrPauseTrackByID={playOrPauseTrackByID}
               />
             ) : (
-              <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
+              <>
+                {currentUser.user === 'mateopresa' && (
+                  <UploadTrack
+                    setUserTracksFileNames={setUserTracksFileNames}
+                  />
+                )}
+              </>
             )}
             {userTracksFileNames[1] ? (
               <Track
@@ -60,7 +66,13 @@ export default function Profile({
                 playOrPauseTrackByID={playOrPauseTrackByID}
               />
             ) : (
-              <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
+              <>
+                {currentUser.user === 'mateopresa' && (
+                  <UploadTrack
+                    setUserTracksFileNames={setUserTracksFileNames}
+                  />
+                )}
+              </>
             )}
             {userTracksFileNames[2] ? (
               <Track
@@ -70,7 +82,13 @@ export default function Profile({
                 playOrPauseTrackByID={playOrPauseTrackByID}
               />
             ) : (
-              <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
+              <>
+                {currentUser.user === 'mateopresa' && (
+                  <UploadTrack
+                    setUserTracksFileNames={setUserTracksFileNames}
+                  />
+                )}
+              </>
             )}
           </section>
         </div>
