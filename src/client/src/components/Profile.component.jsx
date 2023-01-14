@@ -50,30 +50,30 @@ export default function Profile({
         </div>
         <div className="w-full flex justify-center items-center">
           <section className="w-96">
-            {userTracksFileNames[0] ? (
+            {userTracksFileNames[0] && trackList[0] ? (
               <Track
                 fileName={userTracksFileNames[0]}
-                track={trackList?.['0']}
+                track={trackList[0]}
                 setTrackList={setTrackList}
                 playOrPauseTrackByID={playOrPauseTrackByID}
               />
             ) : (
               <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
             )}
-            {userTracksFileNames[1] ? (
+            {userTracksFileNames[1] && trackList[1] ? (
               <Track
                 fileName={userTracksFileNames[1]}
-                track={trackList?.['1']}
+                track={trackList[1]}
                 setTrackList={setTrackList}
                 playOrPauseTrackByID={playOrPauseTrackByID}
               />
             ) : (
               <UploadTrack setUserTracksFileNames={setUserTracksFileNames} />
             )}
-            {userTracksFileNames[2] ? (
+            {userTracksFileNames[2] && trackList[2] ? (
               <Track
                 fileName={userTracksFileNames[2]}
-                track={trackList?.['2']}
+                track={trackList[2]}
                 setTrackList={setTrackList}
                 playOrPauseTrackByID={playOrPauseTrackByID}
               />
