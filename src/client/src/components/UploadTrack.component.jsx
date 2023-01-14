@@ -16,10 +16,10 @@ export default function UploadTrack({ setUserTracksFileNames }) {
   };
 
   return (
-    <form className="h-20" onSubmit={handleSubmit}>
+    <form className="h-16 mb-10" onSubmit={handleSubmit}>
       <div className="flex items-center justify-center w-full mb-9 ">
-        <label className="flex flex-col items-center justify-center w-full h-12 border-2 border-neutral-800 border-dashed rounded cursor-pointer bg-neutral-900">
-          <div className="flex items-center justify-center py-5">
+        <label className="flex flex-col items-center justify-center w-full h-20 border-2 border-neutral-800 border-dashed rounded cursor-pointer bg-neutral-900">
+          <div className="flex items-center justify-center">
             <FiUpload className="text-neutral-700" />
           </div>
           <input
@@ -28,11 +28,11 @@ export default function UploadTrack({ setUserTracksFileNames }) {
             accept=".wav,.mp3,.flac"
             onChange={handleFileChange}
           />
-          <input
+          {selectedFile && <input
             type="submit"
             value="Upload track"
-            className="cursor-pointer text-xs bg-transparent text-neutral-500 py-1 px-4 border border-neutral-700 rounded "
-          />
+            className="cursor-pointer text-xs bg-transparent text-neutral-500 mt-1 py-1 px-4 border border-neutral-700 rounded "
+          />}
         </label>
       </div>
     </form>
