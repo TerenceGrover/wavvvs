@@ -12,10 +12,9 @@ function App() {
   const [activeTrack, setActiveTrack] = useState(null);
   const [isAudioMuted, setIsAudioMuted] = useState(false);
 
-  const { isAuthenticated, user } = useAuth0();
+  const { isAuthenticated } = useAuth0();
 
   useEffect(() => {
-    console.log({user})
     const newActiveTrack = trackList.find(
       (track) => track.isLastActive === true
     );
