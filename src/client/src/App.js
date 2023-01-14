@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import Profile from './components/Profile.component.jsx';
 import Header from './components/Header.component.jsx';
 import MediaController from './components/MediaController.component.jsx';
-import { getUser } from './apiService/api-service.js';
+import { getUser, getTracksFromBackend } from './apiService/api-service.js';
 
 function App() {
   const [trackList, setTrackList] = useState([]);
@@ -14,11 +14,22 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      const userData = await getUser(user);
-      if (userData) {
-        setCurrentUser(user => ({...user, ...userData}));
+      const tracksFromBackend = await getTracksFromBackend();
+      console.log({ tracksFromBackend });
+      const currentUserData = await getUser(user);
+      console.log({ currentUserData });
+
+      if (currentUserData && tracksFromBackend) {
+        setCurrentUser((currentUser) => ({
+          ...currentUser,
+          ...currentUserData,
+          tracks: tracksFromBackend.filter(
+            (track) => track.uploaded_by === currentUser?.user
+          ),
+        }));
       }
     })();
+
     const newActiveTrack = trackList.find(
       (track) => track.isLastActive === true
     );

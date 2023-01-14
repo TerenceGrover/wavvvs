@@ -18,5 +18,8 @@ const getUser = async (user) => {
   const result = await fetch(`${baseURL}${user}`).then((res) => res.json());
   return result;
 };
-
-export { postTrack, getUser };
+const getTracksFromBackend = async () => {
+  const result = await fetch(`${baseURL}alltracks`).then((res) => res.json());
+  return result;
+}
+export { postTrack, getUser, getTracksFromBackend };

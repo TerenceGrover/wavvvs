@@ -13,7 +13,10 @@ export default function Profile({
 }) {
   // const [userTracksFileNames, setUserTracksFileNames] = useState([]);
   useEffect(() => {
-    console.log('currentUser.track0', currentUser.track0);
+    console.log(
+      'currentUser FROM PROFILE COMPONENT SHOUDL HAVE ARRAYA S TRACKS',
+      currentUser
+    );
   });
   // Todo add spinner for loading state
   if (!currentUser) {
