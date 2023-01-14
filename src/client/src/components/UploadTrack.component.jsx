@@ -16,10 +16,10 @@ export default function UploadTrack({ setUserTracksFileNames }) {
   };
 
   return (
-    <form className="h-16 mb-10" onSubmit={handleSubmit}>
+    <form className="h-12 mb-10" onSubmit={handleSubmit}>
       <div className="flex items-center justify-center w-full mb-9 ">
-        <label className="flex flex-col items-center justify-evenly w-full h-20 border-2 border-neutral-800 border-dashed rounded bg-neutral-900">
-          <FiUpload className="text-neutral-700 hover:text-neutral-400 ease-in transition duration-100 cursor-pointer" />
+        <label className="flex items-center justify-evenly w-full h-12 border-2 border-neutral-800 border-dashed rounded bg-neutral-900 hover:border-neutral-700 ease-in transition duration-100">
+          <FiUpload className="self-center text-neutral-700 hover:text-neutral-400 ease-in transition duration-100 cursor-pointer" />
           <input
             type="file"
             className="hidden"

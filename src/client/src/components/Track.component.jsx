@@ -20,6 +20,8 @@ export default function Track({
       barWidth: 2,
       height: 18,
       normalize: true,
+      waveColor: '#383838',
+      progressColor: '#999'
     };
 
     if (waveformRef.current) {
@@ -62,7 +64,7 @@ export default function Track({
   return (
     <div className="mb-9  h-12 ">
       <>
-        <h4 className="text-white text-xs pl-9 mb-2">
+        <h4 className="text-neutral-300 text-xs pl-9 mb-2">
           {fileName.originalname}
         </h4>
         <div className="flex align-center items-center overflow-hidden">
