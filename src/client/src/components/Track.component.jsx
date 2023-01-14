@@ -11,7 +11,6 @@ export default function Track({
   playOrPauseTrackByID,
 }) {
   const trackID = fileName.filename;
-  console.log(trackID);
   const waveformRef = useRef(null);
 
   useEffect(() => {

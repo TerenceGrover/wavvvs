@@ -50,6 +50,31 @@ function App() {
     });
   };
 
+  const playNextTrack = () => {
+    let lastActiveTrackIndex = trackList.findIndex(
+      (track) => track.isLastActive === true
+    );
+
+    lastActiveTrackIndex === trackList.length - 1
+      ? (lastActiveTrackIndex = 0)
+      : lastActiveTrackIndex++;
+
+    const nextTrack = trackList.at(lastActiveTrackIndex);
+    playOrPauseTrackByID(nextTrack.waveformRef.id);
+  };
+
+  const playPrevTrack = () => {
+    let lastActiveTrackIndex = trackList.findIndex(
+      (track) => track.isLastActive === true
+    );
+
+    lastActiveTrackIndex === 0
+      ? (lastActiveTrackIndex = trackList.length - 1)
+      : lastActiveTrackIndex--;
+
+    const prevTrack = trackList.at(lastActiveTrackIndex);
+    playOrPauseTrackByID(prevTrack.waveformRef.id);
+  };
   return (
     <div className="h-screen w-screen bg-neutral-900 flex flex-col">
       {!isAuthenticated ? (
@@ -68,6 +93,8 @@ function App() {
             <MediaController
               activeTrack={activeTrack}
               playOrPauseTrackByID={playOrPauseTrackByID}
+              playNextTrack={playNextTrack}
+              playPrevTrack={playPrevTrack}
             />
           )}
         </>

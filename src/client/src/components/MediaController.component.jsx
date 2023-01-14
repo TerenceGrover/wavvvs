@@ -3,15 +3,28 @@ import { IoPlay, IoStop } from 'react-icons/io5';
 import { TbPlayerSkipBack, TbPlayerSkipForward } from 'react-icons/tb';
 import { FiVolume2, FiVolumeX } from 'react-icons/fi';
 
-export default function MediaController({ activeTrack, playOrPauseTrackByID}) {
+export default function MediaController({
+  activeTrack,
+  playOrPauseTrackByID,
+  playNextTrack,
+  playPrevTrack,
+}) {
   const [isMuted, setIsMuted] = useState(false);
 
-  const handlePlayClick = () => { //
-    playOrPauseTrackByID(activeTrack.waveformRef.id)
+  const handlePlayClick = () => {
+    //
+    playOrPauseTrackByID(activeTrack.waveformRef.id);
   };
 
+  const handleNextClick = () => {
+    playNextTrack();
+  };
   const handleMuteClick = () => {
     setIsMuted(!isMuted);
+  };
+
+  const handlePrevClick = () => {
+    playPrevTrack();
   };
 
   return (
@@ -20,7 +33,10 @@ export default function MediaController({ activeTrack, playOrPauseTrackByID}) {
         <div className="h-full flex justify-center items-center align-center">
           <div className=" flex w-96 h-full justify-between items-center">
             <div className="flex w-28 justify-between items-center">
-              <TbPlayerSkipBack className="text-neutral-200 h-5 w-5 mr-3" />
+              <TbPlayerSkipBack
+                onClick={handlePrevClick}
+                className="text-neutral-200 h-5 w-5 mr-3"
+              />
               {!activeTrack?.isPlaying ? (
                 <IoPlay
                   onClick={handlePlayClick}
@@ -32,7 +48,10 @@ export default function MediaController({ activeTrack, playOrPauseTrackByID}) {
                   className="text-neutral-200 h-5 w-5 mr-3"
                 />
               )}
-              <TbPlayerSkipForward className="text-neutral-200 h-5 w-5 mr-3" />
+              <TbPlayerSkipForward
+                onClick={handleNextClick}
+                className="text-neutral-200 h-5 w-5 mr-3"
+              />
             </div>
             <div className="flex w-14 justify-end items-center">
               {isMuted ? (
