@@ -8,12 +8,10 @@ export default function MediaController({
   playOrPauseTrackByID,
   playNextTrack,
   playPrevTrack,
+  isAudioMuted,
+  setIsAudioMuted,
 }) {
-  const [isMuted, setIsMuted] = useState(false);
-
-  useEffect(() => {
-    setIsMuted(activeTrack.waveformRef.wavesurfer.getMute());
-  }, [activeTrack.waveformRef.wavesurfer]);
+  activeTrack.waveformRef.wavesurfer.setMute(isAudioMuted);
 
   const handlePlayClick = () => {
     playOrPauseTrackByID(activeTrack.waveformRef.id);
@@ -23,8 +21,7 @@ export default function MediaController({
     playNextTrack();
   };
   const handleMuteClick = () => {
-    setIsMuted(!isMuted);
-    activeTrack.waveformRef.wavesurfer.toggleMute();
+    setIsAudioMuted(!isAudioMuted);
   };
 
   const handlePrevClick = () => {
@@ -58,7 +55,7 @@ export default function MediaController({
               />
             </div>
             <div className="flex w-14 justify-end items-center">
-              {isMuted ? (
+              {isAudioMuted ? (
                 <FiVolumeX
                   onClick={handleMuteClick}
                   className="cursor-pointer text-neutral-200 h-5 w-7 hover:text-neutral-400 ease-in transition duration-100"

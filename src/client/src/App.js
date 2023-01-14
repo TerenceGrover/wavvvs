@@ -9,6 +9,8 @@ import LandingPage from './components/LandingPage.component.jsx';
 function App() {
   const [trackList, setTrackList] = useState([]);
   const [activeTrack, setActiveTrack] = useState(null);
+  const [isAudioMuted, setIsAudioMuted] = useState(false);
+
   const { isAuthenticated } = useAuth0();
 
   useEffect(() => {
@@ -97,6 +99,8 @@ function App() {
               playNextTrack={playNextTrack}
               playPrevTrack={playPrevTrack}
               setTrackList={setTrackList}
+              isAudioMuted={isAudioMuted}
+              setIsAudioMuted={setIsAudioMuted}
             />
           )}
         </>
