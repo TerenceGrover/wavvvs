@@ -7,11 +7,16 @@ const userSchema = mongoose.Schema({
   password: String,
   bio: String,
   profile_pic_path: String,
-  track0: String,
-  track1: String,
-  track2: String,
+});
+
+const trackSchema = mongoose.Schema({
+  uploaded_by: String,
+  path: String,
+  title: String,
+  size: Number,
 });
 
 const User = mongoose.model('User', userSchema);
+const Track = mongoose.model('Track', trackSchema);
 
-export { User };
+export { User, Track };

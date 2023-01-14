@@ -1,33 +1,15 @@
-import { User } from '../models/models.js';
-
+import { Track } from '../models/models.js';
+// todo error handling
 export default async function uploadTrack(req, res) {
-  console.log('im here in uploadTrack controller');
   const { username } = req.params;
-  const { originalname, filename } = req.file;
-  // todo: save path to track on user Model in database
-  const user = await User.findOne({ user: username });
-  console.log({ user });
-  if (user.track0 === '') {
-    await User.findOneAndUpdate({ user: username }, { track0: filename });
-    sendUserBackToClient(username, res);
-  }
-  if (user.track1 === '') {
-    await User.findOneAndUpdate({ user: username }, { track1: filename });
-    sendUserBackToClient(username, res);
-  }
-  if (user.track2 === '') {
-    await User.findOneAndUpdate({ user: username }, { track2: filename });
-    sendUserBackToClient(username);
-  }
-  // const updatedUser = await User.findOne({ user: username });
-  // console.log({ updatedUser });
-  // res.status(200);
-  // res.send(updatedUser);
-}
-
-const sendUserBackToClient = async (username, res) => {
-  const updatedUser = await User.findOne({ user: username });
-  console.log({ updatedUser });
+  const { originalname, filename, size } = req.file;
+  const newTrack = new Track({
+    uploaded_by: username,
+    path: filename,
+    title: originalname,
+    size: size,
+  });
+  await newTrack.save();
   res.status(200);
-  res.send(updatedUser);
-};
+  res.send(newTrack);
+}
