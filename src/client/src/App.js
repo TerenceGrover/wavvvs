@@ -1,17 +1,14 @@
 import { useState, useEffect } from 'react';
-
-import { Route, Routes } from 'react-router-dom'
-
+import { useParams } from 'react-router-dom';
 import Profile from './components/Profile.component.jsx';
 import Header from './components/Header.component.jsx';
 import MediaController from './components/MediaController.component.jsx';
-import LandingPage from './components/LandingPage.component.jsx';
 
 function App() {
   const [trackList, setTrackList] = useState([]);
   const [activeTrack, setActiveTrack] = useState(null);
   const [isAudioMuted, setIsAudioMuted] = useState(false);
-
+  const { user } = useParams();
 
   useEffect(() => {
     const newActiveTrack = trackList.find(
@@ -79,33 +76,28 @@ function App() {
   };
 
   return (
-    // <Routes>
-    //   <Route path="/" element={<LandingPage />} />
-    //   <Route path="/test" element={<Profile />} />
-    // </Routes>)
     <div className="h-screen w-screen bg-neutral-900 flex flex-col">
-        <>
-          <Header />
-          <Profile
-            trackList={trackList}
-            setTrackList={setTrackList}
+      <>
+        <Header />
+        <Profile
+          trackList={trackList}
+          setTrackList={setTrackList}
+          playOrPauseTrackByID={playOrPauseTrackByID}
+        />
+        {activeTrack && (
+          <MediaController
+            activeTrack={activeTrack}
             playOrPauseTrackByID={playOrPauseTrackByID}
+            playNextTrack={playNextTrack}
+            playPrevTrack={playPrevTrack}
+            setTrackList={setTrackList}
+            isAudioMuted={isAudioMuted}
+            setIsAudioMuted={setIsAudioMuted}
           />
-          {activeTrack && (
-            <MediaController
-              activeTrack={activeTrack}
-              playOrPauseTrackByID={playOrPauseTrackByID}
-              playNextTrack={playNextTrack}
-              playPrevTrack={playPrevTrack}
-              setTrackList={setTrackList}
-              isAudioMuted={isAudioMuted}
-              setIsAudioMuted={setIsAudioMuted}
-            />
-          )}
-        </>
-      )}
-    </div> );
-  // );
+        )}
+      </>
+    </div>
+  );
 }
 
 export default App;
