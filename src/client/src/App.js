@@ -9,17 +9,16 @@ function App() {
   const [trackList, setTrackList] = useState([]);
   const [activeTrack, setActiveTrack] = useState(null);
   const [isAudioMuted, setIsAudioMuted] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null)
+  const [currentUser, setCurrentUser] = useState(null);
   const { user } = useParams();
 
   useEffect(() => {
     (async () => {
       const userData = await getUser(user);
-      if(userData) {
-        setCurrentUser(userData);
+      if (userData) {
+        setCurrentUser(user => ({...user, ...userData}));
       }
     })();
-
     const newActiveTrack = trackList.find(
       (track) => track.isLastActive === true
     );
@@ -84,7 +83,7 @@ function App() {
     const prevTrack = trackList.at(lastActiveTrackIndex);
     playOrPauseTrackByID(prevTrack.waveformRef.id);
   };
-  if(!currentUser) return (<div>Loading...</div>)
+  if (!currentUser) return <div>Loading...</div>;
 
   return (
     <div className="h-screen w-screen bg-neutral-900 flex flex-col">
@@ -92,6 +91,7 @@ function App() {
         <Header />
         <Profile
           currentUser={currentUser}
+          setCurrentUser={setCurrentUser}
           trackList={trackList}
           setTrackList={setTrackList}
           playOrPauseTrackByID={playOrPauseTrackByID}

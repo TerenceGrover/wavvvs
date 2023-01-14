@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import Track from './Track.component.jsx';
 import UploadTrack from './UploadTrack.component.jsx';
 
@@ -9,9 +9,12 @@ export default function Profile({
   trackList,
   setTrackList,
   playOrPauseTrackByID,
+  setCurrentUser,
 }) {
-  const [userTracksFileNames, setUserTracksFileNames] = useState([]);
-
+  // const [userTracksFileNames, setUserTracksFileNames] = useState([]);
+  useEffect(() => {
+    console.log('currentUser.track0', currentUser.track0);
+  });
   // Todo add spinner for loading state
   if (!currentUser) {
     return <>loading</>;
@@ -35,16 +38,16 @@ export default function Profile({
           <hr className="w-96 border-neutral-800 my-6" />
           <section className="w-96">
             <p className="text-xs text-neutral-400 text-left w-full">
-              {currentUser?.bio}
+              {currentUser.bio}
             </p>
           </section>
           <hr className="w-96 border-neutral-800 my-6" />
         </div>
         <div className="w-full flex justify-center items-center">
           <section className="w-96">
-            {userTracksFileNames[0] ? (
+            {currentUser.track0 ? (
               <Track
-                fileName={userTracksFileNames[0]}
+                fileName={currentUser.track0}
                 track={trackList[0]}
                 setTrackList={setTrackList}
                 playOrPauseTrackByID={playOrPauseTrackByID}
@@ -53,12 +56,14 @@ export default function Profile({
               <>
                 {currentUser.user === 'mateopresa' && (
                   <UploadTrack
-                    setUserTracksFileNames={setUserTracksFileNames}
+                    setCurrentUser={setCurrentUser}
+
+                    // setUserTracksFileNames={setUserTracksFileNames}
                   />
                 )}
               </>
             )}
-            {userTracksFileNames[1] ? (
+            {/* {userTracksFileNames[1] ? (
               <Track
                 fileName={userTracksFileNames[1]}
                 track={trackList[1]}
@@ -89,7 +94,7 @@ export default function Profile({
                   />
                 )}
               </>
-            )}
+            )} */}
           </section>
         </div>
       </div>

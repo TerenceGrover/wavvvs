@@ -11,6 +11,7 @@ export default function Track({
   playOrPauseTrackByID,
 }) {
   const trackID = fileName.filename;
+  console.log(trackID);
   const waveformRef = useRef(null);
 
   useEffect(() => {
@@ -21,7 +22,7 @@ export default function Track({
       height: 18,
       normalize: true,
       waveColor: '#383838',
-      progressColor: '#999'
+      progressColor: '#999',
     };
 
     if (waveformRef.current) {
@@ -31,6 +32,7 @@ export default function Track({
       });
 
       //Fetch data with load method
+      console.log('trackId from effect', trackID);
       wavesurfer.load(staticTrackURL + trackID);
       waveformRef.id = trackID;
       waveformRef.wavesurfer = wavesurfer;
@@ -70,9 +72,15 @@ export default function Track({
         <div className="flex align-center items-center overflow-hidden">
           <div className="mr-2">
             {track?.isPlaying ? (
-              <IoStop onClick={handleClick} className="cursor-pointer text-white w-5 h-5 hover:text-neutral-400 ease-in transition duration-100" />
+              <IoStop
+                onClick={handleClick}
+                className="cursor-pointer text-white w-5 h-5 hover:text-neutral-400 ease-in transition duration-100"
+              />
             ) : (
-              <IoPlay onClick={handleClick} className="cursor-pointer text-white w-5 h-5 hover:text-neutral-400 ease-in transition duration-100" />
+              <IoPlay
+                onClick={handleClick}
+                className="cursor-pointer text-white w-5 h-5 hover:text-neutral-400 ease-in transition duration-100"
+              />
             )}
           </div>
           <div className="w-full overflow-hidden ml-2" ref={waveformRef}></div>

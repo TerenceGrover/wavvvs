@@ -2,15 +2,23 @@ import { useState } from 'react';
 import { FiUpload } from 'react-icons/fi';
 import { postTrack } from '../apiService/api-service.js';
 
-export default function UploadTrack({ setUserTracksFileNames }) {
+export default function UploadTrack({
+  setUserTracksFileNames,
+  setCurrentUser,
+}) {
   const [selectedFile, setSelectedFile] = useState();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newTrack = await postTrack(selectedFile);
-    setUserTracksFileNames((tracks) => [...tracks, newTrack]);
+    console.log({ newTrack });
+    setCurrentUser((user) => {
+      if (!user.track0) return { ...user, track0: {...newTrack} };
+      if (!user.track1) return { ...user, track1: {...newTrack} };
+      if (!user.track2) return { ...user, track2: {...newTrack} };
+    });
+    // setUserTracksFileNames((tracks) => [...tracks, newTrack]);
   };
-
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
   };
