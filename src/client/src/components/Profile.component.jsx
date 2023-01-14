@@ -5,22 +5,17 @@ import UploadTrack from './UploadTrack.component.jsx';
 const serverUrl = 'http://localhost:3001';
 
 export default function Profile({
+  currentUser,
   trackList,
   setTrackList,
   playOrPauseTrackByID,
 }) {
   const [userTracksFileNames, setUserTracksFileNames] = useState([]);
-  const [userData, setUserData] = useState({});
 
-  useEffect(() => {
-    // This is just a test for now.
-    (async () => {
-      const incomingUserData = await fetch(`${serverUrl}/user`).then((res) =>
-        res.json()
-      );
-      setUserData(incomingUserData);
-    })();
-  }, []);
+  // Todo add spinner for loading state
+  if (!currentUser) {
+    return (<>loading</>)
+  }
 
   return (
     <div className="h-screen w-screen ">
@@ -29,19 +24,18 @@ export default function Profile({
           <section className="flex flex-col justify-center items-center mt-3">
             <img
               className="w-60 h-60 rounded"
-              src="https://img.freepik.com/free-photo/vivid-blurred-colorful-background_58702-2563.jpg?w=2000"
+              src={`${serverUrl}/pics/${currentUser.profile_pic_path}`}
               alt="profile-pic"
             />
-            <h1 className="text-white text-2xl mt-7 mb-1">Mateo Presa</h1>
-            <p className="text-neutral-400">@mateo_presa</p>
+            <h1 className="text-white text-2xl mt-7 mb-1">
+              {currentUser.name}
+            </h1>
+            <p className="text-neutral-400">{`@${currentUser.user}`}</p>
           </section>
           <hr className="w-96 border-neutral-800 my-6" />
           <section className="w-96">
             <p className="text-xs text-neutral-400 text-left w-full">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Suspendisse id neque at nulla suscipit dapibus. Lorem ipsum dolor
-              sit amet, consectetur adipiscing elit. Suspendisse id neque at
-              nulla suscipit dapibus.
+              {currentUser?.bio}
             </p>
           </section>
           <hr className="w-96 border-neutral-800 my-6" />

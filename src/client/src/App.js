@@ -3,19 +3,29 @@ import { useParams } from 'react-router-dom';
 import Profile from './components/Profile.component.jsx';
 import Header from './components/Header.component.jsx';
 import MediaController from './components/MediaController.component.jsx';
+import { getUser } from './apiService/api-service.js';
 
 function App() {
   const [trackList, setTrackList] = useState([]);
   const [activeTrack, setActiveTrack] = useState(null);
   const [isAudioMuted, setIsAudioMuted] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null)
   const { user } = useParams();
 
   useEffect(() => {
+    (async () => {
+      const userData = await getUser(user);
+      if(userData) {
+        setCurrentUser(userData);
+      }
+    })();
+
     const newActiveTrack = trackList.find(
       (track) => track.isLastActive === true
     );
+
     setActiveTrack(newActiveTrack);
-  }, [activeTrack, trackList]);
+  }, [activeTrack, trackList, user]);
 
   const playOrPauseTrackByID = (id) => {
     setTrackList((tracks) => {
@@ -74,12 +84,14 @@ function App() {
     const prevTrack = trackList.at(lastActiveTrackIndex);
     playOrPauseTrackByID(prevTrack.waveformRef.id);
   };
+  if(!currentUser) return (<div>Loading...</div>)
 
   return (
     <div className="h-screen w-screen bg-neutral-900 flex flex-col">
       <>
-        <Header />
+        <Header profilePicPath={currentUser.profile_pic_path}/>
         <Profile
+          currentUser={currentUser}
           trackList={trackList}
           setTrackList={setTrackList}
           playOrPauseTrackByID={playOrPauseTrackByID}
