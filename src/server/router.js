@@ -7,7 +7,7 @@ const upload = multer({ dest: './public/tracks' });
 
 const router = express.Router();
 
-router.post('/:userID/tracks', upload.single('track'), uploadTrack);
-router.get('/user', User.getAllUsers);
+router.post('/:username/tracks', upload.single('track'), uploadTrack);
+router.get('/:username', User.getUser);
 
 export default router;

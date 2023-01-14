@@ -1,5 +1,5 @@
 export default function uploadTrack(req, res) {
-  const { userID } = req.params;
+  const { username } = req.params;
   const { originalname, filename } = req.file;
   // todo: save path to track on user Model in database
   console.log(req.file);
