@@ -1,6 +1,8 @@
 import { Track } from '../models/models.js';
 // todo error handling
-export default async function uploadTrack(req, res) {
+
+const uploadTrack = async (req, res) => {
+  console.log('uplaodtrckcalled called')
   const { username } = req.params;
   const { originalname, filename, size } = req.file;
   const newTrack = new Track({
@@ -10,6 +12,15 @@ export default async function uploadTrack(req, res) {
     size: size,
   });
   await newTrack.save();
+  console.log(newTrack)
   res.status(200);
   res.send(newTrack);
-}
+};
+
+const getAllTracks = async (req, res) => {
+  const tracks = await Track.find({});
+  res.status(200);
+  res.send(tracks);
+};
+
+export { uploadTrack, getAllTracks };
