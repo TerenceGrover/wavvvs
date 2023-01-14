@@ -4,7 +4,7 @@ const baseURL = 'http://localhost:3001/';
 
 // Todo: error handling
 
-const postTrack = async (selectedFile, userID = 0) => {
+const postTrack = async (selectedFile, userID = 'mateopresa') => {
   const formData = new FormData();
   formData.append('track', selectedFile);
 
