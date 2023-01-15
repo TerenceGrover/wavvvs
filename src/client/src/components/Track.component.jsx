@@ -18,7 +18,7 @@ export default function Track({
   const [isHovering, setIsHovering] = useState(false);
   const waveformRef = useRef(null);
 
-  const { path, title, date } = trackMetaData;
+  const { path, title, date, uploaded_by } = trackMetaData;
 
   const hoursSinceUploaded = millisecondsToHours(Number(Date.now() - date));
   if (hoursSinceUploaded >= 24) deleteTrack(path); // in this case the path is the id
@@ -87,15 +87,17 @@ export default function Track({
     >
       <DeleteWarningModal setOpen={setOpen} open={open} trackPath={path} />
       <div className="relative flex justify-between w-full">
-        {isHovering ? (
+        {isHovering && uploaded_by === 'mateopresa' ? (
           <MdClose
-            className="text-neutral-300 p-0 m-0 cursor-pointer hover:text-neutral-600 ease-in transition duration-100"
+            className="text-neutral-300 p-0 m-0 cursor-pointer hover:text-red-500 ease-in transition duration-100"
             onClick={handleDelete}
           />
         ) : (
           <div className="w-4"></div>
         )}
-        <h4 className=" absolute left-4 text-neutral-300 text-xs mb-2 ml-5">{title}</h4>
+        <h4 className=" absolute left-4 text-neutral-300 text-xs mb-2 ml-5">
+          {title}
+        </h4>
         <h4 className="text-neutral-600 text-xs pl-9 mb-2">
           {hoursSinceUploaded ? hoursSinceUploaded + 'h' : 'now'}
         </h4>

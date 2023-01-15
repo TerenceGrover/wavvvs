@@ -40,9 +40,9 @@ export default function DeleteWarningModal({ open, setOpen, trackPath }) {
               <Dialog.Panel className="relative transform overflow-hidden rounded bg-neutral-700 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                 <div className="bg-neutral-900 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                   <div className="sm:flex sm:items-start">
-                    <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                    <div className="mx-auto flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-red-900">
                       <ExclamationTriangleIcon
-                        className="h-6 w-6 text-red-600"
+                        className="h-5 w-5 text-red-400"
                         aria-hidden="true"
                       />
                     </div>
@@ -54,7 +54,7 @@ export default function DeleteWarningModal({ open, setOpen, trackPath }) {
                         Delete track
                       </Dialog.Title>
                       <div className="mt-2">
-                        <p className="text-xs font-normal text-neutral-100">
+                        <p className="text-xs font-normal text-neutral-400">
                           Are you sure you want to delete this track? All of
                           your data will be permanently removed. This action
                           cannot be undone.
@@ -63,12 +63,11 @@ export default function DeleteWarningModal({ open, setOpen, trackPath }) {
                     </div>
                   </div>
                 </div>
-                <div className="bg-neutral-800 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                <div className="bg-neutral-900 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                   <button
                     type="button"
-                    className="inline-flex w-full justify-center border-none rounded bg-red-600 px-4 py-2 text-xs text-white  hover:bg-red-700  sm:ml-3 sm:w-auto sm:text-sm"
+                    className="transition ease-in duration-200 w-20 rounded bg-red-800 py-2 px-1 mt-2 text-xs text-white hover:bg-red-700 ml-3"
                     onClick={() => {
-                      console.log(trackPath);
                       deleteTrack(trackPath);
                       setOpen(false);
                     }}
@@ -77,7 +76,7 @@ export default function DeleteWarningModal({ open, setOpen, trackPath }) {
                   </button>
                   <button
                     type="button"
-                    className="mt-3 inline-flex w-full justify-center rounded bg-neutral-400 px-4 py-2 text-base text-neutral-900 shadow-sm hover:bg-neutral-50  sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                    className="transition ease-in duration-200 w-20 rounded bg-neutral-800 py-2 px-1 mt-2 text-xs text-white hover:bg-neutral-700"
                     onClick={() => setOpen(false)}
                     ref={cancelButtonRef}
                   >
