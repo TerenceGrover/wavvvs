@@ -85,12 +85,15 @@ export default function Track({
       className="h-12 mb-10"
     >
       <div className="flex justify-between w-full">
-        {isHovering && (
-          <MdClose className="text-neutral-300 cursor-pointer hover:text-neutral-600" onClick={handleDelete} />
+        {isHovering ? (
+          <MdClose
+            className="text-neutral-300 p-0 m-0 cursor-pointer hover:text-neutral-600 ease-in transition duration-100"
+            onClick={handleDelete}
+          />
+        ) : (
+          <div className="w-4"></div>
         )}
-        <h4 className="text-neutral-300 text-xs pl-9 mb-2 justify-self-start">
-          {title}
-        </h4>
+        <h4 className=" text-neutral-300 text-xs mb-2">{title}</h4>
         <h4 className="text-neutral-600 text-xs pl-9 mb-2">
           {hoursSinceUploaded ? hoursSinceUploaded + 'h' : 'now'}
         </h4>
