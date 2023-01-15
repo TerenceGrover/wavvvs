@@ -27,12 +27,14 @@ const fakeTracks = [
     path: 'audio0.wav',
     title: 'throwaway...',
     size: 123456,
+    date: Date.now() - 21600000, // 6 hours ago
   },
   {
     uploaded_by: 'randomproducer',
     path: 'audio1.wav',
     title: 'vibes',
     size: 123456,
+    date: Date.now() - 18000000, // 5 hours ago
   },
 ];
 

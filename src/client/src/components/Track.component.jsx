@@ -1,6 +1,8 @@
-import { useEffect, useRef} from 'react';
-import { IoPlay, IoStop } from 'react-icons/io5';
+import { useEffect, useRef } from 'react';
 import WaveSurfer from 'wavesurfer.js';
+import millisecondsToHours from 'date-fns/millisecondsToHours';
+
+import { IoPlay, IoStop } from 'react-icons/io5';
 
 const staticTrackURL = 'http://localhost:3001/tracks/';
 
@@ -11,7 +13,8 @@ export default function Track({
   playOrPauseTrackByID,
 }) {
   const waveformRef = useRef(null);
-  const { path, title } = trackMetaData;
+  const { path, title, date } = trackMetaData;
+  const hoursSinceUploaded = millisecondsToHours(Number(Date.now() - date));
 
   useEffect(() => {
     const options = {
@@ -61,7 +64,12 @@ export default function Track({
   return (
     <div className="h-12 mb-10">
       <>
-        <h4 className="text-neutral-300 text-xs pl-9 mb-2">{title}</h4>
+        <div className="flex justify-between">
+          <h4 className="text-neutral-300 text-xs pl-9 mb-2">{title}</h4>
+          <h4 className="text-neutral-600 text-xs pl-9 mb-2">
+            {hoursSinceUploaded ? hoursSinceUploaded + 'h' : 'now'}
+          </h4>
+        </div>
         <div className="flex align-center items-center overflow-hidden">
           <div className="mr-2">
             {track?.isPlaying ? (

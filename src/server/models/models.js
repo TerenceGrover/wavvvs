@@ -14,6 +14,7 @@ const trackSchema = mongoose.Schema({
   path: String,
   title: String,
   size: Number,
+  date: Number
 });
 
 const User = mongoose.model('User', userSchema);

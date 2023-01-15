@@ -9,6 +9,7 @@ const uploadTrack = async (req, res) => {
     path: filename,
     title: originalname,
     size: size,
+    date: new Date(),
   });
   await newTrack.save();
   res.status(200);
