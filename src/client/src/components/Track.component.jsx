@@ -4,6 +4,7 @@ import millisecondsToHours from 'date-fns/millisecondsToHours';
 import { deleteTrack } from '../apiService/api-service.js';
 import { IoPlay, IoStop } from 'react-icons/io5';
 import { MdClose } from 'react-icons/md';
+import DeleteWarningModal from './DeleteWarningModal.component.jsx';
 
 const staticTrackURL = 'http://localhost:3001/tracks/';
 
@@ -13,6 +14,7 @@ export default function Track({
   setTrackList,
   playOrPauseTrackByID,
 }) {
+  const [open, setOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const waveformRef = useRef(null);
 
@@ -75,15 +77,15 @@ export default function Track({
   };
 
   const handleDelete = () => {
-    deleteTrack(path);
+    setOpen(true);
   };
-
   return (
     <div
       onMouseOver={handleMouseOver}
       onMouseOut={handleMouseOut}
       className="h-12 mb-10"
     >
+      <DeleteWarningModal setOpen={setOpen} open={open} trackPath={path} />
       <div className="flex justify-between w-full">
         {isHovering ? (
           <MdClose
@@ -93,7 +95,7 @@ export default function Track({
         ) : (
           <div className="w-4"></div>
         )}
-        <h4 className=" text-neutral-300 text-xs mb-2">{title}</h4>
+        <h4 className=" text-neutral-300 text-xs mb-2 ml-5">{title}</h4>
         <h4 className="text-neutral-600 text-xs pl-9 mb-2">
           {hoursSinceUploaded ? hoursSinceUploaded + 'h' : 'now'}
         </h4>
