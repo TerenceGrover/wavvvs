@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef} from 'react';
 import { IoPlay, IoStop } from 'react-icons/io5';
 import WaveSurfer from 'wavesurfer.js';
 
@@ -10,7 +10,6 @@ export default function Track({
   setTrackList,
   playOrPauseTrackByID,
 }) {
-  const [isTrackReady, setIsTrackReady] = useState(false);
   const waveformRef = useRef(null);
   const { path, title } = trackMetaData;
 
@@ -27,10 +26,6 @@ export default function Track({
 
     if (waveformRef.current) {
       const wavesurfer = WaveSurfer.create(options);
-
-      wavesurfer.on('ready', () => {
-        setIsTrackReady(true);
-      });
 
       //The load method handles the actual fetching of the audio
       wavesurfer.load(staticTrackURL + path);
