@@ -26,7 +26,6 @@ export default function UploadTrack({
     <form className="h-12 mb-10" onSubmit={handleSubmit}>
       <div className="flex items-center justify-center w-full mb-9 ">
         <label className="flex items-center justify-evenly w-full h-12 border-2 border-neutral-800 border-dashed rounded bg-neutral-900 hover:border-neutral-700 ease-in transition duration-100">
-          <FiUpload className="self-center text-neutral-700 hover:text-neutral-400 ease-in transition duration-100 cursor-pointer" />
           <input
             type="file"
             className="hidden"
@@ -34,11 +33,11 @@ export default function UploadTrack({
             onChange={handleFileChange}
           />
           {selectedFile && (
-            <input
-              type="submit"
-              value="Upload track"
-              className="cursor-pointer text-xs bg-transparent text-neutral-500 mt-1 py-1 px-4 border border-neutral-700 rounded hover:text-neutral-400 ease-in transition duration-100"
-            />
+            <>
+              <button type="submit">
+                <FiUpload className="self-center text-neutral-700 hover:text-neutral-400 ease-in transition duration-100 cursor-pointer" />
+              </button>
+            </>
           )}
         </label>
       </div>

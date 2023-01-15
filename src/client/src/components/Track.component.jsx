@@ -59,7 +59,7 @@ export default function Track({
   };
 
   return (
-    <div className="mb-9  h-12 ">
+    <div className="h-12 mb-10">
       <>
         <h4 className="text-neutral-300 text-xs pl-9 mb-2">{title}</h4>
         <div className="flex align-center items-center overflow-hidden">
