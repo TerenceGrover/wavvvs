@@ -49,10 +49,11 @@ export default async function () {
         await fs.unlink(path.join(tracksPublicDirectory, file));
       }
     }
+    console.log('Deleting files from public track directory...');
 
     await User.deleteMany({});
     await Track.deleteMany({});
-    console.log('Starting seed: all users and tracks deleted correctly');
+    console.log('Starting seed: all users and tracks deleted from database');
 
     for (const fakeUser of fakeUsers) {
       const user = new User(fakeUser);
@@ -63,7 +64,7 @@ export default async function () {
       await track.save();
     }
 
-    console.log('Seed successful: all users and tracks added 🤞🏼');
+    console.log('Seed successful: all users and tracks added to database🤞🏼');
   } catch (error) {
     console.log(error);
   }

@@ -9,6 +9,8 @@ const router = express.Router();
 
 router.post('/:username/tracks', upload.single('track'), Track.uploadTrack);
 
+router.delete('/delete/tracks/:id', Track.deleteTrack)
+
 router.get('/alltracks', Track.getAllTracks);
 router.get('/:username', User.getUser);
 

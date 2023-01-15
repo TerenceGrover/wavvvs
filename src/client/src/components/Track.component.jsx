@@ -15,6 +15,7 @@ export default function Track({
   const waveformRef = useRef(null);
   const { path, title, date } = trackMetaData;
   const hoursSinceUploaded = millisecondsToHours(Number(Date.now() - date));
+  // if (hoursSinceUploaded => 24) deleteTrack(path) // in this case the path is the id
 
   useEffect(() => {
     const options = {
