@@ -1,8 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import millisecondsToHours from 'date-fns/millisecondsToHours';
 import { deleteTrack } from '../apiService/api-service.js';
 import { IoPlay, IoStop } from 'react-icons/io5';
+import { MdClose } from 'react-icons/md';
 
 const staticTrackURL = 'http://localhost:3001/tracks/';
 
@@ -12,8 +13,11 @@ export default function Track({
   setTrackList,
   playOrPauseTrackByID,
 }) {
+  const [isHovering, setIsHovering] = useState(false);
   const waveformRef = useRef(null);
+
   const { path, title, date } = trackMetaData;
+
   const hoursSinceUploaded = millisecondsToHours(Number(Date.now() - date));
   if (hoursSinceUploaded >= 24) deleteTrack(path); // in this case the path is the id
 
@@ -62,32 +66,51 @@ export default function Track({
     playOrPauseTrackByID(path);
   };
 
+  const handleMouseOver = () => {
+    setIsHovering(true);
+  };
+
+  const handleMouseOut = () => {
+    setIsHovering(false);
+  };
+
+  const handleDelete = () => {
+    deleteTrack(path);
+  };
+
   return (
-    <div className="h-12 mb-10">
-      <>
-        <div className="flex justify-between">
-          <h4 className="text-neutral-300 text-xs pl-9 mb-2">{title}</h4>
-          <h4 className="text-neutral-600 text-xs pl-9 mb-2">
-            {hoursSinceUploaded ? hoursSinceUploaded + 'h' : 'now'}
-          </h4>
+    <div
+      onMouseOver={handleMouseOver}
+      onMouseOut={handleMouseOut}
+      className="h-12 mb-10"
+    >
+      <div className="flex justify-between w-full">
+        {isHovering && (
+          <MdClose className="text-neutral-300 cursor-pointer hover:text-neutral-600" onClick={handleDelete} />
+        )}
+        <h4 className="text-neutral-300 text-xs pl-9 mb-2 justify-self-start">
+          {title}
+        </h4>
+        <h4 className="text-neutral-600 text-xs pl-9 mb-2">
+          {hoursSinceUploaded ? hoursSinceUploaded + 'h' : 'now'}
+        </h4>
+      </div>
+      <div className="flex align-center items-center overflow-hidden">
+        <div className="mr-2">
+          {track?.isPlaying ? (
+            <IoStop
+              onClick={handleClick}
+              className="cursor-pointer text-white w-5 h-5 hover:text-neutral-400 ease-in transition duration-100"
+            />
+          ) : (
+            <IoPlay
+              onClick={handleClick}
+              className="cursor-pointer text-white w-5 h-5 hover:text-neutral-400 ease-in transition duration-100"
+            />
+          )}
         </div>
-        <div className="flex align-center items-center overflow-hidden">
-          <div className="mr-2">
-            {track?.isPlaying ? (
-              <IoStop
-                onClick={handleClick}
-                className="cursor-pointer text-white w-5 h-5 hover:text-neutral-400 ease-in transition duration-100"
-              />
-            ) : (
-              <IoPlay
-                onClick={handleClick}
-                className="cursor-pointer text-white w-5 h-5 hover:text-neutral-400 ease-in transition duration-100"
-              />
-            )}
-          </div>
-          <div className="w-full overflow-hidden ml-2" ref={waveformRef}></div>
-        </div>
-      </>
+        <div className="w-full overflow-hidden ml-2" ref={waveformRef}></div>
+      </div>
     </div>
   );
 }
