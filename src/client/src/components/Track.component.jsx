@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import millisecondsToHours from 'date-fns/millisecondsToHours';
 import { deleteTrack } from '../apiService/api-service.js';
-
 import { IoPlay, IoStop } from 'react-icons/io5';
 
 const staticTrackURL = 'http://localhost:3001/tracks/';
