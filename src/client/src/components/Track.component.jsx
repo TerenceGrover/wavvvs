@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import millisecondsToHours from 'date-fns/millisecondsToHours';
+import { deleteTrack } from '../apiService/api-service.js';
 
 import { IoPlay, IoStop } from 'react-icons/io5';
 
@@ -15,7 +16,7 @@ export default function Track({
   const waveformRef = useRef(null);
   const { path, title, date } = trackMetaData;
   const hoursSinceUploaded = millisecondsToHours(Number(Date.now() - date));
-  // if (hoursSinceUploaded => 24) deleteTrack(path) // in this case the path is the id
+  if (hoursSinceUploaded >= 24) deleteTrack(path); // in this case the path is the id
 
   useEffect(() => {
     const options = {

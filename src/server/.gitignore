@@ -1,4 +1,5 @@
 /node_modules
 /public/pics/*
 /public/tracks/*
+/backup-tracks
 ../.DS_Store
