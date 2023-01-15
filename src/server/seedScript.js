@@ -1,4 +1,6 @@
 import { User, Track } from './models/models.js';
+import * as fs from 'node:fs/promises';
+import path from 'node:path';
 
 const fakeUsers = [
   {
@@ -23,19 +25,29 @@ const fakeTracks = [
   {
     uploaded_by: 'randomproducer',
     path: 'audio0.wav',
-    title: 'Track 1',
+    title: 'throwaway...',
     size: 123456,
   },
   {
     uploaded_by: 'randomproducer',
     path: 'audio1.wav',
-    title: 'Track 2',
+    title: 'vibes',
     size: 123456,
   },
 ];
 
+const tracksToKeep = ['audio0.wav', 'audio1.wav', 'audio2.wav'];
+
+const tracksPublicDirectory = './public/tracks';
+
 export default async function () {
   try {
+    for (const file of await fs.readdir(tracksPublicDirectory)) {
+      if (tracksToKeep.includes(file) === false) {
+        await fs.unlink(path.join(tracksPublicDirectory, file));
+      }
+    }
+
     await User.deleteMany({});
     await Track.deleteMany({});
     console.log('Starting seed: all users and tracks deleted correctly');

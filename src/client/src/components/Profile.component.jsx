@@ -10,10 +10,6 @@ export default function Profile({
   playOrPauseTrackByID,
   setCurrentUser,
 }) {
-  // Todo add spinner for loading state
-  if (!currentUser) {
-    return <>loading</>;
-  }
 
   return (
     <div className="h-screen w-screen ">

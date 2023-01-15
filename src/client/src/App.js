@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import MoonLoader from 'react-spinners/MoonLoader.js';
 import Profile from './components/Profile.component.jsx';
 import Header from './components/Header.component.jsx';
 import MediaController from './components/MediaController.component.jsx';
@@ -92,8 +93,14 @@ function App() {
     const prevTrack = trackList.at(lastActiveTrackIndex);
     playOrPauseTrackByID(prevTrack.waveformRef.id);
   };
-  if (!currentUser) return <div>Loading...</div>;
 
+  if (!currentUser) {
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <MoonLoader color="#666666" size={45}/>
+      </div>
+    );
+  }
   return (
     <div className="h-screen w-screen bg-neutral-900 flex flex-col">
       <>
