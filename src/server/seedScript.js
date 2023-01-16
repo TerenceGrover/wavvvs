@@ -71,7 +71,7 @@ export default async function () {
       await track.save();
     }
 
-    console.log('Seed successful: all users and tracks added to database🤞🏼');
+    console.log('Seed successful: all users and tracks added to database🤞🏼\n');
   } catch (error) {
     console.log(error);
   }
