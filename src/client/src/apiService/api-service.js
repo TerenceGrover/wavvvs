@@ -11,7 +11,7 @@ const postTrack = async (selectedFile, userID = 'mateopresa') => {
     });
     return result.data;
   } catch (error) {
-    console.log({error});
+    console.log({ error });
     return error;
   }
 };
@@ -21,7 +21,7 @@ const getUser = async (user) => {
     const result = await fetch(`${baseURL}/${user}`).then((res) => res.json());
     return result;
   } catch (error) {
-    console.log({error});
+    console.log({ error });
     return error;
   }
 };
@@ -32,7 +32,7 @@ const getTracksFromBackend = async () => {
     );
     return result;
   } catch (error) {
-    console.log({error});
+    console.log({ error });
     return error;
   }
 };
@@ -44,7 +44,7 @@ const deleteTrack = async (id) => {
     }).then((res) => res.json());
     return result;
   } catch (error) {
-    console.log({error});
+    console.log({ error });
     return error;
   }
 };
@@ -56,7 +56,7 @@ const getUserTracks = async (username) => {
     );
     return result;
   } catch (error) {
-    console.log({error});
+    console.log({ error });
     return error;
   }
 };
