@@ -19,7 +19,7 @@ export default function Header({ profilePicPath }) {
             <img
               className="w-6 h-6 ml-3 rounded-full"
               src={staticPicUrl}
-              alt="profile.pic"
+              alt="User profile"
             />
           </div>
         </div>

@@ -12,7 +12,10 @@ export default function DeleteWarningModal({
   const cancelButtonRef = useRef(null);
 
   const handleDeleteInModal = () => {
-    deleteTrack(trackPath);
+    const resultOfDeleting = deleteTrack(trackPath);
+    if (resultOfDeleting instanceof Error) {
+      // todo: render another modal when error while deleting
+    }
     setOpen(false);
     setCurrentUser((currentUser) => ({
       ...currentUser,

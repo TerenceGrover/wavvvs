@@ -11,6 +11,9 @@ export default function UploadTrack({
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newTrack = await postTrack(selectedFile);
+    if (newTrack instanceof Error) {
+      // todo setup error handling here. Load new modal?
+    }
     setCurrentUser((currentUser) => ({
       // this is only to trigger a re render
       ...currentUser,

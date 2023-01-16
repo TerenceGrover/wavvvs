@@ -10,7 +10,6 @@ export default function Profile({
   playOrPauseTrackByID,
   setCurrentUser,
 }) {
-
   return (
     <div className="h-screen w-screen ">
       <div className="flex flex-col justify-start mt-14 items-center content-start p-6">

@@ -37,7 +37,7 @@ function App() {
           ),
         }));
       } catch (error) {
-        console.log(error);
+        console.log({ error });
         seThereIsAnError(true);
       } finally {
         setIsLoading(false);
