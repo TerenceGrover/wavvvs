@@ -18,7 +18,7 @@ const uploadTrack = async (req, res) => {
     await newTrack.save();
     res.status(200).send(newTrack);
   } catch (error) {
-    console.log(error);
+    console.log({error});
     res.status(500).send({ error });
   }
 };
@@ -28,7 +28,7 @@ const getAllTracks = async (req, res) => {
     const tracks = await Track.find({});
     res.status(200).send(tracks);
   } catch (error) {
-    console.log(error);
+    console.log({error});
     res.status(500).send({ error });
   }
 };
@@ -39,7 +39,7 @@ const getUserTracks = async (req, res) => {
     const tracks = await Track.find({ uploaded_by: username });
     res.status(200).send(tracks);
   } catch (error) {
-    console.log(error);
+    console.log({error});
     res.status(500).send({ error });
   }
 };
@@ -56,7 +56,7 @@ const deleteTrack = async (req, res) => {
     }
     res.status(200).send({ deletedCount });
   } catch (error) {
-    console.log(error);
+    console.log({error});
     res.status(500).send({ error });
   }
 };

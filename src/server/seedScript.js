@@ -73,6 +73,6 @@ export default async function () {
 
     console.log('Seed successful: all users and tracks added to database🤞🏼\n');
   } catch (error) {
-    console.log(error);
+    console.log({erro}r);
   }
 }

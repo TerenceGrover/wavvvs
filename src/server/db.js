@@ -6,7 +6,7 @@ try {
   console.log('Connected to the DB');
 } catch (error) {
   console.log('Error connecting to DB');
-  console.log(error);
+  console.log({error});
 }
 
 export default mongoose;
