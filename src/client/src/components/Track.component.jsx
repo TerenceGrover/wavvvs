@@ -6,7 +6,8 @@ import { IoPlay, IoStop } from 'react-icons/io5';
 import { MdClose } from 'react-icons/md';
 import DeleteWarningModal from './DeleteWarningModal.component.jsx';
 
-const staticTrackURL = 'http://localhost:3001/tracks/';
+const { REACT_APP_BACKEND_HOST } = process.env;
+const staticTrackURL = `${REACT_APP_BACKEND_HOST}/tracks/`;
 
 export default function Track({
   trackMetaData,

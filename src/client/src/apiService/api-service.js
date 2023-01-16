@@ -1,6 +1,6 @@
 import axios from 'axios';
-
-const baseURL = 'http://localhost:3001';
+const { REACT_APP_BACKEND_HOST } = process.env;
+const baseURL = REACT_APP_BACKEND_HOST;
 
 const postTrack = async (selectedFile, userID = 'mateopresa') => {
   try {

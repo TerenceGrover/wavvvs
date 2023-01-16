@@ -1,7 +1,8 @@
 import Track from './Track.component.jsx';
 import UploadTrack from './UploadTrack.component.jsx';
 
-const serverUrl = 'http://localhost:3001';
+const { REACT_APP_BACKEND_HOST } = process.env;
+const serverUrl = REACT_APP_BACKEND_HOST;
 
 export default function Profile({
   currentUser,
