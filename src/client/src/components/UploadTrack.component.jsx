@@ -7,18 +7,23 @@ export default function UploadTrack({
   setCurrentUser,
 }) {
   const [selectedFile, setSelectedFile] = useState();
+  const [thereIsAnError, setError] = useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const newTrack = await postTrack(selectedFile);
-    if (newTrack instanceof Error) {
-      // todo setup error handling here. Load new modal?
+    try {
+      e.preventDefault();
+      const newTrack = await postTrack(selectedFile);
+      if (newTrack instanceof Error) {
+        throw new Error({ cause: newTrack });
+      }
+      setCurrentUser((currentUser) => ({
+        ...currentUser,
+        tracks: [...currentUser.tracks, newTrack],
+      }));
+    } catch (error) {
+      console.log({ error });
+      setError(true);
     }
-    setCurrentUser((currentUser) => ({
-      // this is only to trigger a re render
-      ...currentUser,
-      tracks: [...currentUser.tracks, newTrack],
-    }));
   };
 
   const handleFileChange = (e) => {
@@ -41,6 +46,11 @@ export default function UploadTrack({
                 <FiUpload className="self-center text-neutral-700 hover:text-neutral-400 ease-in transition duration-100 cursor-pointer" />
               </button>
             </>
+          )}
+          {thereIsAnError && (
+            <p className="text-neutral-500 text-xs italic">
+              An error ocurred, please try again later
+            </p>
           )}
         </label>
       </div>
