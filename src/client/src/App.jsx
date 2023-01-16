@@ -77,7 +77,7 @@ function App() {
 
   const playNextTrack = () => {
     let lastActiveTrackIndex = trackList.findIndex(
-      (track) => track.isLastActive === true
+      (track) => track.isLastActive
     );
 
     lastActiveTrackIndex === trackList.length - 1
@@ -90,7 +90,7 @@ function App() {
 
   const playPrevTrack = () => {
     let lastActiveTrackIndex = trackList.findIndex(
-      (track) => track.isLastActive === true
+      (track) => track.isLastActive
     );
 
     lastActiveTrackIndex === 0
