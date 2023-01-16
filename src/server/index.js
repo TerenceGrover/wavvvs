@@ -1,10 +1,12 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import router from './router.js';
 import seedScript from './seedScript.js';
 import removeExpiredTracksCronJob from './cronJob.js';
 
-const port = 3001;
+const { PORT, HOST_NAME } = process.env;
 
 const app = express();
 
@@ -22,8 +24,8 @@ seedScript();
 
 const intervalID = removeExpiredTracksCronJob();
 
-app.listen(port, () => {
-  console.log(`Web server running: http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Web server running: ${HOST_NAME}:${PORT}`);
 });
 
 export default app;
