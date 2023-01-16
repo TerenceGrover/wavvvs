@@ -1,3 +1,4 @@
 /node_modules
 /backup-tracks
-../.DS_Store
+/../.DS_Store
+/../.vscode
