@@ -36,6 +36,13 @@ const fakeTracks = [
     size: 123456,
     date: Date.now() - 18000000, // 5 hours ago
   },
+  {
+    uploaded_by: 'randomproducer',
+    path: 'audio2.wav',
+    title: 'this track will be deleted because it was uploaded 25 hours ago',
+    size: 123456,
+    date: Date.now() - 90000000, // 25 hours ago
+  },
 ];
 
 const tracksToKeep = ['audio0.wav', 'audio1.wav', 'audio2.wav'];
