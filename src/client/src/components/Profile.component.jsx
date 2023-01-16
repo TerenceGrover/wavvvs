@@ -42,6 +42,7 @@ export default function Profile({
                 track={trackList[0]}
                 setTrackList={setTrackList}
                 playOrPauseTrackByID={playOrPauseTrackByID}
+                setCurrentUser={setCurrentUser}
               />
             ) : (
               <>
@@ -56,6 +57,7 @@ export default function Profile({
                 track={trackList[1]}
                 setTrackList={setTrackList}
                 playOrPauseTrackByID={playOrPauseTrackByID}
+                setCurrentUser={setCurrentUser}
               />
             ) : (
               <>
@@ -70,6 +72,7 @@ export default function Profile({
                 track={trackList[2]}
                 setTrackList={setTrackList}
                 playOrPauseTrackByID={playOrPauseTrackByID}
+                setCurrentUser={setCurrentUser}
               />
             ) : (
               <>

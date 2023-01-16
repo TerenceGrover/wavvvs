@@ -3,8 +3,22 @@ import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { deleteTrack } from '../apiService/api-service.js';
 
-export default function DeleteWarningModal({ open, setOpen, trackPath }) {
+export default function DeleteWarningModal({
+  open,
+  setOpen,
+  trackPath,
+  setCurrentUser,
+}) {
   const cancelButtonRef = useRef(null);
+
+  const handleDeleteInModal = () => {
+    deleteTrack(trackPath);
+    setOpen(false);
+    setCurrentUser((currentUser) => ({
+      ...currentUser,
+      tracks: currentUser.tracks.filter((track) => track.path !== trackPath),
+    }));
+  };
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -67,10 +81,7 @@ export default function DeleteWarningModal({ open, setOpen, trackPath }) {
                   <button
                     type="button"
                     className="transition ease-in duration-200 w-20 rounded bg-red-800 py-2 px-1 mt-2 text-xs text-white hover:bg-red-700 ml-3"
-                    onClick={() => {
-                      deleteTrack(trackPath);
-                      setOpen(false);
-                    }}
+                    onClick={handleDeleteInModal}
                   >
                     Delete
                   </button>

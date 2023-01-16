@@ -13,6 +13,7 @@ export default function Track({
   track,
   setTrackList,
   playOrPauseTrackByID,
+  setCurrentUser,
 }) {
   const [open, setOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
@@ -79,13 +80,19 @@ export default function Track({
   const handleDelete = () => {
     setOpen(true);
   };
+
   return (
     <div
       onMouseOver={handleMouseOver}
       onMouseOut={handleMouseOut}
       className="h-12 mb-10"
     >
-      <DeleteWarningModal setOpen={setOpen} open={open} trackPath={path} />
+      <DeleteWarningModal
+        setOpen={setOpen}
+        open={open}
+        trackPath={path}
+        setCurrentUser={setCurrentUser}
+      />
       <div className="relative flex justify-between w-full">
         {isHovering && uploaded_by === 'mateopresa' ? (
           <MdClose
