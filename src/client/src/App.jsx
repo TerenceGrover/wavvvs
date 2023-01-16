@@ -15,24 +15,26 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      const tracksFromBackend = await getTracksFromBackend();
-      const currentUserData = await getUser(user);
-
-      if (currentUserData && tracksFromBackend) {
-        setCurrentUser((currentUser) => ({
-          ...currentUser,
-          ...currentUserData,
-          tracks: tracksFromBackend.filter(
-            (track) => track.uploaded_by === currentUser?.user
-          ),
-        }));
+      try {
+        const currentUserData = await getUser(user);
+        // todo: setup endpoint to get tracks only from one user
+        const tracksFromBackend = await getTracksFromBackend();
+        if (currentUserData && tracksFromBackend) {
+          setCurrentUser((currentUser) => ({
+            ...currentUser,
+            ...currentUserData,
+            tracks: tracksFromBackend.filter(
+              (track) => track.uploaded_by === currentUser?.user
+            ),
+          }));
+        }
+      } catch (error) {
+        // todo: show users error
+        console.log(error);
       }
     })();
 
-    const newActiveTrack = trackList.find(
-      (track) => track.isLastActive === true
-    );
-
+    const newActiveTrack = trackList.find((track) => track.isLastActive);
     setActiveTrack(newActiveTrack);
   }, [activeTrack, trackList, user]);
 
@@ -97,33 +99,31 @@ function App() {
   if (!currentUser) {
     return (
       <div className="h-screen flex justify-center items-center">
-        <MoonLoader color="#666666" size={45}/>
+        <MoonLoader color="#666666" size={45} />
       </div>
     );
   }
   return (
     <div className="h-screen w-screen bg-neutral-900 flex flex-col">
-      <>
-        <Header />
-        <Profile
-          currentUser={currentUser}
-          setCurrentUser={setCurrentUser}
-          trackList={trackList}
-          setTrackList={setTrackList}
+      <Header />
+      <Profile
+        currentUser={currentUser}
+        setCurrentUser={setCurrentUser}
+        trackList={trackList}
+        setTrackList={setTrackList}
+        playOrPauseTrackByID={playOrPauseTrackByID}
+      />
+      {activeTrack && (
+        <MediaController
+          activeTrack={activeTrack}
           playOrPauseTrackByID={playOrPauseTrackByID}
+          playNextTrack={playNextTrack}
+          playPrevTrack={playPrevTrack}
+          setTrackList={setTrackList}
+          isAudioMuted={isAudioMuted}
+          setIsAudioMuted={setIsAudioMuted}
         />
-        {activeTrack && (
-          <MediaController
-            activeTrack={activeTrack}
-            playOrPauseTrackByID={playOrPauseTrackByID}
-            playNextTrack={playNextTrack}
-            playPrevTrack={playPrevTrack}
-            setTrackList={setTrackList}
-            isAudioMuted={isAudioMuted}
-            setIsAudioMuted={setIsAudioMuted}
-          />
-        )}
-      </>
+      )}
     </div>
   );
 }
