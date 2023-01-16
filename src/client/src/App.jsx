@@ -4,7 +4,7 @@ import MoonLoader from 'react-spinners/MoonLoader.js';
 import Profile from './components/Profile.component.jsx';
 import Header from './components/Header.component.jsx';
 import MediaController from './components/MediaController.component.jsx';
-import { getUser, getTracksFromBackend } from './apiService/api-service.js';
+import { getUser, getUserTracks } from './apiService/api-service.js';
 import ErrorPage from './pages/ErrorPage.jsx';
 
 function App() {
@@ -13,26 +13,32 @@ function App() {
   const [isAudioMuted, setIsAudioMuted] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [thereIsAnError, seThereIsAnError] = useState(false);
   const { user } = useParams();
 
   useEffect(() => {
     (async () => {
       try {
-        // todo: setup endpoint to get tracks only from one user
         const currentUserData = await getUser(user);
-        const tracksFromBackend = await getTracksFromBackend();
-        if (currentUserData && tracksFromBackend) {
-          setCurrentUser((currentUser) => ({
-            ...currentUser,
-            ...currentUserData,
-            tracks: tracksFromBackend.filter(
-              (track) => track.uploaded_by === currentUser?.user
-            ),
-          }));
+        if (currentUserData instanceof Error) {
+          throw new Error({ cause: currentUserData });
         }
+
+        const tracksFromBackend = await getUserTracks(user);
+        if (tracksFromBackend instanceof Error) {
+          throw new Error({ cause: tracksFromBackend });
+        }
+
+        setCurrentUser((currentUser) => ({
+          ...currentUser,
+          ...currentUserData,
+          tracks: tracksFromBackend.filter(
+            (track) => track.uploaded_by === currentUser?.user
+          ),
+        }));
       } catch (error) {
-        // todo: show users error
         console.log(error);
+        seThereIsAnError(true);
       } finally {
         setIsLoading(false);
       }
@@ -94,7 +100,7 @@ function App() {
     const prevTrack = trackList.at(lastActiveTrackIndex);
     playOrPauseTrackByID(prevTrack.waveformRef.id);
   };
-  // todo error state ad loading state
+
   if (isLoading) {
     return (
       <div className="h-screen flex justify-center items-center">
@@ -102,7 +108,9 @@ function App() {
       </div>
     );
   }
-  if (!currentUser) return <ErrorPage />;
+
+  if (thereIsAnError) return <ErrorPage />;
+
   return (
     <div className="h-screen w-screen bg-neutral-900 flex flex-col">
       <Header />

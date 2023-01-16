@@ -34,7 +34,8 @@ const getAllTracks = async (req, res) => {
 const getUserTracks = async (req, res) => {
   try {
     const { username } = req.params;
-    const tracks = await Track.find({ user: username });
+    console.log(username);
+    const tracks = await Track.find({ uploaded_by: username });
     res.status(200).send(tracks);
   } catch (error) {
     console.log(error);

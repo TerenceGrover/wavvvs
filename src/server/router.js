@@ -11,8 +11,8 @@ router.post('/:username/tracks', upload.single('track'), Track.uploadTrack);
 
 router.delete('/delete/tracks/:id', Track.deleteTrack);
 
+router.get('/:username/tracks', Track.getUserTracks);
 router.get('/alltracks', Track.getAllTracks);
-router.get(':username/tracks', Track.getUserTracks)
 router.get('/:username', User.getUser);
 
 export default router;
