@@ -31,7 +31,7 @@ export default function MediaController({
     <div className="static">
       <footer className="h-12 fixed bottom-0 left-0 right-0 text-white bg-neutral-800 z-10">
         <div className="h-full flex justify-center items-center align-center">
-          <div className=" flex w-96 h-full justify-between items-center">
+          <div className=" flex w-96 h-full justify-between items-center lg:max-w-xl lg:w-full">
             <div className="flex w-28 justify-between items-center">
               <TbPlayerSkipBack
                 onClick={handlePrevClick}
