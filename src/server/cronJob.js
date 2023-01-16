@@ -12,10 +12,10 @@ const removeExpiredTracksCronJob = () => {
         'CRON JOB: Remove all expired tracks from db and file system ⏱'
       );
       await Track.deleteMany({ date: { $lt: Date.now() - DAY_IN_MS } }); // remove expired tracks
-      let remainingTracksInDb = await Track.find({}, 'path -_id'); // get only the path field, removing also the _id field
+      const remainingTracksInDb = await Track.find({}, 'path -_id'); // get only the path field, removing also the _id field
       removeExpiredTracksFromFileSystem(remainingTracksInDb);
     } catch (error) {
-      console.log({ error: error });
+      console.log({ error });
     }
   }, EVERY_30SECONDS);
 };

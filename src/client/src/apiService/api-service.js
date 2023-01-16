@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 const baseURL = 'http://localhost:3001';
-
 // Todo: error handling
 
 const postTrack = async (selectedFile, userID = 'mateopresa') => {
@@ -24,12 +23,10 @@ const getTracksFromBackend = async () => {
 };
 
 const deleteTrack = async (id) => {
-  const result = await fetch(`${baseURL}/delete/tracks/${id}`,{
-    method: 'DELETE'
-  }).then((res) =>
-    res.json()
-  );
+  const result = await fetch(`${baseURL}/delete/tracks/${id}`, {
+    method: 'DELETE',
+  }).then((res) => res.json());
   return result;
 };
-//delete/tracks/
+
 export { postTrack, getUser, getTracksFromBackend, deleteTrack };

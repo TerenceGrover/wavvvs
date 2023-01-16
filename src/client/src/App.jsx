@@ -5,19 +5,21 @@ import Profile from './components/Profile.component.jsx';
 import Header from './components/Header.component.jsx';
 import MediaController from './components/MediaController.component.jsx';
 import { getUser, getTracksFromBackend } from './apiService/api-service.js';
+import ErrorPage from './pages/ErrorPage.jsx';
 
 function App() {
   const [trackList, setTrackList] = useState([]);
   const [activeTrack, setActiveTrack] = useState(null);
   const [isAudioMuted, setIsAudioMuted] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const { user } = useParams();
 
   useEffect(() => {
     (async () => {
       try {
-        const currentUserData = await getUser(user);
         // todo: setup endpoint to get tracks only from one user
+        const currentUserData = await getUser(user);
         const tracksFromBackend = await getTracksFromBackend();
         if (currentUserData && tracksFromBackend) {
           setCurrentUser((currentUser) => ({
@@ -31,6 +33,8 @@ function App() {
       } catch (error) {
         // todo: show users error
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     })();
 
@@ -90,14 +94,15 @@ function App() {
     const prevTrack = trackList.at(lastActiveTrackIndex);
     playOrPauseTrackByID(prevTrack.waveformRef.id);
   };
-
-  if (!currentUser) {
+  // todo error state ad loading state
+  if (isLoading) {
     return (
       <div className="h-screen flex justify-center items-center">
         <MoonLoader color="#666666" size={45} />
       </div>
     );
   }
+  if (!currentUser) return <ErrorPage />;
   return (
     <div className="h-screen w-screen bg-neutral-900 flex flex-col">
       <Header />
