@@ -14,7 +14,7 @@ export default function UploadTrack({
       e.preventDefault();
       const newTrack = await postTrack(selectedFile);
       if (newTrack instanceof Error) {
-        throw new Error({ cause: newTrack });
+        throw new Error('Error while posting track', { cause: newTrack });
       }
       setCurrentUser((currentUser) => ({
         ...currentUser,
@@ -49,7 +49,7 @@ export default function UploadTrack({
           )}
           {thereIsAnError && (
             <p className="text-neutral-500 text-xs italic">
-              An error ocurred, please try again later
+              {'The file size must be < 100MB, or try again later'}
             </p>
           )}
         </label>

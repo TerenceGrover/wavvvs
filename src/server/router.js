@@ -2,12 +2,18 @@ import express from 'express';
 import multer from 'multer';
 import * as Track from './controllers/Track.controller.js';
 import * as User from './controllers/User.controller.js';
+import checkFileSize from './middle-ware/checkFileSize.js';
 
 const upload = multer({ dest: './public/tracks' });
 
 const router = express.Router();
 
-router.post('/:username/tracks', upload.single('track'), Track.uploadTrack);
+router.post(
+  '/:username/tracks',
+  checkFileSize,
+  upload.single('track'),
+  Track.uploadTrack
+);
 
 router.delete('/delete/tracks/:id', Track.deleteTrack);
 

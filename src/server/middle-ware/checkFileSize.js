@@ -1,0 +1,16 @@
+const MAX_FILE_SIZE_IN_BYTES = 104857600; // 100MB;
+
+const checkFileSize = (req, res, next) => {
+  try {
+    const fileSize = parseInt(req.headers['content-length']);
+    console.log({ fileSize });
+    if (fileSize > 5) {
+      throw new Error('File size exceeded');
+    }
+    next();
+  } catch (error) {
+    res.status(407).send({ error });
+  }
+};
+
+export default checkFileSize;
