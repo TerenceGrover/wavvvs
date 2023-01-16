@@ -1,4 +1,4 @@
-import { Fragment, useRef } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { deleteTrack } from '../apiService/api-service.js';
@@ -10,17 +10,23 @@ export default function DeleteWarningModal({
   setCurrentUser,
 }) {
   const cancelButtonRef = useRef(null);
+  const [thereIsAnError, setError] = useState(false);
 
-  const handleDeleteInModal = () => {
-    const resultOfDeleting = deleteTrack(trackPath);
-    if (resultOfDeleting instanceof Error) {
-      // todo: render another modal when error while deleting
+  const handleDeleteInModal = async () => {
+    try {
+      const resultOfDeleting = await deleteTrack(trackPath);
+      if (resultOfDeleting instanceof Error) {
+        throw new Error({ cause: resultOfDeleting });
+      }
+      setOpen(false);
+      setCurrentUser((currentUser) => ({
+        ...currentUser,
+        tracks: currentUser.tracks.filter((track) => track.path !== trackPath),
+      }));
+    } catch (error) {
+      console.log({ error });
+      setError(true);
     }
-    setOpen(false);
-    setCurrentUser((currentUser) => ({
-      ...currentUser,
-      tracks: currentUser.tracks.filter((track) => track.path !== trackPath),
-    }));
   };
 
   return (
@@ -96,6 +102,11 @@ export default function DeleteWarningModal({
                   >
                     Cancel
                   </button>
+                  {thereIsAnError && (
+                    <p className="text-neutral-500 text-xs italic mr-7 mt-4">
+                      An error ocurred, please try again later
+                    </p>
+                  )}
                 </div>
               </Dialog.Panel>
             </Transition.Child>
