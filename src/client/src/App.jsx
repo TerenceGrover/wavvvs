@@ -40,30 +40,25 @@ function App() {
 
   const playOrPauseTrackByID = (id) => {
     setTrackList((tracks) => {
+      // Loop trough the tracks and modify the status of th track you want to play/pause
       const modifiedTrackList = tracks.map((track) => {
-        // Loop trough the tracks and find by id the one you want to play/pause.
-        if (track.waveformRef.id === id) {
-          return {
-            ...track,
-            isLastActive: track.isPlaying || true, // track.isPlaying being false here means you are clicking play.
-            // the last active track is the last track on which you clicked play.
-            isPlaying: !track.isPlaying, // toggle isPlaying flag on or off
-          };
-        }
-        return track;
+        return track.waveformRef.id === id
+          ? {
+              ...track,
+              isLastActive: track.isPlaying || true, // track.isPlaying being false here means you are clicking play.
+              // the last active track is the last track on which you clicked play.
+              isPlaying: !track.isPlaying, // toggle isPlaying flag on or off
+            }
+          : track;
       });
 
       // make sure only one track is playing, and only one track is active at the same time.
       return modifiedTrackList.map((track) => {
-        if (track.isPlaying) {
-          if (track.waveformRef.id !== id) {
-            track.isPlaying = !track.isPlaying;
-          }
+        if (track.isPlaying && track.waveformRef.id !== id) {
+          track.isPlaying = !track.isPlaying;
         }
-        if (track.isLastActive) {
-          if (track.waveformRef.id !== id) {
-            track.isLastActive = !track.isLastActive;
-          }
+        if (track.isLastActive && track.waveformRef.id !== id) {
+          track.isLastActive = !track.isLastActive;
         }
         return track;
       });
