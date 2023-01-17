@@ -1,9 +1,10 @@
 import { AiOutlineMenu, AiOutlineSearch } from 'react-icons/ai';
 import Logo from './Logo.component';
 
-const staticPicUrl = 'http://localhost:3001/pics/mateo_pic.jpeg';
+const { REACT_APP_BACKEND_HOST } = process.env;
+const staticPicUrl = `${REACT_APP_BACKEND_HOST}/pics/mateo_pic.jpeg`;
 
-export default function Header({ profilePicPath }) {
+export default function Header() {
   return (
     <div className="fixed top-0 left-0 right-0 z-10 max-w-92">
       <header className="flex justify-center h-14 text-white bg-neutral-800">

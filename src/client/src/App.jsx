@@ -13,7 +13,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [thereIsAnError, seThereIsAnError] = useState(false);
-  const [repeat, setRepeat] = useState(0);
+  const [repeat, setRepeat] = useState(false);
   const { user } = useParams();
 
   useEffect(() => {
@@ -46,7 +46,6 @@ function App() {
   }, [user]);
 
   const activeTrack = trackList.find((track) => track.isLastActive) ?? null;
-  // .map((track) => ({ ...track, isFinished: false }))
 
   const playOrPauseTrackByID = (id) => {
     setTrackList((tracks) => {

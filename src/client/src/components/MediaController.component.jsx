@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { IoPlay, IoStop } from 'react-icons/io5';
 import {
   TbPlayerSkipBack,
@@ -20,28 +20,13 @@ export default function MediaController({
   setRepeat,
 }) {
   activeTrack.waveformRef.wavesurfer.setMute(isAudioMuted);
-  let prevRepeat = repeat;
 
   useEffect(() => {
-    const { isFinished } = activeTrack;
-    console.log({ isFinished });
-    console.log({ prevRepeat });
-    if (activeTrack.isFinished && activeTrack.isPlaying && repeat === 0) {
+    if (activeTrack.isFinished && activeTrack.isPlaying && repeat === false) {
       console.log('repeat === 0');
-      pauseAllTracks(pauseAllTracks);
+      pauseAllTracks();
     }
-
-    if (activeTrack.isFinished && activeTrack.isPlaying && repeat === 2) {
-      console.log({ activeTrack });
-      console.log('repeat === 2');
-      //trouble here
-      playNextTrack();
-    }
-  }, [repeat, activeTrack]);
-
-  useEffect(() => {
-    console.log({ prevRepeat });
-  }, [prevRepeat]);
+  }, [repeat, activeTrack, pauseAllTracks]);
 
   const handlePlayClick = () => {
     playOrPauseTrackByID(activeTrack.waveformRef.id);
@@ -60,7 +45,7 @@ export default function MediaController({
   };
 
   const handleRepeatClick = () => {
-    setRepeat((repeat) => (repeat < 2 ? repeat + 1 : 0));
+    setRepeat(!repeat);
   };
 
   return (
@@ -88,7 +73,7 @@ export default function MediaController({
                 onClick={handleNextClick}
                 className="cursor-pointer text-neutral-200 h-5 w-5 mr-3 hover:text-neutral-400 ease-in transition duration-100"
               />
-              {repeat === 0 ? (
+              {repeat === false ? (
                 <TbRepeat
                   onClick={handleRepeatClick}
                   className="cursor-pointer text-neutral-200 h-5 w-5 mr-3 hover:text-neutral-400 ease-in transition duration-100"
