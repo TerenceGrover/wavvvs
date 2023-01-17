@@ -46,7 +46,7 @@ const tracksPublicDirectory = './public/tracks'; // path relative to the node pr
 
 const deleteTrack = async (req, res) => {
   try {
-    // The name of the file is the id of the track, and the path at the same time.
+    // The name of the file is the id of the track, and the path to it, at the same time.
     const { id } = req.params;
     const { deletedCount } = await Track.deleteOne({ path: id });
     if (deletedCount) {
