@@ -134,6 +134,7 @@ function App() {
       {activeTrack && (
         <MediaController
           activeTrack={activeTrack}
+          currentUser={currentUser}
           playOrPauseTrackByID={playOrPauseTrackByID}
           playNextTrack={playNextTrack}
           playPrevTrack={playPrevTrack}
@@ -143,6 +144,7 @@ function App() {
           pauseAllTracks={pauseAllTracks}
           repeat={repeat}
           setRepeat={setRepeat}
+          trackList={trackList}
         />
       )}
     </div>

@@ -18,6 +18,8 @@ export default function MediaController({
   pauseAllTracks,
   repeat,
   setRepeat,
+  currentUser,
+  trackList,
 }) {
   activeTrack.waveformRef.wavesurfer.setMute(isAudioMuted);
 
@@ -48,53 +50,59 @@ export default function MediaController({
     setRepeat(!repeat);
   };
 
+  // const titleIndex = trackList.findIndex((t) => Object.is(activeTrack, t)) ?? 0;
+
   return (
     <div className="static">
       <footer className="h-14 fixed bottom-0 left-0 right-0 text-white bg-neutral-800 z-10">
         <div className="h-full flex justify-center items-center align-center">
           <div className=" flex w-96 h-full justify-between items-center lg:max-w-xl lg:w-full">
-            <div className="flex w-28 justify-between items-center">
+            <div className="flex w-32 justify-between items-center">
               <TbPlayerSkipBack
                 onClick={handlePrevClick}
-                className="cursor-pointer text-neutral-200 h-5 w-5 mr-3 hover:text-neutral-400 ease-in transition duration-100"
+                className="cursor-pointer text-neutral-200 h-5 w-5 mr-3 hover:text-neutral-400 active:text-neutral-700 ease-in transition duration-100"
               />
               {!activeTrack?.isPlaying ? (
                 <IoPlay
                   onClick={handlePlayClick}
-                  className="cursor-pointer text-neutral-200 h-5 w-5 mr-3 hover:text-neutral-400 ease-in transition duration-100"
+                  className="cursor-pointer text-neutral-200 h-5 w-5 mr-3 hover:text-neutral-400 active:text-neutral-700 ease-in transition duration-100"
                 />
               ) : (
                 <IoStop
                   onClick={handlePlayClick}
-                  className="cursor-pointer text-neutral-200 h-5 w-5 mr-3 hover:text-neutral-400 ease-in transition duration-100"
+                  className="cursor-pointer text-neutral-200 h-5 w-5 mr-3 hover:text-neutral-400 active:text-neutral-700 ease-in transition duration-100"
                 />
               )}
               <TbPlayerSkipForward
                 onClick={handleNextClick}
-                className="cursor-pointer text-neutral-200 h-5 w-5 mr-3 hover:text-neutral-400 ease-in transition duration-100"
+                className="cursor-pointer text-neutral-200 h-5 w-5 mr-3 hover:text-neutral-400  active:text-neutral-700 ease-in transition duration-100"
               />
               {repeat === false ? (
                 <TbRepeat
                   onClick={handleRepeatClick}
-                  className="cursor-pointer text-neutral-200 h-5 w-5 mr-3 hover:text-neutral-400 ease-in transition duration-100"
+                  className="cursor-pointer text-neutral-200 h-5 w-5 mr-3 hover:text-neutral-400  active:text-green-700 ease-in transition duration-100"
                 />
               ) : (
                 <TbRepeatOnce
                   onClick={handleRepeatClick}
-                  className="cursor-pointer text-green-400 h-5 w-5 mr-3 hover:text-green-600 ease-in transition duration-100"
+                  className="cursor-pointer text-green-400 h-5 w-5 mr-3 hover:text-green-600 active:text-green-700 ease-in transition duration-100"
                 />
               )}
             </div>
-            <div className="flex w-14 justify-end items-center">
+            {/* <p className="text-neutral-5  00 w-full font-light text-xs m-1.5">
+              <span className="text-neutral-200">Active track: </span>
+              {currentUser.tracks[titleIndex].title}
+            </p> */}
+            <div className="flex w-14 justify-end items-center ">
               {isAudioMuted ? (
                 <FiVolumeX
                   onClick={handleMuteClick}
-                  className="cursor-pointer text-neutral-200 h-5 w-7 hover:text-neutral-400 ease-in transition duration-100"
+                  className="cursor-pointer text-neutral-200 h-5 w-7 hover:text-neutral-400 active:text-neutral-700 ease-in transition duration-100"
                 />
               ) : (
                 <FiVolume2
                   onClick={handleMuteClick}
-                  className="cursor-pointer text-neutral-200 h-5 w-7 hover:text-neutral-400 ease-in transition duration-100"
+                  className="cursor-pointer text-neutral-200 h-5 w-7 hover:text-neutral-400 active:text-neutral-700 ease-in transition duration-100"
                 />
               )}
             </div>

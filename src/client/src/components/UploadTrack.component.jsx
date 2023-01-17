@@ -2,10 +2,7 @@ import { useState } from 'react';
 import { FiUpload } from 'react-icons/fi';
 import { postTrack } from '../apiService/api-service.js';
 
-export default function UploadTrack({
-  setUserTracksFileNames,
-  setCurrentUser,
-}) {
+export default function UploadTrack({ setCurrentUser }) {
   const [selectedFile, setSelectedFile] = useState();
   const [thereIsAnError, setError] = useState(false);
 
