@@ -1,9 +1,7 @@
 import Bio from './Bio.component.jsx';
 import Track from './Track.component.jsx';
 import UploadTrack from './UploadTrack.component.jsx';
-
-const { REACT_APP_BACKEND_HOST } = process.env;
-const serverUrl = REACT_APP_BACKEND_HOST;
+import ProfilePic from './ProfilePic.component.jsx';
 
 export default function Profile({
   currentUser,
@@ -17,18 +15,14 @@ export default function Profile({
       <div className="flex flex-col justify-start mt-14 items-center content-start p-6">
         <div className="">
           <section className="flex flex-col justify-center items-center mt-3">
-            <img
-              className="w-60 h-60 rounded"
-              src={`${serverUrl}/pics/${currentUser.profile_pic_path}`}
-              alt="profile-pic"
-            />
+            <ProfilePic path={currentUser.profile_pic_path} />
             <h1 className="text-white text-2xl mt-7 mb-1">
               {currentUser.name}
             </h1>
             <p className="text-neutral-400">{`@${currentUser.user}`}</p>
           </section>
           <hr className="w-96 border-neutral-800 my-6" />
-            <Bio bio={currentUser.bio}/>
+          <Bio bio={currentUser.bio} />
           <hr className="w-96 border-neutral-800 my-6" />
         </div>
         <div className="w-full flex justify-center items-center">

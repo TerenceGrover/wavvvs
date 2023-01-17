@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { TbDotsVertical } from 'react-icons/tb';
+
 const Bio = ({ bio }) => {
-  const [isHovering, setIsHovering] = useState(true);
+  const [isHovering, setIsHovering] = useState(false);
+  const [isEditing, editing] = useState(false);
 
   const handleMouseOver = () => {
     setIsHovering(true);
@@ -19,7 +21,6 @@ const Bio = ({ bio }) => {
       onMouseOver={handleMouseOver}
       onMouseOut={handleMouseOut}
     >
-      {' '}
       <div className="static flex w-full">
         {isHovering ? (
           <TbDotsVertical
