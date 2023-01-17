@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import millisecondsToHours from 'date-fns/millisecondsToHours';
-import { deleteTrack } from '../apiService/api-service.js';
 import { IoPlay, IoStop } from 'react-icons/io5';
 import { MdClose } from 'react-icons/md';
 import DeleteWarningModal from './DeleteWarningModal.component.jsx';
@@ -18,12 +17,11 @@ export default function Track({
 }) {
   const [open, setOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+
   const waveformRef = useRef(null);
 
   const { path, title, date, uploaded_by } = trackMetaData;
-
   const hoursSinceUploaded = millisecondsToHours(Number(Date.now() - date));
-  if (hoursSinceUploaded >= 24) deleteTrack(path); // in this case the path is the id
 
   useEffect(() => {
     const options = {
@@ -36,26 +34,45 @@ export default function Track({
       progressColor: '#999',
     };
 
-    if (waveformRef.current) {
-      const wavesurfer = WaveSurfer.create(options);
+    const wavesurfer = WaveSurfer.create(options);
 
-      //The load method handles the actual fetching of the audio
-      wavesurfer.load(staticTrackURL + path);
-      waveformRef.id = path;
-      waveformRef.wavesurfer = wavesurfer;
+    //The load method handles the actual fetching of the audio
+    wavesurfer.load(staticTrackURL + path);
 
-      setTrackList((tracks) => [
-        ...tracks,
-        { waveformRef, isPlaying: false, isActive: false },
-      ]);
+    waveformRef.id = path;
+    waveformRef.wavesurfer = wavesurfer;
 
-      return () => {
-        setTrackList((tracks) => {
-          return tracks.filter((track) => track.waveformRef.id !== path);
-        });
-        wavesurfer.destroy();
-      };
-    }
+    wavesurfer.on('finish', () => {
+      setTrackList((tracks) =>
+        tracks.map((track) =>
+          track.waveformRef.id === path ? { ...track, isFinished: true } : track
+        )
+      );
+    });
+
+    setTrackList((tracks) => [
+      ...tracks,
+      { waveformRef, isPlaying: false, isActive: false, isFinished: false },
+    ]);
+
+    return () => {
+      // clean up function
+      setTrackList((tracks) => {
+        return tracks.filter((track) => track.waveformRef.id !== path);
+      });
+
+      wavesurfer.un('finish', () => {
+        setTrackList((tracks) =>
+          tracks.map((track) =>
+            track.waveformRef.id === path
+              ? { ...track, isFinished: false }
+              : track
+          )
+        );
+      });
+
+      wavesurfer.destroy();
+    };
   }, [path, setTrackList]);
 
   if (track) {

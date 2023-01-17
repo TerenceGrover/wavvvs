@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { getUser, getUserTracks } from './apiService/api-service.js';
 import MoonLoader from 'react-spinners/MoonLoader.js';
 import Profile from './components/Profile.component.jsx';
 import Header from './components/Header.component.jsx';
 import MediaController from './components/MediaController.component.jsx';
-import { getUser, getUserTracks } from './apiService/api-service.js';
 import ErrorPage from './pages/ErrorPage.jsx';
 
 function App() {
   const [trackList, setTrackList] = useState([]);
-  const [activeTrack, setActiveTrack] = useState(null);
   const [isAudioMuted, setIsAudioMuted] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [thereIsAnError, seThereIsAnError] = useState(false);
+  const [repeat, setRepeat] = useState(0);
   const { user } = useParams();
 
   useEffect(() => {
@@ -43,10 +43,10 @@ function App() {
         setIsLoading(false);
       }
     })();
+  }, [user]);
 
-    const newActiveTrack = trackList.find((track) => track.isLastActive);
-    setActiveTrack(newActiveTrack);
-  }, [activeTrack, trackList, user]);
+  const activeTrack = trackList.find((track) => track.isLastActive) ?? null;
+  // .map((track) => ({ ...track, isFinished: false }))
 
   const playOrPauseTrackByID = (id) => {
     setTrackList((tracks) => {
@@ -58,6 +58,7 @@ function App() {
               isLastActive: track.isPlaying || true, // track.isPlaying being false here means you are clicking play.
               // the last active track is the last track on which you clicked play.
               isPlaying: !track.isPlaying, // toggle isPlaying flag on or off
+              isFinished: track.isPlaying && false,
             }
           : track;
       });
@@ -101,6 +102,16 @@ function App() {
     playOrPauseTrackByID(prevTrack.waveformRef.id);
   };
 
+  const pauseAllTracks = () => {
+    setTrackList((tracks) =>
+      tracks.map((track) => ({
+        ...track,
+        isPlaying: false,
+        isFinished: false,
+      }))
+    );
+  };
+
   if (isLoading) {
     return (
       <div className="h-screen flex justify-center items-center">
@@ -130,6 +141,9 @@ function App() {
           setTrackList={setTrackList}
           isAudioMuted={isAudioMuted}
           setIsAudioMuted={setIsAudioMuted}
+          pauseAllTracks={pauseAllTracks}
+          repeat={repeat}
+          setRepeat={setRepeat}
         />
       )}
     </div>
