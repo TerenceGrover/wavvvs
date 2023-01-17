@@ -1,3 +1,4 @@
+import Bio from './Bio.component.jsx';
 import Track from './Track.component.jsx';
 import UploadTrack from './UploadTrack.component.jsx';
 
@@ -27,11 +28,7 @@ export default function Profile({
             <p className="text-neutral-400">{`@${currentUser.user}`}</p>
           </section>
           <hr className="w-96 border-neutral-800 my-6" />
-          <section className="w-96">
-            <p className="text-xs text-neutral-400 text-left w-full">
-              {currentUser.bio}
-            </p>
-          </section>
+            <Bio bio={currentUser.bio}/>
           <hr className="w-96 border-neutral-800 my-6" />
         </div>
         <div className="w-full flex justify-center items-center">

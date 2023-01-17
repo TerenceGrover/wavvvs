@@ -18,14 +18,11 @@ export default function MediaController({
   pauseAllTracks,
   repeat,
   setRepeat,
-  currentUser,
-  trackList,
 }) {
   activeTrack.waveformRef.wavesurfer.setMute(isAudioMuted);
 
   useEffect(() => {
     if (activeTrack.isFinished && activeTrack.isPlaying && repeat === false) {
-      console.log('repeat === 0');
       pauseAllTracks();
     }
   }, [repeat, activeTrack, pauseAllTracks]);
@@ -49,8 +46,6 @@ export default function MediaController({
   const handleRepeatClick = () => {
     setRepeat(!repeat);
   };
-
-  // const titleIndex = trackList.findIndex((t) => Object.is(activeTrack, t)) ?? 0;
 
   return (
     <div className="static">
@@ -89,10 +84,6 @@ export default function MediaController({
                 />
               )}
             </div>
-            {/* <p className="text-neutral-5  00 w-full font-light text-xs m-1.5">
-              <span className="text-neutral-200">Active track: </span>
-              {currentUser.tracks[titleIndex].title}
-            </p> */}
             <div className="flex w-14 justify-end items-center ">
               {isAudioMuted ? (
                 <FiVolumeX
