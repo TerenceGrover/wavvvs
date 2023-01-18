@@ -42,6 +42,7 @@ export default function Track({
     waveformRef.id = path;
     waveformRef.wavesurfer = wavesurfer;
 
+    // add on finish event listener
     wavesurfer.on('finish', () => {
       setTrackList((tracks) =>
         tracks.map((track) =>
@@ -60,7 +61,7 @@ export default function Track({
       setTrackList((tracks) => {
         return tracks.filter((track) => track.waveformRef.id !== path);
       });
-
+      // remove event listener
       wavesurfer.un('finish', () => {
         setTrackList((tracks) =>
           tracks.map((track) =>
@@ -70,7 +71,7 @@ export default function Track({
           )
         );
       });
-
+      // destroy the instance
       wavesurfer.destroy();
     };
   }, [path, setTrackList]);

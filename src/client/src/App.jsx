@@ -32,9 +32,7 @@ function App() {
         setCurrentUser((currentUser) => ({
           ...currentUser,
           ...currentUserData,
-          tracks: tracksFromBackend.filter(
-            (track) => track.uploaded_by === currentUser?.user
-          ),
+          tracks: [...tracksFromBackend],
         }));
       } catch (error) {
         console.log({ error });
