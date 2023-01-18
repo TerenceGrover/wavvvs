@@ -20,7 +20,7 @@ router.post('/:username/tracks', checkFileSize, upload.single('track'), Track.up
 ``upload.single('track')`` is a function by Multer that uploads the file to the selected directory, gives it a random name and adds ``file`` property to the ``res`` object. That name is used in ``Track.uploadTrack`` controller to store the file name.
 
 ```js
-
+ const { originalname, filename, size } = req.file;
 ```
 
 In ``index.js`` I serve the ``./public`` folder as static files.
