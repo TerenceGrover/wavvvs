@@ -17,7 +17,7 @@ router.post('/:username/tracks', checkFileSize, upload.single('track'), Track.up
 ```
 
 ``checkFileSize`` sends and ``407`` status code back to the client if the file is too big.
-``upload.single('track')`` is a function by Multer that uploads the file to the selected directory, gives it a random name and adds ``file`` property to the ``res`` object. That name is used in ``Track.uploadTrack`` controller to store the file name.
+``upload.single('track')`` is a function by Multer that uploads the file to the selected directory, gives it a random name and adds ``file`` property to the ``req`` object. That name is used in ``Track.uploadTrack`` controller to store the file name.
 
 ```js
  const { originalname, filename, size } = req.file;
