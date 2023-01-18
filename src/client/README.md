@@ -19,10 +19,10 @@ and appended to the DOM using the ``useRef`` hook inside the ``useEffect``:
 ```js
 const  waveformRef  =  useRef(null);
 useEffect(() => {
-	const  options  = {
-		container: waveformRef.current
-	};
-	const  wavesurfer  =  WaveSurfer.create(options);
+ const  options  = {
+  container: waveformRef.current
+ };
+ const  wavesurfer  =  WaveSurfer.create(options);
 ...
 
 ...
@@ -33,58 +33,59 @@ useEffect(() => {
 <div ref={waveformRef} className="w-full..." ></div>
 ```
 
-
 Every track starts with all the flags set to ``false``:
 
 ```js
 setTrackList((tracks) => [
-	...tracks,
-	{ waveformRef, isPlaying: false, isActive: false, isFinished: false },
+ ...tracks,
+ { waveformRef, isPlaying: false, isActive: false, isFinished: false },
 ]);
 ```
 
 Each ``WaveSurfer``instance gets added an event listener when initialised, that sets to ``true`` the ``isFinished`` flag when the track finishes playing:
+
 ```js
 // add on finish event listener
 wavesurfer.on('finish', () => {
-	setTrackList((tracks) =>
-		tracks.map((track) =>
-			track.waveformRef.id  ===  path
-			? { ...track, isFinished: true }
-			:  track
-		)
-	);
+ setTrackList((tracks) =>
+  tracks.map((track) =>
+   track.waveformRef.id  ===  path
+   ? { ...track, isFinished: true }
+   :  track
+  )
+ );
 });
 ```
 
-When you click on play or pause, the ``playOrPauseTrackByID`` function inside ``App.jsx ``gets triggered. This function holds the logic of how the boolean flags should get toggled:
+When you click on play or pause, the ``playOrPauseTrackByID`` function inside ``App.jsx``gets triggered. This function holds the logic of how the boolean flags should get toggled:
 This is when things get complicated for no reason. If someone want's to work in this project I would recommend trying change this to a more manageable solution. Looking into [State Machines](https://en.wikipedia.org/wiki/Finite-state_machine) as [Kostas](https://github.com/kostasx) suggested me later on, might help.
+
 ```js
 const  playOrPauseTrackByID  = (id) => {
-	setTrackList((tracks) => {
-		// Loop trough the tracks and modify the status of th track you want to play/pause
-		const  modifiedTrackList  = tracks.map((track) => {
-			return track.waveformRef.id  ===  id
-			? {	...track,
-				isLastActive: track.isPlaying  ||  true, // track.isPlaying being false here means you are 							clicking play.
-				// the last active track is the last track on which you clicked play.
-				isPlaying: !track.isPlaying, // toggle isPlaying flag on or off
-				isFinished: track.isPlaying  &&  false,
-				}
-			:  track;
-			});
+ setTrackList((tracks) => {
+  // Loop trough the tracks and modify the status of th track you want to play/pause
+  const  modifiedTrackList  = tracks.map((track) => {
+   return track.waveformRef.id  ===  id
+   ? { ...track,
+    isLastActive: track.isPlaying  ||  true, // track.isPlaying being false here means you are        clicking play.
+    // the last active track is the last track on which you clicked play.
+    isPlaying: !track.isPlaying, // toggle isPlaying flag on or off
+    isFinished: track.isPlaying  &&  false,
+    }
+   :  track;
+   });
 
-	// make sure only one track is playing, and only one track is active at the same time
-		return modifiedTrackList.map((track) => {
-			if (track.isPlaying  && track.waveformRef.id  !==  id) {
-				track.isPlaying  =  !track.isPlaying;
-			}
-			if (track.isLastActive  && track.waveformRef.id  !==  id) {
-				track.isLastActive  =  !track.isLastActive;
-			}
-			return  track;
-		});
-	});
+ // make sure only one track is playing, and only one track is active at the same time
+  return modifiedTrackList.map((track) => {
+   if (track.isPlaying  && track.waveformRef.id  !==  id) {
+    track.isPlaying  =  !track.isPlaying;
+   }
+   if (track.isLastActive  && track.waveformRef.id  !==  id) {
+    track.isLastActive  =  !track.isLastActive;
+   }
+   return  track;
+  });
+ });
 };
 ```
 
