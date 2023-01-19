@@ -2,6 +2,8 @@ import Bio from './Bio.component.jsx';
 import Track from './Track.component.jsx';
 import UploadTrack from './UploadTrack.component.jsx';
 import ProfilePic from './ProfilePic.component.jsx';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 export default function Profile({
   currentUser,
@@ -10,6 +12,15 @@ export default function Profile({
   playOrPauseTrackByID,
   setCurrentUser,
 }) {
+
+  const [tracksto3, setTracksto3] = useState([1,2,3])
+
+  useEffect(() => {
+    if(currentUser.tracks.length > 0){
+      setTracksto3((currentUser.tracks.concat([1,2,3])).slice(0,3))
+      }
+  }, [currentUser.tracks])
+
   return (
     <div className="h-screen w-screen ">
       <div className="flex flex-col justify-start mt-14 items-center content-start p-6">
@@ -27,54 +38,21 @@ export default function Profile({
         </div>
         <div className="w-full flex justify-center items-center">
           <section className="w-96">
-            {currentUser.tracks[0] ? (
-              <Track
-                trackMetaData={currentUser.tracks[0]}
+            {tracksto3.map((track) =>
+              {return (
+                typeof track === 'object'
+                ?
+                <Track
+                trackMetaData={track}
                 track={trackList[0]}
                 setTrackList={setTrackList}
                 playOrPauseTrackByID={playOrPauseTrackByID}
                 setCurrentUser={setCurrentUser}
-                key={currentUser.tracks[0].path}
-              />
-            ) : (
-              <>
-                {currentUser.user === 'mateopresa' && (
-                  <UploadTrack setCurrentUser={setCurrentUser} />
-                )}
-              </>
-            )}
-            {currentUser.tracks[1] ? (
-              <Track
-                trackMetaData={currentUser.tracks[1]}
-                track={trackList[1]}
-                setTrackList={setTrackList}
-                playOrPauseTrackByID={playOrPauseTrackByID}
-                setCurrentUser={setCurrentUser}
-                key={currentUser.tracks[1].path}
-              />
-            ) : (
-              <>
-                {currentUser.user === 'mateopresa' && (
-                  <UploadTrack setCurrentUser={setCurrentUser} />
-                )}
-              </>
-            )}
-            {currentUser.tracks[2] ? (
-              <Track
-                trackMetaData={currentUser.tracks[2]}
-                track={trackList[2]}
-                setTrackList={setTrackList}
-                playOrPauseTrackByID={playOrPauseTrackByID}
-                setCurrentUser={setCurrentUser}
-                key={currentUser.tracks[2].path}
-              />
-            ) : (
-              <>
-                {currentUser.user === 'mateopresa' && (
-                  <UploadTrack setCurrentUser={setCurrentUser} />
-                )}
-              </>
-            )}
+                key={track.path}
+                />
+                :
+                <UploadTrack setCurrentUser={setCurrentUser} key={track} />)
+            })}
           </section>
         </div>
       </div>
