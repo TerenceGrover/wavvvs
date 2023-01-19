@@ -6,55 +6,51 @@ const postTrack = async (selectedFile, userID = 'mateopresa') => {
   try {
     const formData = new FormData();
     formData.append('track', selectedFile);
-    const result = await axios.post(`${baseURL}/${userID}/tracks`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
-    return result.data;
+    return fetch(baseURL + `/${userID}/tracks`, {
+      method : 'POST',
+      body : formData
+    }).then(response => response.data)
   } catch (error) {
     console.log({ error });
     return error;
   }
 };
 
-const getUser = async (user) => {
+const getUser = (user) => {
   try {
-    const result = await fetch(baseURL + `/${user}`).then((res) => res.json());
-    return result;
+    return fetch(baseURL + `/${user}`).then((res) => res.json());
   } catch (error) {
     console.log({ error });
     return error;
   }
 };
-const getTracksFromBackend = async () => {
+const getTracksFromBackend = () => {
   try {
-    const result = await fetch(baseURL + `/alltracks`).then((res) =>
+    return fetch(baseURL + `/alltracks`).then((res) =>
       res.json()
     );
-    return result;
   } catch (error) {
     console.log({ error });
     return error;
   }
 };
 
-const deleteTrack = async (id) => {
+const deleteTrack = (id) => {
   try {
-    const result = await fetch(baseURL + `/delete/tracks/${id}`, {
+    return fetch(baseURL + `/delete/tracks/${id}`, {
       method: 'DELETE',
     }).then((res) => res.json());
-    return result;
   } catch (error) {
     console.log({ error });
     return error;
   }
 };
 
-const getUserTracks = async (username) => {
+const getUserTracks = (username) => {
   try {
-    const result = await fetch(baseURL + `/${username}/tracks`).then((res) =>
+    return fetch(baseURL + `/${username}/tracks`).then((res) =>
       res.json()
     );
-    return result;
   } catch (error) {
     console.log({ error });
     return error;

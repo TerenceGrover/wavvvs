@@ -34,7 +34,7 @@ export default function UploadTrack({ setCurrentUser }) {
           <input
             type="file"
             className="hidden"
-            accept=".wav,.mp3,.flac"
+            accept=".wav,.mp3,.flac,.m4a"
             onChange={handleFileChange}
           />
           {selectedFile && (
