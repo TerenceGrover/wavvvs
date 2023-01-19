@@ -1,4 +1,4 @@
-import { User, Track } from './models/models.js';
+import { User, Track, ITrack, IUser } from './models/models';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 
@@ -27,21 +27,21 @@ const fakeTracks = [
     path: 'audio0.wav',
     title: 'throwaway...',
     size: 123456,
-    date: Date.now() - 21600000, // 6 hours ago
+    date: Date.now() // 6 hours ago
   },
   {
     uploaded_by: 'randomproducer',
     path: 'audio1.wav',
     title: 'vibes',
     size: 123456,
-    date: Date.now() - 18000000, // 5 hours ago
+    date: Date.now(), // 5 hours ago
   },
   {
     uploaded_by: 'randomproducer',
     path: 'audio2.wav',
     title: 'this track will be deleted because it was uploaded 25 hours ago',
     size: 123456,
-    date: Date.now() - 90000000, // 25 hours ago
+    date: Date.now(), // 25 hours ago
   },
 ];
 
@@ -63,12 +63,12 @@ export default async function () {
     console.log('Starting seed: all users and tracks deleted from database');
 
     for (const fakeUser of fakeUsers) {
-      const user = new User(fakeUser);
-      await user.save();
+      const user : IUser = fakeUser;
+      await User.create(user);
     }
     for (const fakeTrack of fakeTracks) {
-      const track = new Track(fakeTrack);
-      await track.save();
+      const track : ITrack = fakeTrack;
+      await Track.create(track);
     }
 
     console.log('Seed successful: all users and tracks added to database🤞🏼\n');

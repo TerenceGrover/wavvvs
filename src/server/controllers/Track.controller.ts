@@ -1,19 +1,24 @@
 import * as fs from 'node:fs/promises';
+import { Request, Response } from 'express';
 import path from 'node:path';
-import { Track } from '../models/models.js';
+import { ITrack, Track } from '../models/models.js';
 
-const uploadTrack = async (req, res) => {
+const uploadTrack = async (req: Request, res: Response) => {
   try {
-    const { username } = req.params;
-    const { originalname, filename, size } = req.file;
-    const newTrack = new Track({
+    const username: string = req.body.username;
+    const originalname: string = req.file!.originalname;
+    const filename: string = req.file!.filename;
+    const size: number = req.file!.size;
+
+    const newTrack: ITrack = {
       uploaded_by: username,
       path: filename,
       title: originalname,
       size: size,
-      date: new Date(),
-    });
-    await newTrack.save();
+      date: Date.now(),
+    };
+    // .create() check for if the data conforms to the schema
+    await Track.create(newTrack);
     res.status(200).send(newTrack);
   } catch (error) {
     console.log({ error });
@@ -21,9 +26,9 @@ const uploadTrack = async (req, res) => {
   }
 };
 
-const getAllTracks = async (req, res) => {
+const getAllTracks = async (req: Request, res: Response) => {
   try {
-    const tracks = await Track.find({});
+    const tracks: ITrack[] = await Track.find({});
     res.status(200).send(tracks);
   } catch (error) {
     console.log({ error });
@@ -31,11 +36,13 @@ const getAllTracks = async (req, res) => {
   }
 };
 
-const getUserTracks = async (req, res) => {
+const getUserTracks = async (req: Request, res: Response) => {
   try {
-    const { username } = req.params;
-    const tracks = await Track.find({ uploaded_by: username });
-    res.status(200).send(tracks);
+    const { username } = req.body;
+    const tracks: ITrack[] | undefined = await Track.find({ uploaded_by: username });
+
+    // if user has tracks, send them. If not, 404
+    tracks ? res.status(200).send(tracks) : res.sendStatus(404)
   } catch (error) {
     console.log({ error });
     res.status(500).send({ error });
@@ -43,11 +50,10 @@ const getUserTracks = async (req, res) => {
 };
 
 const tracksPublicDirectory = './public/tracks'; // path relative to the node process
-
-const deleteTrack = async (req, res) => {
+const deleteTrack = async (req: Request, res: Response) => {
   try {
     // The name of the file is the id of the track, and the path to it, at the same time.
-    const { id } = req.params;
+    const { id } = req.body; // refactored
     const { deletedCount } = await Track.deleteOne({ path: id });
     if (deletedCount) {
       await fs.unlink(path.join(tracksPublicDirectory, id));
