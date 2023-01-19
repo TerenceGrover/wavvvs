@@ -4,7 +4,7 @@ import { Track } from '../models/models.js';
 
 const uploadTrack = async (req, res) => {
   try {
-    const { username } = req.params;
+    const { username } = req.body; // refactored
     const { originalname, filename, size } = req.file;
     const newTrack = new Track({
       uploaded_by: username,
@@ -33,7 +33,7 @@ const getAllTracks = async (req, res) => {
 
 const getUserTracks = async (req, res) => {
   try {
-    const { username } = req.params;
+    const { username } = req.body;
     const tracks = await Track.find({ uploaded_by: username });
     res.status(200).send(tracks);
   } catch (error) {
@@ -47,7 +47,7 @@ const tracksPublicDirectory = './public/tracks'; // path relative to the node pr
 const deleteTrack = async (req, res) => {
   try {
     // The name of the file is the id of the track, and the path to it, at the same time.
-    const { id } = req.params;
+    const { id } = req.body; // refactored
     const { deletedCount } = await Track.deleteOne({ path: id });
     if (deletedCount) {
       await fs.unlink(path.join(tracksPublicDirectory, id));

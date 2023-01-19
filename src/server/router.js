@@ -8,17 +8,22 @@ const upload = multer({ dest: './public/tracks' });
 
 const router = express.Router();
 
-router.post(
-  '/:username/tracks',
+// refactored 
+router.post('/user/tracks',
   checkFileSize,
   upload.single('track'),
   Track.uploadTrack
 );
 
-router.delete('/delete/tracks/:id', Track.deleteTrack);
+router.delete('/delete/tracks', Track.deleteTrack);
 
-router.get('/:username/tracks', Track.getUserTracks);
+// refactored 
+router.get('/user/tracks', Track.getUserTracks);
+
+// THIS NEVER GETS CALLED. DELETE ?
 router.get('/alltracks', Track.getAllTracks);
-router.get('/:username', User.getUser);
+
+// refactored
+router.get('/users', User.getUser);
 
 export default router;
