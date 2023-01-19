@@ -41,7 +41,6 @@ const app = (0, express_1.default)();
         (0, index_1.default)();
     }
     catch (error) {
-        console.log('sdfg');
         console.log(error);
         return;
     }

@@ -7,6 +7,7 @@ export default function LandingPage() {
     <main className="w-screen h-screen flex flex-col justify-center items-center">
       <Logo />
       <LoginButton />
+      <LoginButton register = {true} />
     </main>
   );
 }

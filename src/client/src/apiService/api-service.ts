@@ -19,10 +19,13 @@ const postTrack = async (selectedFile : File, setter : Function, userID = 'mateo
   }
 };
 
-const getUser = (user : string | undefined) :any => {
+const getUser = (user : string) : any => {
   try {
-    return fetch(baseURL + `/${user}`)
-    .then((res) => res.json());
+    return fetch(baseURL + `/users`, {
+      method : 'GET',
+      body : JSON.stringify({ username : user })
+    })
+    .then((res) => {console.log(res);res.json()});
   } catch (error) {
     console.log({ error });
     return error;
