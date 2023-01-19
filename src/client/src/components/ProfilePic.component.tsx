@@ -1,10 +1,11 @@
+import React from 'react';
 import { useState } from 'react';
 import { TbDotsVertical } from 'react-icons/tb';
 
 const { REACT_APP_BACKEND_HOST } = process.env;
 const serverUrl = REACT_APP_BACKEND_HOST;
 
-const ProfilePic = ({ path }) => {
+const ProfilePic = (props : { path : string }) => {
   const [isHovering, setIsHovering] = useState(false);
   const [isEditing, editing] = useState(false);
 
@@ -34,7 +35,7 @@ const ProfilePic = ({ path }) => {
       )}
       <img
         className="relative right-5 w-60 h-60 rounded"
-        src={`${serverUrl}/pics/${path}`}
+        src={`${serverUrl}/pics/${props.path}`}
         alt="profile-pic"
       />
     </div>

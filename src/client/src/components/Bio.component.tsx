@@ -1,7 +1,8 @@
+import React from 'react';
 import { useState } from 'react';
 import { TbDotsVertical } from 'react-icons/tb';
 
-const Bio = ({ bio }) => {
+const Bio = (props : { bio : string }) => {
   const [isHovering, setIsHovering] = useState(false);
   const [isEditing, editing] = useState(false);
 
@@ -30,7 +31,7 @@ const Bio = ({ bio }) => {
         ) : (
           <div className="w-4 mr-4"></div>
         )}
-        <p className="text-xs text-neutral-400 text-left w-full">{bio}</p>
+        <p className="text-xs text-neutral-400 text-left w-full">{props.bio}</p>
       </div>
     </section>
   );

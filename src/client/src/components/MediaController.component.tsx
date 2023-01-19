@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { CurrentUser } from '../Interfaces';
 import { IoPlay, IoStop } from 'react-icons/io5';
 import {
   TbPlayerSkipBack,
@@ -7,44 +8,45 @@ import {
   TbRepeatOnce,
 } from 'react-icons/tb';
 import { FiVolume2, FiVolumeX } from 'react-icons/fi';
+import React from 'react';
 
-export default function MediaController({
-  activeTrack,
-  playOrPauseTrackByID,
-  playNextTrack,
-  playPrevTrack,
-  isAudioMuted,
-  setIsAudioMuted,
-  pauseAllTracks,
-  repeat,
-  setRepeat,
+export default function MediaController(props : {
+  activeTrack : any;
+  playOrPauseTrackByID : any;
+  playNextTrack : any;
+  playPrevTrack : any;
+  isAudioMuted : Boolean;
+  setIsAudioMuted : any;
+  pauseAllTracks : any;
+  repeat : any;
+  setRepeat : any;
 }) {
-  activeTrack.waveformRef.wavesurfer.setMute(isAudioMuted);
+  props.activeTrack.waveformRef.wavesurfer.setMute(props.isAudioMuted);
 
   useEffect(() => {
-    if (activeTrack.isFinished && activeTrack.isPlaying && repeat === false) {
-      pauseAllTracks();
+    if (props.activeTrack.isFinished && props.activeTrack.isPlaying && props.repeat === false) {
+      props.pauseAllTracks();
     }
-  }, [repeat, activeTrack, pauseAllTracks]);
+  }, [props.repeat, props.activeTrack, props.pauseAllTracks]);
 
   const handlePlayClick = () => {
-    playOrPauseTrackByID(activeTrack.waveformRef.id);
+    props.playOrPauseTrackByID(props.activeTrack.waveformRef.id);
   };
 
   const handleNextClick = () => {
-    playNextTrack();
+    props.playNextTrack();
   };
 
   const handleMuteClick = () => {
-    setIsAudioMuted(!isAudioMuted);
+    props.setIsAudioMuted(!props.isAudioMuted);
   };
 
   const handlePrevClick = () => {
-    playPrevTrack();
+    props.playPrevTrack();
   };
 
   const handleRepeatClick = () => {
-    setRepeat(!repeat);
+    props.setRepeat(!props.repeat);
   };
 
   return (
@@ -57,7 +59,7 @@ export default function MediaController({
                 onClick={handlePrevClick}
                 className="cursor-pointer text-neutral-200 h-5 w-5 mr-3 hover:text-neutral-400 active:text-neutral-700 ease-in transition duration-100"
               />
-              {!activeTrack?.isPlaying ? (
+              {!props.activeTrack?.isPlaying ? (
                 <IoPlay
                   onClick={handlePlayClick}
                   className="cursor-pointer text-neutral-200 h-5 w-5 mr-3 hover:text-neutral-400 active:text-neutral-700 ease-in transition duration-100"
@@ -72,7 +74,7 @@ export default function MediaController({
                 onClick={handleNextClick}
                 className="cursor-pointer text-neutral-200 h-5 w-5 mr-3 hover:text-neutral-400  active:text-neutral-700 ease-in transition duration-100"
               />
-              {repeat === false ? (
+              {props.repeat === false ? (
                 <TbRepeat
                   onClick={handleRepeatClick}
                   className="cursor-pointer text-neutral-200 h-5 w-5 mr-3 hover:text-neutral-400  active:text-green-700 ease-in transition duration-100"
@@ -85,7 +87,7 @@ export default function MediaController({
               )}
             </div>
             <div className="flex w-14 justify-end items-center ">
-              {isAudioMuted ? (
+              {props.isAudioMuted ? (
                 <FiVolumeX
                   onClick={handleMuteClick}
                   className="cursor-pointer text-neutral-200 h-5 w-7 hover:text-neutral-400 active:text-neutral-700 ease-in transition duration-100"

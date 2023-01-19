@@ -1,3 +1,4 @@
+import React from 'react';
 import { AiOutlineMenu, AiOutlineSearch } from 'react-icons/ai';
 import Logo from './Logo.component';
 
