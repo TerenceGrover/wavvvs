@@ -1,8 +1,8 @@
 import express from 'express';
-import multer from 'multer';
-import * as Track from './controllers/Track.controller.js';
-import * as User from './controllers/User.controller.js';
-import checkFileSize from './middle-ware/checkFileSize.js';
+import multer from 'multer'
+import * as Track from './controllers/Track.controller';
+import * as User from './controllers/User.controller';
+import checkFileSize from './middle-ware/checkFileSize';
 
 const upload = multer({ dest: './public/tracks' });
 

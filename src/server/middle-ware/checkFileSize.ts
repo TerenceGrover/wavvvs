@@ -1,8 +1,12 @@
+import { Request, Response, NextFunction } from 'express';
 const MAX_FILE_SIZE_IN_BYTES = 104857600; // 100MB;
 
-const checkFileSize = (req, res, next) => {
+const checkFileSize = (req: Request, res: Response, next: NextFunction) => {
   try {
-    const fileSize = parseInt(req.headers['content-length']);
+    let fileSize: number = 0;
+    if(req.headers['content-length']) {
+      fileSize = +req.headers['content-length'];
+    }
     // console.log({ fileSize });
     if (fileSize > MAX_FILE_SIZE_IN_BYTES) {
       throw new Error('File size exceeded');
