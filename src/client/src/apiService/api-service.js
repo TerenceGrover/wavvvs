@@ -18,7 +18,7 @@ const postTrack = async (selectedFile, userID = 'mateopresa') => {
 
 const getUser = async (user) => {
   try {
-    const result = await fetch(`${baseURL}/${user}`).then((res) => res.json());
+    const result = await fetch(baseURL + `/${user}`).then((res) => res.json());
     return result;
   } catch (error) {
     console.log({ error });
@@ -27,7 +27,7 @@ const getUser = async (user) => {
 };
 const getTracksFromBackend = async () => {
   try {
-    const result = await fetch(`${baseURL}/alltracks`).then((res) =>
+    const result = await fetch(baseURL + `/alltracks`).then((res) =>
       res.json()
     );
     return result;
@@ -39,7 +39,7 @@ const getTracksFromBackend = async () => {
 
 const deleteTrack = async (id) => {
   try {
-    const result = await fetch(`${baseURL}/delete/tracks/${id}`, {
+    const result = await fetch(baseURL + `/delete/tracks/${id}`, {
       method: 'DELETE',
     }).then((res) => res.json());
     return result;
@@ -51,7 +51,7 @@ const deleteTrack = async (id) => {
 
 const getUserTracks = async (username) => {
   try {
-    const result = await fetch(`${baseURL}/${username}/tracks`).then((res) =>
+    const result = await fetch(baseURL + `/${username}/tracks`).then((res) =>
       res.json()
     );
     return result;
