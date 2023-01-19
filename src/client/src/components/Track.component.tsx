@@ -1,26 +1,28 @@
 import { useEffect, useRef, useState } from 'react';
+import { TrackType, TrackListItemType } from '../Interfaces.js';
 import WaveSurfer from 'wavesurfer.js';
 import millisecondsToHours from 'date-fns/millisecondsToHours';
 import { IoPlay, IoStop } from 'react-icons/io5';
 import { MdClose } from 'react-icons/md';
-import DeleteWarningModal from './DeleteWarningModal.component.jsx';
+import DeleteWarningModal from './DeleteWarningModal.component';
+import React from 'react';
 
 const { REACT_APP_BACKEND_HOST } = process.env;
 const staticTrackURL = `${REACT_APP_BACKEND_HOST}/tracks/`;
 
-export default function Track({
-  trackMetaData,
-  track,
-  setTrackList,
-  playOrPauseTrackByID,
-  setCurrentUser,
+export default function Track(props : {
+  trackMetaData : TrackType;
+  track : TrackListItemType;
+  setTrackList : React.Dispatch<React.SetStateAction<TrackListItemType[]>>;
+  playOrPauseTrackByID : (id : string) => void;
+  setCurrentUser : React.Dispatch<React.SetStateAction<any>>;
 }) {
   const [open, setOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
 
-  const waveformRef = useRef(null);
+  const waveformRef : any = useRef("waveform");
 
-  const { path, title, date, uploaded_by } = trackMetaData;
+  const { path, title, date, uploaded_by } = props.trackMetaData;
   const hoursSinceUploaded = millisecondsToHours(Number(Date.now() - date));
 
   useEffect(() => {
@@ -44,26 +46,26 @@ export default function Track({
 
     // add on finish event listener
     wavesurfer.on('finish', () => {
-      setTrackList((tracks) =>
+      props.setTrackList((tracks) =>
         tracks.map((track) =>
           track.waveformRef.id === path ? { ...track, isFinished: true } : track
         )
       );
     });
 
-    setTrackList((tracks) => [
+    props.setTrackList((tracks) => [
       ...tracks,
       { waveformRef, isPlaying: false, isActive: false, isFinished: false },
     ]);
 
     return () => {
       // clean up function
-      setTrackList((tracks) => {
+      props.setTrackList((tracks) => {
         return tracks.filter((track) => track.waveformRef.id !== path);
       });
       // remove event listener
       wavesurfer.un('finish', () => {
-        setTrackList((tracks) =>
+        props.setTrackList((tracks) =>
           tracks.map((track) =>
             track.waveformRef.id === path
               ? { ...track, isFinished: false }
@@ -74,18 +76,18 @@ export default function Track({
       // destroy the instance
       wavesurfer.destroy();
     };
-  }, [path, setTrackList]);
+  }, [path, props.setTrackList]);
 
-  if (track) {
-    if (track.isPlaying) {
-      track.waveformRef?.wavesurfer.play();
+  if (props.track) {
+    if (props.track.isPlaying) {
+      props.track.waveformRef?.wavesurfer.play();
     } else {
-      track.waveformRef?.wavesurfer.stop();
+      props.track.waveformRef?.wavesurfer.stop();
     }
   }
 
   const handleClick = () => {
-    playOrPauseTrackByID(path);
+    props.playOrPauseTrackByID(path);
   };
 
   const handleMouseOver = () => {
@@ -110,7 +112,7 @@ export default function Track({
         setOpen={setOpen}
         open={open}
         trackPath={path}
-        setCurrentUser={setCurrentUser}
+        setCurrentUser={props.setCurrentUser}
       />
       <div className="relative flex justify-between w-full">
         {isHovering && uploaded_by === 'mateopresa' ? (
@@ -130,7 +132,7 @@ export default function Track({
       </div>
       <div className="flex align-center items-center overflow-hidden">
         <div className="mr-2">
-          {track?.isPlaying ? (
+          {props.track?.isPlaying ? (
             <IoStop
               onClick={handleClick}
               className="cursor-pointer text-white w-5 h-5 hover:text-neutral-400 ease-in transition duration-100"

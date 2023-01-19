@@ -1,7 +1,8 @@
+import React from 'react';
 import { useRouteError } from 'react-router-dom';
 
 export default function ErrorPage() {
-  const error = useRouteError();
+  const error : any = useRouteError();
 
   return (
     <div className="h-screen text-neutral-200 flex justify-center items-center text-sm font-light">

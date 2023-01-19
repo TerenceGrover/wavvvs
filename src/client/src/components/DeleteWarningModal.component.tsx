@@ -1,27 +1,29 @@
 import { Fragment, useRef, useState } from 'react';
+import { CurrentUser } from '../Interfaces';
 import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
-import { deleteTrack } from '../apiService/api-service.js';
+import { deleteTrack } from '../apiService/api-service';
+import React from 'react';
 
-export default function DeleteWarningModal({
-  open,
-  setOpen,
-  trackPath,
-  setCurrentUser,
+export default function DeleteWarningModal(props : {
+  open: boolean;
+  setOpen : React.Dispatch<React.SetStateAction<boolean>>;
+  trackPath : string;
+  setCurrentUser : React.Dispatch<React.SetStateAction<CurrentUser>>;
 }) {
   const cancelButtonRef = useRef(null);
   const [thereIsAnError, setError] = useState(false);
 
   const handleDeleteInModal = async () => {
     try {
-      const resultOfDeleting = await deleteTrack(trackPath);
+      const resultOfDeleting = await deleteTrack(props.trackPath);
       if (resultOfDeleting instanceof Error) {
-        throw new Error({ cause: resultOfDeleting });
+        throw new Error(`${{ cause: resultOfDeleting }}`);
       }
-      setOpen(false);
-      setCurrentUser((currentUser) => ({
+      props.setOpen(false);
+      props.setCurrentUser((currentUser) => ({
         ...currentUser,
-        tracks: currentUser.tracks.filter((track) => track.path !== trackPath),
+        tracks: currentUser.tracks.filter((track) => track.path !== props.trackPath),
       }));
     } catch (error) {
       console.log({ error });
@@ -30,12 +32,12 @@ export default function DeleteWarningModal({
   };
 
   return (
-    <Transition.Root show={open} as={Fragment}>
+    <Transition.Root show={props.open} as={Fragment}>
       <Dialog
         as="div"
         className="relative z-10"
         initialFocus={cancelButtonRef}
-        onClose={setOpen}
+        onClose={props.setOpen}
       >
         <Transition.Child
           as={Fragment}
@@ -97,7 +99,7 @@ export default function DeleteWarningModal({
                   <button
                     type="button"
                     className="transition ease-in duration-200 w-20 rounded bg-neutral-800 py-2 px-1 mt-2 text-xs text-white hover:bg-neutral-700"
-                    onClick={() => setOpen(false)}
+                    onClick={() => props.setOpen(false)}
                     ref={cancelButtonRef}
                   >
                     Cancel

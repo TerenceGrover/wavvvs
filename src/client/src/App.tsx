@@ -1,42 +1,44 @@
+import type { CurrentUser, TrackType, TrackListItemType } from './Interfaces';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getUser, getUserTracks } from './apiService/api-service.js';
+import { getUser, getUserTracks } from './apiService/api-service';
 import MoonLoader from 'react-spinners/MoonLoader.js';
-import Profile from './components/Profile.component.jsx';
-import Header from './components/Header.component.jsx';
-import MediaController from './components/MediaController.component.jsx';
-import ErrorPage from './pages/ErrorPage.jsx';
+import Profile from './components/Profile.component';
+import Header from './components/Header.component';
+import MediaController from './components/MediaController.component';
+import ErrorPage from './pages/ErrorPage';
+import React from 'react';
 
 function App() {
-  const [trackList, setTrackList] = useState([]);
+  const [trackList, setTrackList] = useState<TrackListItemType[]>([]);
   const [isAudioMuted, setIsAudioMuted] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState<CurrentUser | undefined >();
   const [isLoading, setIsLoading] = useState(true);
   const [thereIsAnError, seThereIsAnError] = useState(false);
   const [repeat, setRepeat] = useState(false);
-  const { user } = useParams();
+  const { user } : any = useParams();
 
   useEffect(() => {
     (async () => {
       try {
-        const currentUserData = await getUser(user);
-        if (currentUserData instanceof Error) {
-          throw new Error({ cause: currentUserData });
-        }
+        // const currentUserData = await getUser(user);
+        // if (currentUserData instanceof Error) {
+        //   throw new Error(`${{ cause: currentUserData }}`);
+        // }
 
-        const tracksFromBackend = await getUserTracks(user);
-        if (tracksFromBackend instanceof Error) {
-          throw new Error({ cause: tracksFromBackend });
-        }
+        await getUserTracks(user, setCurrentUser);
+        // if (tracksFromBackend instanceof Error) {
+        //   throw new Error(`${{ cause: currentUserData }}`);
+        // }
 
-        setCurrentUser((currentUser) => ({
-          ...currentUser,
-          ...currentUserData,
-          tracks: [...tracksFromBackend],
-        }));
+        // setCurrentUser((currentUser) => ({
+        //   ...currentUser,
+        //   ...currentUserData,
+        //   tracks: [...tracksFromBackend],
+        // }));
       } catch (error) {
         console.log({ error });
-        seThereIsAnError(true);
+        seThereIsAnError(true); 
       } finally {
         setIsLoading(false);
       }
@@ -45,12 +47,12 @@ function App() {
 
   const activeTrack = trackList.find((track) => track.isLastActive) ?? null;
 
-  const playOrPauseTrackByID = (id) => {
+  const playOrPauseTrackByID = (id : string) => {
     setTrackList((tracks) => {
       // Loop trough the tracks and modify the status of th track you want to play/pause
       const modifiedTrackList = tracks.map((track) => {
         return track.waveformRef.id === id
-          ? {
+          ? { 
               ...track,
               isLastActive: track.isPlaying || true, // track.isPlaying being false here means you are clicking play.
               // the last active track is the last track on which you clicked play.
@@ -83,6 +85,7 @@ function App() {
       : lastActiveTrackIndex++;
 
     const nextTrack = trackList.at(lastActiveTrackIndex);
+    nextTrack &&
     playOrPauseTrackByID(nextTrack.waveformRef.id);
   };
 
@@ -96,7 +99,7 @@ function App() {
       : lastActiveTrackIndex--;
 
     const prevTrack = trackList.at(lastActiveTrackIndex);
-    playOrPauseTrackByID(prevTrack.waveformRef.id);
+    prevTrack && playOrPauseTrackByID(prevTrack.waveformRef.id);
   };
 
   const pauseAllTracks = () => {
@@ -122,27 +125,26 @@ function App() {
   return (
     <div className="h-screen w-screen bg-neutral-900 flex flex-col">
       <Header />
-      <Profile
-        currentUser={currentUser}
-        setCurrentUser={setCurrentUser}
-        trackList={trackList}
-        setTrackList={setTrackList}
-        playOrPauseTrackByID={playOrPauseTrackByID}
-      />
+      {currentUser && (
+        <Profile
+          currentUser={currentUser}
+          setCurrentUser={setCurrentUser}
+          trackList={trackList}
+          setTrackList={setTrackList}
+          playOrPauseTrackByID={playOrPauseTrackByID}
+        />
+      )} 
       {activeTrack && (
         <MediaController
           activeTrack={activeTrack}
-          currentUser={currentUser}
           playOrPauseTrackByID={playOrPauseTrackByID}
           playNextTrack={playNextTrack}
           playPrevTrack={playPrevTrack}
-          setTrackList={setTrackList}
           isAudioMuted={isAudioMuted}
           setIsAudioMuted={setIsAudioMuted}
           pauseAllTracks={pauseAllTracks}
           repeat={repeat}
           setRepeat={setRepeat}
-          trackList={trackList}
         />
       )}
     </div>

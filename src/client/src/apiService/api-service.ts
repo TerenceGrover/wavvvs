@@ -1,24 +1,28 @@
-import axios from 'axios';
-const { REACT_APP_BACKEND_HOST } = process.env;
-const baseURL = REACT_APP_BACKEND_HOST;
+import { CurrentUser } from '../Interfaces';
+const baseURL = 'http://localhost:3001';
 
-const postTrack = async (selectedFile, userID = 'mateopresa') => {
+const postTrack = async (selectedFile : File, setter : Function, userID = 'mateopresa') => {
   try {
     const formData = new FormData();
     formData.append('track', selectedFile);
     return fetch(baseURL + `/${userID}/tracks`, {
       method : 'POST',
       body : formData
-    }).then(response => response.data)
+    }).then(response => response.json())
+    .then(data => {setter((currentUser: { tracks: any; }) => ({
+      ...currentUser,
+      tracks: [...currentUser.tracks, data],
+    }))})
   } catch (error) {
     console.log({ error });
     return error;
   }
 };
 
-const getUser = (user) => {
+const getUser = (user : string | undefined) :any => {
   try {
-    return fetch(baseURL + `/${user}`).then((res) => res.json());
+    return fetch(baseURL + `/${user}`)
+    .then((res) => res.json());
   } catch (error) {
     console.log({ error });
     return error;
@@ -35,7 +39,7 @@ const getTracksFromBackend = () => {
   }
 };
 
-const deleteTrack = (id) => {
+const deleteTrack = (id : string) => {
   try {
     return fetch(baseURL + `/delete/tracks/${id}`, {
       method: 'DELETE',
@@ -46,11 +50,16 @@ const deleteTrack = (id) => {
   }
 };
 
-const getUserTracks = (username) => {
+const getUserTracks = (username : string, setter : React.Dispatch<React.SetStateAction<CurrentUser | undefined>>) => {
   try {
+    const userData = getUser(username);
     return fetch(baseURL + `/${username}/tracks`).then((res) =>
       res.json()
-    );
+    ).then(data => setter((currentUser) => ({
+        ...currentUser,
+        ...userData,
+        tracks: [...data],
+      })));
   } catch (error) {
     console.log({ error });
     return error;

@@ -1,5 +1,6 @@
-import LoginButton from './LoginButton.component.jsx';
-import Logo from './Logo.component.jsx';
+import React from 'react';
+import LoginButton from './LoginButton.component';
+import Logo from './Logo.component';
 
 export default function LandingPage() {
   return (
