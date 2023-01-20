@@ -1,13 +1,12 @@
 import React from 'react';
 import { login, register } from '../apiService/api-service';
-const UserForm = () => {
+const UserForm = (props : {setIsAuth : React.Dispatch<React.SetStateAction<boolean>>, setIsNewUser : React.Dispatch<React.SetStateAction<boolean>>}) => {
 
-  const [isLogged, setIsLogged] = React.useState(false);
   const [clicked, setClicked] = React.useState('');
   const [info, setInfo] = React.useState({
     username: '',
     email: '',
-    password: '',
+    password: ''
   });
 
   const handleBack = () => {
@@ -15,16 +14,45 @@ const UserForm = () => {
   };
 
   const handleSubmit = () => {
-    if (clicked === 'login') {
-    console.log('login', info)
-    login(info)
+    if ((clicked === 'register' && !info.username) || !info.password || !info.email) {
+      alert('Please fill in all fields');
+      return;
     }
+    if (clicked === 'register'){
+      if (info.username.length < 3 || !info.username.match(/^[a-zA-Z0-9]+$/)) {
+        alert('Username must be at least 3 characters long and contain only letters and numbers');
+        return;
+    }
+    }
+    if (!info.email.includes('@') || !info.email.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
+      alert('Email must contain @ and contain only letters and numbers');
+      return;
+  }
+    if (info.password.length < 8 || !info.password.match(/^[a-zA-Z0-9]+$/)) {
+        alert('Password must be at least 8 characters long and contain only letters and numbers');
+        return;
+    }
+
+    if (clicked === 'login') {
+      login(info).then((res) => {
+        if (res) {
+          if (res.user.isNew) {
+            props.setIsNewUser(true);
+          }
+          props.setIsAuth(true);
+        }
+      })
+    }
+    
     if (clicked === 'register') {
-    console.log('register', info)
-    register(info)
+      register(info).then((res) => {
+        if (res) {
+          setClicked('login');
+        }
+      })
     }
     setInfo({ username: '', email: '', password: '' });
-  };
+};
 
   return (
     // On click of the button, make the button disappear and two input fields appear
@@ -33,14 +61,13 @@ const UserForm = () => {
         className={`${clicked === '' && 'hidden'} 
     flex items-center gap-2 flex-col transition ease-in duration-400 w-20 rounded py-2 px-1 text-xs text-white
     [&>input]:bg-neutral-600 [&>input]:p-1 [&>input]:rounded [&>*:hover]:bg-neutral-500`}
-        // onSubmit={(e) => handleSubmit(e)}
       >
         <input
-          id="username"
-          placeholder="username"
-          className="w-40"
-          type="text"
-          autoComplete="username"
+          id='username'
+          placeholder='username'
+          className={`${clicked === 'register' ? 'show' : 'hidden'} w-40`}
+          type='text'
+          autoComplete='username'
           onChange={(e) => {
             setInfo({ ...info, username: e.target.value });
           }}
@@ -49,7 +76,7 @@ const UserForm = () => {
         <input
           id="email"
           placeholder="email"
-          className={`${clicked === 'register' ? 'show' : 'hidden'} w-40`}
+          className='w-40'
           type="email"
           autoComplete="email"
           onChange={(e) => {
@@ -83,7 +110,6 @@ const UserForm = () => {
             setClicked('login');
           }
         }}
-        type="button"
       >
         Login
       </button>
@@ -101,14 +127,13 @@ const UserForm = () => {
             setClicked('register');
           }
         }}
-        type="button"
       >
         Register
       </button>
       <button
         className={`${
           clicked === '' && 'hidden'
-        } mt-6 text-white underline underline-offset-2`}
+        } mt-6 underline underline-offset-2 text-sm text-neutral-200`}
         onClick={handleBack}
       >
         Go back

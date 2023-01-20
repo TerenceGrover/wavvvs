@@ -9,6 +9,7 @@ const getUser = async (req: Request, res: Response) => {
   try {
 
     if (req.headers && req.headers.authorization) {
+      console.log(req.headers.authorization)
       let authorization = req.headers.authorization.split(' ')[1],
           decoded:any;
       try {
@@ -20,14 +21,16 @@ const getUser = async (req: Request, res: Response) => {
       // Fetch the user by id 
       User.findOne({_id: id}).then(function(user){
           // Do something with the user
-          user!.password = '';
+          // user!.password = '';
+          console.log(user);
+          
           return res.status(200).send(user);
       });
   }
-  return res.send(500);
+  // return res.send(500);
   } catch (error) {
     console.log({ error });
-    res.status(500).send({ error: getErrorMessage(error) });
+    return res.status(500).send({ error: getErrorMessage(error) });
   }
 };
 

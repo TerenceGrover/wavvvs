@@ -9,7 +9,6 @@ export interface CurrentUser {
   bio: string;
   email: string;
   name: string;
-  password: string;
   profile_pic_path: string;
   tracks: Array<TrackType>;
   user: string;
@@ -32,7 +31,14 @@ export interface TrackListItemType {
 }
 
 export interface InfoObject {
-  username: string;
+  username?: string;
   password: string;
   email?: string;
+}
+
+export interface AdditionalInfoObject {
+  name: string;
+  bio: string;
+  email: string;
+  profile_pic_path: string;
 }

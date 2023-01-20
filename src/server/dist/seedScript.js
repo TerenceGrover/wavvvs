@@ -31,16 +31,18 @@ const fs = __importStar(require("node:fs/promises"));
 const node_path_1 = __importDefault(require("node:path"));
 const fakeUsers = [
     {
+        isNew: false,
         name: 'Mateo Presa',
-        user: 'mateopresa',
+        username: 'mateopresa',
         email: 'mateopresacastro@gmail.com',
         password: 'secret',
         bio: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse id neque at nulla suscipit dapibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse id neque at nulla suscipit dapibus.`,
         profile_pic_path: 'mateo_pic.jpeg',
     },
     {
+        isNew: true,
         name: 'Random Producer',
-        user: 'randomproducer',
+        username: 'randomproducer',
         email: 'randomproducer@gmail.com',
         password: 'secret',
         bio: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse id neque at nulla suscipit dapibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse id neque at nulla suscipit dapibus.`,
