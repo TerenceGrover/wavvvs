@@ -21,21 +21,7 @@ function App() {
   useEffect(() => {
     (async () => {
       try {
-        // const currentUserData = await getUser(user);
-        // if (currentUserData instanceof Error) {
-        //   throw new Error(`${{ cause: currentUserData }}`);
-        // }
-
         await getUserTracks(user, setCurrentUser);
-        // if (tracksFromBackend instanceof Error) {
-        //   throw new Error(`${{ cause: currentUserData }}`);
-        // }
-
-        // setCurrentUser((currentUser) => ({
-        //   ...currentUser,
-        //   ...currentUserData,
-        //   tracks: [...tracksFromBackend],
-        // }));
       } catch (error) {
         console.log({ error });
         seThereIsAnError(true); 
