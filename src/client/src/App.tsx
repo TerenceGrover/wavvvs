@@ -1,7 +1,7 @@
 import type { CurrentUser, TrackType, TrackListItemType } from './Interfaces';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { getUser, getUserTracks } from './apiService/api-service';
+import { useParams ,Router, Routes, Route } from 'react-router-dom';
+import { getUserTracks } from './apiService/api-service';
 import MoonLoader from 'react-spinners/MoonLoader.js';
 import Profile from './components/Profile.component';
 import Header from './components/Header.component';

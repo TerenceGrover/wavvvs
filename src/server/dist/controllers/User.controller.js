@@ -53,8 +53,8 @@ exports.loginOne = loginOne;
 const registerOne = async (req, res) => {
     try {
         console.log(req.body);
-        await userServices.register(req.body);
-        res.status(200).send(true);
+        const user = await userServices.register(req.body);
+        res.status(200).send(user);
     }
     catch (error) {
         return res.status(500).send((0, error_util_1.getErrorMessage)(error));

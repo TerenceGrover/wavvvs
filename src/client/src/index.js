@@ -5,11 +5,12 @@ import App from './App';
 import LandingPage from './components/LandingPage.component';
 import ErrorPage from './pages/ErrorPage';
 import './index.css';
+import CreateUser from './components/CreateUser.component';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <LandingPage />,
+    element: <CreateUser />,
     errorElement: <ErrorPage />,
   },
   {

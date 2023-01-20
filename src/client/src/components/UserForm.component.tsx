@@ -34,12 +34,14 @@ const UserForm = () => {
         return;
     }
     if (clicked === 'login') {
-      console.log('login', info)
       login(info)
     }
     if (clicked === 'register') {
-      console.log('register', info)
-      register(info)
+      if (register(info)) {
+        console.log('user created')
+        // redirect ro user creation page with react router
+        window.location.replace("/user")
+      }
     }
     setInfo({ username: '', email: '', password: '' });
 };
