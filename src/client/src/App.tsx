@@ -7,6 +7,7 @@ import './index.css'
 import CreateUser from './pages/CreateUser';
 import Logo from './components/Logo.component';
 import { checkUser } from './apiService/api-service';
+import Bio from './components/Bio.component';
 
 export default function App() {
 
@@ -79,7 +80,9 @@ export default function App() {
           :
           <Home /> )
           : 
-          <LandingPage setIsAuth = {setIsAuth} setIsNewUser={setIsNewUser}/>} />
+          <LandingPage setIsAuth = {setIsAuth} setIsNewUser={setIsNewUser}/>
+          } 
+          />
         <Route element={<ErrorPage />} />
       </Routes>
     </Router>
