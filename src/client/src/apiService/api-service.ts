@@ -82,9 +82,9 @@ const getUserTracks = (
   }
 };
 
-const login = (infoObject: InfoObject) => {
-  const { username, password } = infoObject;
-  let user = { username, password };
+const login = async (infoObject: InfoObject) : Promise<any> => {
+  const { email, password } = infoObject;
+  let user = { email, password };
   try {
     return fetch(baseURL + `/login`, {
       method: 'POST',
@@ -92,14 +92,21 @@ const login = (infoObject: InfoObject) => {
         'Content-type': 'Application/json',
       },
       body: JSON.stringify(user),
-    }).then((res) => res.json());
+    }).then((res) => res.json())
+    .then((data) => {
+      console.log(data)
+      if (data.token){
+        localStorage.setItem('token', data.token)
+      }
+      return data
+    })
   } catch (error) {
     console.log({ error });
-    return error;
+    return Promise.reject(error);
   }
 };
 
-const register = (infoObject: InfoObject) => {
+const register = async (infoObject: InfoObject)  : Promise<JSON> => {
   const { email, username, password } = infoObject;
   let user = { email, username, password };
   try {
@@ -112,11 +119,11 @@ const register = (infoObject: InfoObject) => {
     }).then((res) => res.json());
   } catch (error) {
     console.log({ error });
-    return error;
+    return Promise.reject(error);
   }
 };
 
-const updateUser = (secondObject: AdditionalInfoObject) => {
+const updateUser = async (secondObject: AdditionalInfoObject) : Promise<JSON> => {
   const { name, bio, email, profile_pic_path } = secondObject;
   let user = { name, bio, email, profile_pic_path };
   try {
@@ -129,9 +136,22 @@ const updateUser = (secondObject: AdditionalInfoObject) => {
     }).then((res) => res.json());
   } catch (error) {
     console.log({ error });
-    return error;
+    return Promise.reject(error);
   }
 };
+
+const checkUser = async () => {
+  const token = localStorage.getItem('token')
+  if (token){
+    return fetch(baseURL + `/user`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'Application/json',
+        'Authorization': 'Bearer ' + token
+      },
+    }).then((res) => res.json());
+  }
+}
 
 export {
   postTrack,
@@ -142,4 +162,5 @@ export {
   login,
   register,
   updateUser,
+  checkUser
 };

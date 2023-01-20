@@ -3,13 +3,21 @@ import UserForm from './UserForm.component'
 
 describe('<UserForm />', () => {
 
+  // Create a setstate function to pass to the component that has a dispatch function
+  //
+  const setIsAuth = () => {
+    return {
+      dispatch: () => {}
+    }
+  }
+
   it('renders', () => {
     // see: https://on.cypress.io/mounting-react
-    cy.mount(<UserForm />)
+    cy.mount(<UserForm setIsAuth={setIsAuth} setIsNewUser={setIsAuth} />)
   })
 
   beforeEach(() => {
-    cy.mount(<UserForm />)
+    cy.mount(<UserForm setIsAuth={setIsAuth} setIsNewUser={setIsAuth} />)
   })
 
   it('Clicking each buttons hide the others', () => {

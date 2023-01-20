@@ -33,7 +33,7 @@ const fakeUsers = [
     {
         isNew: false,
         name: 'Mateo Presa',
-        user: 'mateopresa',
+        username: 'mateopresa',
         email: 'mateopresacastro@gmail.com',
         password: 'secret',
         bio: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse id neque at nulla suscipit dapibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse id neque at nulla suscipit dapibus.`,
@@ -42,7 +42,7 @@ const fakeUsers = [
     {
         isNew: true,
         name: 'Random Producer',
-        user: 'randomproducer',
+        username: 'randomproducer',
         email: 'randomproducer@gmail.com',
         password: 'secret',
         bio: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse id neque at nulla suscipit dapibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse id neque at nulla suscipit dapibus.`,

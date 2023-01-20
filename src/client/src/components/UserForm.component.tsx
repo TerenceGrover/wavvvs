@@ -1,8 +1,7 @@
 import React from 'react';
 import { login, register } from '../apiService/api-service';
-const UserForm = () => {
+const UserForm = (props : {setIsAuth : React.Dispatch<React.SetStateAction<boolean>>, setIsNewUser : React.Dispatch<React.SetStateAction<boolean>>}) => {
 
-  const [isLogged, setIsLogged] = React.useState(false);
   const [clicked, setClicked] = React.useState('');
   const [info, setInfo] = React.useState({
     username: '',
@@ -35,14 +34,22 @@ const UserForm = () => {
     }
 
     if (clicked === 'login') {
-      console.log(login(info))
+      login(info).then((res) => {
+        if (res) {
+          if (res.user.isNew) {
+            props.setIsNewUser(true);
+          }
+          props.setIsAuth(true);
+        }
+      })
     }
+    
     if (clicked === 'register') {
-      if (register(info)) {
-        console.log('user created')
-        // redirect ro user creation page with react router
-        window.location.replace("/user")
-      }
+      register(info).then((res) => {
+        if (res) {
+          setClicked('login');
+        }
+      })
     }
     setInfo({ username: '', email: '', password: '' });
 };

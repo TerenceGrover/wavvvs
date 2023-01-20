@@ -31,7 +31,7 @@ export interface TrackListItemType {
 }
 
 export interface InfoObject {
-  username: string;
+  username?: string;
   password: string;
   email?: string;
 }

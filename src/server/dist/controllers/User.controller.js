@@ -51,7 +51,12 @@ const getUser = async (req, res) => {
 exports.getUser = getUser;
 const loginOne = async (req, res) => {
     try {
-        const foundUser = await userServices.login(req.body);
+        const { email, password } = req.body;
+        const userToLog = {
+            email,
+            password,
+        };
+        const foundUser = await userServices.login(userToLog);
         res.status(200).send(foundUser);
     }
     catch (error) {
@@ -61,8 +66,14 @@ const loginOne = async (req, res) => {
 exports.loginOne = loginOne;
 const registerOne = async (req, res) => {
     try {
-        console.log(req.body);
-        const user = await userServices.register(req.body);
+        const { username, email, password } = req.body;
+        const userToRegister = {
+            isNew: true,
+            username,
+            email,
+            password,
+        };
+        const user = await userServices.register(userToRegister);
         res.status(200).send(user);
     }
     catch (error) {
@@ -72,7 +83,16 @@ const registerOne = async (req, res) => {
 exports.registerOne = registerOne;
 const updateOne = async (req, res) => {
     try {
-        const user = await userServices.updateProfileInfo(req.body);
+        const { name, email, bio, profile_pic_path } = req.body;
+        const userToUpdate = {
+            isNew: false,
+            name,
+            email,
+            bio,
+            profile_pic_path,
+            password: '',
+        };
+        const user = await userServices.updateProfileInfo(userToUpdate);
         res.status(204).send(user);
     }
     catch (error) {

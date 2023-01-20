@@ -1,11 +1,11 @@
 import React from 'react';
 import { updateUser } from '../apiService/api-service';
 
-export default function CreateUser() {
+export default function CreateUser(props : {email : string}) {
 
   const [name, setName] = React.useState('');
   const [bio, setBio] = React.useState('');
-  const [profilePicPath, setProfilePicPath] = React.useState('');
+  const [profile_pic_path, setProfile_pic_path] = React.useState('');
 
   const uploadProfilePic = async (file : File) => {
     const formData = new FormData();
@@ -15,7 +15,7 @@ export default function CreateUser() {
       method: 'POST',
       body: formData,
     })
-    setProfilePicPath(await string.json())
+    setProfile_pic_path(await string.json())
   }
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,6 +45,9 @@ export default function CreateUser() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (profile_pic_path) {
+      updateUser({ name, email : props.email, bio, profile_pic_path });
+    }
   }
 
   return (
@@ -86,6 +89,7 @@ export default function CreateUser() {
                 id="name"
                 placeholder="What's your name..."
                 className="text-neutral-200 bg-neutral-600 p-1 rounded hover:bg-neutral-500 mb-6"
+                onChange={(e) => setName(e.target.value)}
               />
               <label htmlFor="bio" className="mb-2 text-md text-neutral-200">
                 Bio
@@ -97,6 +101,7 @@ export default function CreateUser() {
                 id="bio"
                 placeholder='Tell us about yourself...'
                 className="text-neutral-200 bg-neutral-600 p-1 rounded hover:bg-neutral-500 mb-6"
+                onChange={(e) => setBio(e.target.value)}
               />
             </div>
           </div>
