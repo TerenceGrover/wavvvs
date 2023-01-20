@@ -31,18 +31,23 @@ const multer_1 = __importDefault(require("multer"));
 const Track = __importStar(require("./controllers/Track.controller"));
 const User = __importStar(require("./controllers/User.controller"));
 const checkFileSize_1 = __importDefault(require("./middle-ware/checkFileSize"));
+const auth_1 = require("./middle-ware/auth");
 const upload = (0, multer_1.default)({ dest: './public/tracks' });
 const router = express_1.default.Router();
 // LOGIN & REGISTER
 router.post('/login', User.loginOne);
 router.post('/register', User.registerOne);
-// refactored 
-router.post('/user/tracks', checkFileSize_1.default, upload.single('track'), Track.uploadTrack);
-router.delete('/delete/tracks', Track.deleteTrack);
-// refactored 
-router.get('/user/tracks', Track.getUserTracks);
+/** ------------ PROTECTED ROUTES ------------ **/
+// UPDATE PROFILE INFO
+router.put('/me', auth_1.auth, User.updateOne);
+// POST TRACK 
+router.post('/user/tracks', auth_1.auth, checkFileSize_1.default, upload.single('track'), Track.uploadTrack);
+// DELETE TRACK
+router.delete('/delete/tracks', auth_1.auth, Track.deleteTrack);
+// GET TRACKS OF USER 
+router.get('/user/tracks', auth_1.auth, Track.getUserTracks);
 // THIS NEVER GETS CALLED. DELETE ?
-router.get('/alltracks', Track.getAllTracks);
-// refactored
-router.get('/users', User.getUser);
+router.get('/alltracks', auth_1.auth, Track.getAllTracks);
+// GET USER INFO
+router.get('/users', auth_1.auth, User.getUser);
 exports.default = router;

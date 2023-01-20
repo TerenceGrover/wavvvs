@@ -31,6 +31,7 @@ const fs = __importStar(require("node:fs/promises"));
 const node_path_1 = __importDefault(require("node:path"));
 const fakeUsers = [
     {
+        isNew: false,
         name: 'Mateo Presa',
         user: 'mateopresa',
         email: 'mateopresacastro@gmail.com',
@@ -39,6 +40,7 @@ const fakeUsers = [
         profile_pic_path: 'mateo_pic.jpeg',
     },
     {
+        isNew: true,
         name: 'Random Producer',
         user: 'randomproducer',
         email: 'randomproducer@gmail.com',

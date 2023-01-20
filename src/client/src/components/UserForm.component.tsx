@@ -15,26 +15,27 @@ const UserForm = () => {
   };
 
   const handleSubmit = () => {
-    if ((clicked === 'register' && !info.email) || !info.password || !info.username) {
+    if ((clicked === 'register' && !info.username) || !info.password || !info.email) {
       alert('Please fill in all fields');
       return;
     }
     if (clicked === 'register'){
-      if (!info.email.includes('@') || !info.email.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
-          alert('Email must contain @ and contain only letters and numbers');
-          return;
-      }
+      if (info.username.length < 3 || !info.username.match(/^[a-zA-Z0-9]+$/)) {
+        alert('Username must be at least 3 characters long and contain only letters and numbers');
+        return;
     }
+    }
+    if (!info.email.includes('@') || !info.email.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
+      alert('Email must contain @ and contain only letters and numbers');
+      return;
+  }
     if (info.password.length < 8 || !info.password.match(/^[a-zA-Z0-9]+$/)) {
         alert('Password must be at least 8 characters long and contain only letters and numbers');
         return;
     }
-    if (info.username.length < 3 || !info.username.match(/^[a-zA-Z0-9]+$/)) {
-        alert('Username must be at least 3 characters long and contain only letters and numbers');
-        return;
-    }
+
     if (clicked === 'login') {
-      login(info)
+      console.log(login(info))
     }
     if (clicked === 'register') {
       if (register(info)) {
@@ -57,7 +58,7 @@ const UserForm = () => {
         <input
           id='username'
           placeholder='username'
-          className='w-40'
+          className={`${clicked === 'register' ? 'show' : 'hidden'} w-40`}
           type='text'
           autoComplete='username'
           onChange={(e) => {
@@ -68,7 +69,7 @@ const UserForm = () => {
         <input
           id="email"
           placeholder="email"
-          className={`${clicked === 'register' ? 'show' : 'hidden'} w-40`}
+          className='w-40'
           type="email"
           autoComplete="email"
           onChange={(e) => {

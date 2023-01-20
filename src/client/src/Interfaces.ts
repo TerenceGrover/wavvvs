@@ -35,3 +35,10 @@ export interface InfoObject {
   password: string;
   email?: string;
 }
+
+export interface AdditionalInfoObject {
+  name: string;
+  bio: string;
+  email: string;
+  profile_pic_path: string;
+}

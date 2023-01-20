@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerOne = exports.loginOne = exports.getUser = void 0;
+exports.updateOne = exports.registerOne = exports.loginOne = exports.getUser = void 0;
 const models_js_1 = require("../models/models.js");
 const userServices = __importStar(require("../services/User.service"));
 const error_util_1 = require("../utils/error.util");
@@ -31,12 +31,21 @@ const getUser = async (req, res) => {
     try {
         const username = req.body.username;
         const user = await models_js_1.User.findOne({ user: username });
+        if (user) {
+            const userToSend = {
+                name: user.name,
+                email: user.email,
+                bio: user.bio,
+                profile_pic_path: user.profile_pic_path,
+            };
+            res.status(200).send(userToSend);
+        }
         // if user exists, return 200 and return the user, otherwise 404
-        user ? res.status(200).send(user) : res.sendStatus(404);
+        res.sendStatus(404);
     }
     catch (error) {
         console.log({ error });
-        res.status(500).send({ error });
+        res.status(500).send({ error: (0, error_util_1.getErrorMessage)(error) });
     }
 };
 exports.getUser = getUser;
@@ -57,7 +66,17 @@ const registerOne = async (req, res) => {
         res.status(200).send(user);
     }
     catch (error) {
-        return res.status(500).send((0, error_util_1.getErrorMessage)(error));
+        return res.status(500).send({ error: (0, error_util_1.getErrorMessage)(error) });
     }
 };
 exports.registerOne = registerOne;
+const updateOne = async (req, res) => {
+    try {
+        const user = await userServices.updateProfileInfo(req.body);
+        res.status(204).send(user);
+    }
+    catch (error) {
+        return res.status(500).send({ error: (0, error_util_1.getErrorMessage)(error) });
+    }
+};
+exports.updateOne = updateOne;
