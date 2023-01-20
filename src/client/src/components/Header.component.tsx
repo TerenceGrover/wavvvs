@@ -1,5 +1,6 @@
 import React from 'react';
 import { AiOutlineMenu, AiOutlineSearch } from 'react-icons/ai';
+import { Link, Router } from 'react-router-dom';
 import Logo from './Logo.component';
 
 const { REACT_APP_BACKEND_HOST } = process.env;
@@ -16,7 +17,9 @@ export default function Header() {
           <div className="flex w-26 h-full justify-between items-center content-center">
             <AiOutlineMenu className="text-neutral-200 h-6 w-6 mr-3 hover:text-neutral-400 ease-in transition duration-100 cursor-pointer" />
             <div className="mb-1">
+              <Link to="/">
               <Logo />
+              </Link>
             </div>
           </div>
           {search
@@ -27,15 +30,19 @@ export default function Header() {
             {!search
             &&
             <AiOutlineSearch 
+            id='search'
             className="text-neutral-200 h-6 w-6 hover:text-neutral-400 ease-in transition duration-100 cursor-pointer"
             onClick={() => {setSearch(true)}}
              />
             }
+            <Link to ="/profile" id='link-to-profile'>
             <img
+              id='user'
               className="w-6 h-6 ml-3 rounded-full"
               src={staticPicUrl}
               alt="User profile"
             />
+            </Link>
           </div>
         </div>
       </header>
