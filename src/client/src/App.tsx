@@ -7,6 +7,7 @@ import './index.css'
 import CreateUser from './pages/CreateUser';
 import Logo from './components/Logo.component';
 import { checkUser } from './apiService/api-service';
+import Header from './components/Header.component';
 
 export default function App() {
 
@@ -64,22 +65,24 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={
-          loading
-          ?
-          <main className="w-screen h-screen flex flex-col justify-center items-center">
-            <Logo/>
-          </main>
-          :
-          valid 
-          ? 
-          (isNewUser
-          ?
-          <CreateUser email={email}/>
-          :
-          <Home /> )
-          : 
-          <LandingPage setIsAuth = {setIsAuth} setIsNewUser={setIsNewUser}/>} />
+        <Route path="/" element={ <Header />
+          // loading
+          // ?
+          // <main className="w-screen h-screen flex flex-col justify-center items-center">
+          //   <Logo/>
+          // </main>
+          // :
+          // valid 
+          // ? 
+          // (isNewUser
+          // ?
+          // <CreateUser email={email}/>
+          // :
+          // <Home /> )
+          // : 
+          // <LandingPage setIsAuth = {setIsAuth} setIsNewUser={setIsNewUser}/>
+          } 
+          />
         <Route element={<ErrorPage />} />
       </Routes>
     </Router>
