@@ -28,8 +28,8 @@ const loginOne = async (req: Request, res: Response) => {
 const registerOne = async (req: Request, res: Response) => {
   try {
     console.log(req.body);
-    await userServices.register(req.body);
-    res.status(200).send(true);
+    const user = await userServices.register(req.body);
+    res.status(200).send(user);
   } catch (error) {
     return res.status(500).send(getErrorMessage(error));
   }
