@@ -5,14 +5,17 @@ import * as User from './controllers/User.controller';
 import checkFileSize from './middle-ware/checkFileSize';
 
 const upload = multer({ dest: './public/tracks' });
-
 const router = express.Router();
+
+// LOGIN & REGISTER
+router.post('/login', User.loginOne);
+router.post('/register', User.registerOne);
 
 // refactored 
 router.post('/user/tracks',
-  checkFileSize,
-  upload.single('track'),
-  Track.uploadTrack
+checkFileSize,
+upload.single('track'),
+Track.uploadTrack
 );
 
 router.delete('/delete/tracks', Track.deleteTrack);

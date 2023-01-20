@@ -1,23 +1,25 @@
 import { Schema, model } from 'mongoose';
+import bcrypt from 'bcrypt';
+const saltRounds = 8;
 
 export interface ITrack {
-  uploaded_by: string,
-  path: string,
-  title: string,
-  size: number,
-  date: number,
+  uploaded_by: string;
+  path: string;
+  title: string;
+  size: number;
+  date: number;
 }
 
 export interface IUser {
-  name: string,
-  user: string,
-  email: string,
-  password: string,
-  bio: string,
-  profile_pic_path: string,
+  name: string;
+  user: string;
+  email: string;
+  password: string;
+  bio: string;
+  profile_pic_path: string;
 }
 
-const userSchema = new Schema <IUser>({
+const userSchema = new Schema<IUser>({
   name: String,
   user: String,
   email: String,
@@ -26,7 +28,7 @@ const userSchema = new Schema <IUser>({
   profile_pic_path: String,
 });
 
-const trackSchema = new Schema <ITrack>({
+const trackSchema = new Schema<ITrack>({
   uploaded_by: String,
   path: String,
   title: String,
@@ -34,8 +36,15 @@ const trackSchema = new Schema <ITrack>({
   date: Number,
 });
 
-const User = model<IUser>("User", userSchema)
-const Track = model<ITrack>("Track", trackSchema)
+const User = model<IUser>('User', userSchema);
+const Track = model<ITrack>('Track', trackSchema);
 
+userSchema.pre('save', async function (next) {
+  const user = this;
+  if (user.isModified('password')) {
+    user.password = await bcrypt.hash(user.password, saltRounds);
+  }
+  next();
+});
 
 export { User, Track };

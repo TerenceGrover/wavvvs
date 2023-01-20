@@ -72,10 +72,14 @@ const getUserTracks = (username : string, setter : React.Dispatch<React.SetState
 
 const login = (infoObject : InfoObject) => {
   const { username, password } = infoObject;
+  let user = {name: username, password}
   try {
     return fetch(baseURL + `/login`, {
       method: 'POST',
-      body: JSON.stringify({ name: username, password }),
+      headers: {
+        "Content-type" : "Application/json"
+      },
+      body: JSON.stringify(user),
     }).then((res) => res.json());
   } catch (error) {
     console.log({ error });
@@ -85,10 +89,14 @@ const login = (infoObject : InfoObject) => {
 
 const register = (infoObject : InfoObject) => {
   const { username, password } = infoObject;
+  let user = {name: username, password}
   try {
     return fetch(baseURL + `/register`, {
       method: 'POST',
-      body: JSON.stringify({ username, password }),
+      headers: {
+        "Content-type" : "Application/json"
+      },
+      body: JSON.stringify(user),
     }).then((res) => res.json());
   } catch (error) {
     console.log({ error });

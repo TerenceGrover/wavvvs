@@ -30,10 +30,10 @@ const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const router_js_1 = __importDefault(require("./router.js"));
+const router_1 = __importDefault(require("./router"));
 const index_1 = __importDefault(require("./models/index"));
-const seedScript_js_1 = __importDefault(require("./seedScript.js"));
-const cronJob_js_1 = __importDefault(require("./cronJob.js"));
+const seedScript_1 = __importDefault(require("./seedScript"));
+const cronJob_1 = __importDefault(require("./cronJob"));
 const { PORT, HOST_NAME } = process.env;
 const app = (0, express_1.default)();
 (async function () {
@@ -50,13 +50,13 @@ app.use((0, cors_1.default)());
 // dangerous, here you have all the songs from all the users.
 // TODO: to play a song u should call an endpoint that serves songs for users
 app.use(express_1.default.static('./public'));
-app.use(router_js_1.default);
+app.use(router_1.default);
 app.get('*', (req, res) => {
     res.status(404);
     res.send('Not Found');
 });
-(0, seedScript_js_1.default)();
-const intervalID = (0, cronJob_js_1.default)();
+(0, seedScript_1.default)();
+const intervalID = (0, cronJob_1.default)();
 app.listen(PORT, () => {
     console.log(`Web server running: ${HOST_NAME}:${PORT}`);
 });
