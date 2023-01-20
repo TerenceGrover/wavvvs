@@ -37,6 +37,6 @@ router.get('/user/tracks', auth, Track.getUserTracks);
 router.get('/alltracks', auth, Track.getAllTracks);
 
 // GET USER INFO
-router.get('/users', auth, User.getUser);
+router.get('/user', auth, User.getUser);
 
 export default router;

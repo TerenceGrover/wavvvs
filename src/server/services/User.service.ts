@@ -44,7 +44,7 @@ export async function login(user: DocumentDefinition<IUser>) {
     const isMatch = bcrypt.compareSync(user.password!, foundUser.password!);
     if (isMatch) {
       const token = jwt.sign(
-        { _id: foundUser._id?.toString(), name: foundUser.email },
+        { id: foundUser._id?.toString() },
         SECRET_KEY!,
         {
           expiresIn: '2 days',
