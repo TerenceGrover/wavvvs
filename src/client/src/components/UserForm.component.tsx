@@ -98,7 +98,6 @@ const UserForm = () => {
             setClicked('login');
           }
         }}
-        type="button"
       >
         Login
       </button>
@@ -116,14 +115,13 @@ const UserForm = () => {
             setClicked('register');
           }
         }}
-        type="button"
       >
         Register
       </button>
       <button
         className={`${
           clicked === '' && 'hidden'
-        } mt-6 text-white underline underline-offset-2`}
+        } mt-6 underline underline-offset-2 text-sm text-neutral-200`}
         onClick={handleBack}
       >
         Go back
