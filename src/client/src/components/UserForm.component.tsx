@@ -1,4 +1,5 @@
 import React from 'react';
+import { login, register } from '../apiService/api-service';
 const UserForm = () => {
 
   const [isLogged, setIsLogged] = React.useState(false);
@@ -16,9 +17,11 @@ const UserForm = () => {
   const handleSubmit = () => {
     if (clicked === 'login') {
     console.log('login', info)
+    login(info)
     }
     if (clicked === 'register') {
     console.log('register', info)
+    register(info)
     }
     setInfo({ username: '', email: '', password: '' });
   };

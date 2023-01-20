@@ -30,3 +30,9 @@ export interface TrackListItemType {
   isActive?: boolean;
   isFinished: boolean;
 }
+
+export interface InfoObject {
+  username: string;
+  password: string;
+  email?: string;
+}
