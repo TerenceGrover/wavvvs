@@ -31,6 +31,7 @@ const getUser = (user : string) : any => {
     return error;
   }
 };
+
 const getTracksFromBackend = () => {
   try {
     return fetch(baseURL + `/alltracks`).then((res) =>
@@ -68,5 +69,30 @@ const getUserTracks = (username : string, setter : React.Dispatch<React.SetState
     return error;
   }
 };
+
+const login = (username : string, password : string) => {
+  try {
+    return fetch(baseURL + `/login`, {
+      method: 'POST',
+      body: JSON.stringify({ name: username, password }),
+    }).then((res) => res.json());
+  } catch (error) {
+    console.log({ error });
+    return error;
+  }
+};
+
+const register = (username : string, password : string) => {
+  try {
+    return fetch(baseURL + `/register`, {
+      method: 'POST',
+      body: JSON.stringify({ username, password }),
+    }).then((res) => res.json());
+  } catch (error) {
+    console.log({ error });
+    return error;
+  }
+};
+
 
 export { postTrack, getUser, getTracksFromBackend, deleteTrack, getUserTracks };
