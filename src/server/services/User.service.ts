@@ -5,6 +5,13 @@ import bcrypt from 'bcrypt';
 const saltRounds = 8;
 const { SECRET_KEY } = process.env;
 
+// const userToRegister: IUser = {
+//   isNew: true,
+//   username,
+//   email,
+//   password
+// }
+
 // this works. Maybe sanitize inputs.
 export async function register(user: DocumentDefinition<IUser>) {
   const exists = await User.findOne({ email: user.email });
@@ -16,14 +23,7 @@ export async function register(user: DocumentDefinition<IUser>) {
   }
   try {
     // setting isNew to true so next time he logs in he will be automatically redirected to modify user page.
-    const userToInsert = {
-      isNew: true,
-      name: user.name,
-      email: user.email,
-      bio: '',
-      profile_pic_path: user.profile_pic_path,
-    };
-    const createdUser = await User.create(userToInsert);
+    const createdUser = await User.create(user);
     if (createdUser) {
       createdUser.toJSON();
       createdUser.password = '';
@@ -50,10 +50,24 @@ export async function login(user: DocumentDefinition<IUser>) {
           expiresIn: '2 days',
         }
       );
-      return {
-        user: { name: foundUser.name, _id: foundUser._id },
-        token: token,
-      };
+      let returnUser;
+      if (foundUser.isNew) {
+        returnUser = {
+          user: { email: foundUser.email, isNew: foundUser.isNew },
+          token: token,
+        };
+      } else {
+        returnUser = {
+          user: {
+            email: foundUser.email,
+            isNew: foundUser.isNew,
+            bio: foundUser.bio,
+            profile_pic_path: foundUser.profile_pic_path,
+          },
+          token: token,
+        };
+      }
+      return returnUser;
     } else {
       throw new Error('Password is not correct');
     }
@@ -74,6 +88,7 @@ export async function updateProfileInfo(user: DocumentDefinition<IUser>) {
     // change isNew to false since now it has logged in one time and from now on he will be redirected to dashboard
     foundUser.isNew = false;
     foundUser.save();
+    return foundUser;
   } catch (error) {
     throw error;
   }
