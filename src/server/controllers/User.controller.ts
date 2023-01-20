@@ -56,10 +56,10 @@ const registerOne = async (req: Request, res: Response) => {
 
 const updateOne = async (req: Request, res: Response) => {
   try {
-    const { username, email, bio, profile_pic_path } = req.body;
+    const { name, email, bio, profile_pic_path } = req.body;
     const userToUpdate: IUser = {
       isNew: false,
-      username,
+      name,
       email,
       bio,
       profile_pic_path,
