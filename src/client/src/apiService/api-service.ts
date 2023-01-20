@@ -120,8 +120,8 @@ const updateUser = (secondObject: AdditionalInfoObject) => {
   const { name, bio, email, profile_pic_path } = secondObject;
   let user = { name, bio, email, profile_pic_path };
   try {
-    return fetch(baseURL + `/update`, {
-      method: 'POST',
+    return fetch(baseURL + `/me`, {
+      method: 'PUT',
       headers: {
         'Content-type': 'Application/json',
       },

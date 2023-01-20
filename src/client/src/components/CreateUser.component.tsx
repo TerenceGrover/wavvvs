@@ -2,6 +2,22 @@ import React from 'react';
 import { updateUser } from '../apiService/api-service';
 
 export default function CreateUser() {
+
+  const [name, setName] = React.useState('');
+  const [bio, setBio] = React.useState('');
+  const [profilePicPath, setProfilePicPath] = React.useState('');
+
+  const uploadProfilePic = async (file : File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'frameit');
+    const string = await fetch('https://api.cloudinary.com/v1_1/dkqmqt1gr/image/upload', {
+      method: 'POST',
+      body: formData,
+    })
+    setProfilePicPath(await string.json())
+  }
+
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e) {
       const target = e.target as HTMLInputElement;
@@ -20,6 +36,8 @@ export default function CreateUser() {
             }
           };
           reader.readAsDataURL(file);
+          uploadProfilePic(file);
+          //upload file to cloudinary
         }
       }
     }
@@ -27,7 +45,6 @@ export default function CreateUser() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(e.target);
   }
 
   return (
