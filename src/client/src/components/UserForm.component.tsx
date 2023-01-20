@@ -15,13 +15,15 @@ const UserForm = () => {
   };
 
   const handleSubmit = () => {
-    if (!info.email || !info.password || !info.username) {
+    if ((clicked === 'register' && !info.email) || !info.password || !info.username) {
       alert('Please fill in all fields');
       return;
     }
-    if (!info.email.includes('@') || !info.email.match(/^[a-zA-Z0-9]+$/)) {
-        alert('Email must contain @ and contain only letters and numbers');
-        return;
+    if (clicked === 'register'){
+      if (!info.email.includes('@') || !info.email.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
+          alert('Email must contain @ and contain only letters and numbers');
+          return;
+      }
     }
     if (info.password.length < 8 || !info.password.match(/^[a-zA-Z0-9]+$/)) {
         alert('Password must be at least 8 characters long and contain only letters and numbers');
