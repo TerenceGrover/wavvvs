@@ -13,7 +13,13 @@ router.post('/login', User.loginOne);
 
 router.post('/register', User.registerOne);
 
-// refactored 
+
+/** ------------ PROTECTED ROUTES ------------ **/
+
+// UPDATE PROFILE INFO
+router.put('/me', auth, User.updateOne);
+
+// POST TRACK 
 router.post('/user/tracks',
 auth,
 checkFileSize,
@@ -21,15 +27,16 @@ upload.single('track'),
 Track.uploadTrack
 );
 
+// DELETE TRACK
 router.delete('/delete/tracks', auth, Track.deleteTrack);
 
-// refactored 
+// GET TRACKS OF USER 
 router.get('/user/tracks', auth, Track.getUserTracks);
 
 // THIS NEVER GETS CALLED. DELETE ?
 router.get('/alltracks', auth, Track.getAllTracks);
 
-// refactored
+// GET USER INFO
 router.get('/users', auth, User.getUser);
 
 export default router;
