@@ -1,4 +1,4 @@
-import { CurrentUser } from '../Interfaces';
+import { CurrentUser, InfoObject } from '../Interfaces';
 const baseURL = 'http://localhost:3001';
 
 const postTrack = async (selectedFile : File, setter : Function, userID = 'mateopresa') => {
@@ -70,7 +70,8 @@ const getUserTracks = (username : string, setter : React.Dispatch<React.SetState
   }
 };
 
-const login = (username : string, password : string) => {
+const login = (infoObject : InfoObject) => {
+  const { username, password } = infoObject;
   try {
     return fetch(baseURL + `/login`, {
       method: 'POST',
@@ -82,7 +83,8 @@ const login = (username : string, password : string) => {
   }
 };
 
-const register = (username : string, password : string) => {
+const register = (infoObject : InfoObject) => {
+  const { username, password } = infoObject;
   try {
     return fetch(baseURL + `/register`, {
       method: 'POST',
@@ -95,4 +97,4 @@ const register = (username : string, password : string) => {
 };
 
 
-export { postTrack, getUser, getTracksFromBackend, deleteTrack, getUserTracks };
+export { postTrack, getUser, getTracksFromBackend, deleteTrack, getUserTracks, login, register };
