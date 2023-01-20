@@ -9,8 +9,6 @@ const UserForm = () => {
     password: '',
   });
 
-  //write test for this
-
   const handleBack = () => {
     setClicked('');
   };
@@ -30,7 +28,7 @@ const UserForm = () => {
     <div className='mt-2 flex flex-col'>
       <form
         className={`${clicked === '' && 'hidden'} 
-    flex items-center gap-2 flex-col transition ease-in duration-400 w-20 rounded py-2 px-1 mt-4 text-xs text-white
+    flex items-center gap-2 flex-col transition ease-in duration-400 w-20 rounded py-2 px-1 text-xs text-white
     [&>input]:bg-neutral-600 [&>input]:p-1 [&>input]:rounded [&>*:hover]:bg-neutral-500`}
         // onSubmit={(e) => handleSubmit(e)}
       >
