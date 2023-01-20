@@ -6,6 +6,7 @@ import ErrorPage from './pages/ErrorPage';
 import './index.css'
 import CreateUser from './pages/CreateUser';
 import Logo from './components/Logo.component';
+import { checkUser } from './apiService/api-service';
 
 export default function App() {
 
@@ -23,13 +24,19 @@ export default function App() {
   };
 
   React.useEffect(() => {
-    const loadInterval = setTimeout(() => {
-      setLoading(false)
-    }, 1000)
-    return () => {
-      clearTimeout(loadInterval)
+    if (!localStorage.getItem('token')) {
+      setLoading(false);
+      return;
     }
-  }, [])
+    checkUser().then((res) => {
+      if (res) {
+        setLoading(false)
+        if (res.isNew) {
+          setIsNewUser(true);
+        }
+      }
+    })
+  }, [isAuth])
 
   React.useEffect(() => {
     if (localStorage.getItem('token') === null) {

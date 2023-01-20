@@ -49,5 +49,5 @@ router.get('/user/tracks', auth_1.auth, Track.getUserTracks);
 // THIS NEVER GETS CALLED. DELETE ?
 router.get('/alltracks', auth_1.auth, Track.getAllTracks);
 // GET USER INFO
-router.get('/users', auth_1.auth, User.getUser);
+router.get('/user', auth_1.auth, User.getUser);
 exports.default = router;

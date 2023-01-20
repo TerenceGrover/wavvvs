@@ -22,30 +22,41 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateOne = exports.registerOne = exports.loginOne = exports.getUser = void 0;
 const models_js_1 = require("../models/models.js");
 const userServices = __importStar(require("../services/User.service"));
 const error_util_1 = require("../utils/error.util");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const { SECRET_KEY } = process.env;
 const getUser = async (req, res) => {
     try {
-        const username = req.body.username;
-        const user = await models_js_1.User.findOne({ user: username });
-        if (user) {
-            const userToSend = {
-                name: user.name,
-                email: user.email,
-                bio: user.bio,
-                profile_pic_path: user.profile_pic_path,
-            };
-            res.status(200).send(userToSend);
+        if (req.headers && req.headers.authorization) {
+            console.log(req.headers.authorization);
+            let authorization = req.headers.authorization.split(' ')[1], decoded;
+            try {
+                decoded = jsonwebtoken_1.default.verify(authorization, SECRET_KEY);
+            }
+            catch (e) {
+                return res.status(401).send('unauthorized');
+            }
+            const id = decoded.id;
+            // Fetch the user by id 
+            models_js_1.User.findOne({ _id: id }).then(function (user) {
+                // Do something with the user
+                // user!.password = '';
+                console.log(user);
+                return res.status(200).send(user);
+            });
         }
-        // if user exists, return 200 and return the user, otherwise 404
-        res.sendStatus(404);
+        // return res.send(500);
     }
     catch (error) {
         console.log({ error });
-        res.status(500).send({ error: (0, error_util_1.getErrorMessage)(error) });
+        return res.status(500).send({ error: (0, error_util_1.getErrorMessage)(error) });
     }
 };
 exports.getUser = getUser;
