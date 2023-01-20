@@ -10,10 +10,10 @@ export interface ITrack {
 
 export interface IUser {
   isNew: boolean;
-  name: string;
-  user: string;
+  name?: string;
+  username?: string;
   email: string;
-  password?: string;
+  password: string;
   bio?: string;
   profile_pic_path?: string;
 }
@@ -21,7 +21,7 @@ export interface IUser {
 const userSchema = new Schema<IUser>({
   isNew: Boolean,
   name: String,
-  user: String,
+  username: String,
   email: String,
   password: String,
   bio: String,
