@@ -65,22 +65,22 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={ <Bio bio='Hola' />
-          // loading
-          // ?
-          // <main className="w-screen h-screen flex flex-col justify-center items-center">
-          //   <Logo/>
-          // </main>
-          // :
-          // valid 
-          // ? 
-          // (isNewUser
-          // ?
-          // <CreateUser email={email}/>
-          // :
-          // <Home /> )
-          // : 
-          // <LandingPage setIsAuth = {setIsAuth} setIsNewUser={setIsNewUser}/>
+        <Route path="/" element={
+          loading
+          ?
+          <main className="w-screen h-screen flex flex-col justify-center items-center">
+            <Logo/>
+          </main>
+          :
+          valid 
+          ? 
+          (isNewUser
+          ?
+          <CreateUser email={email}/>
+          :
+          <Home /> )
+          : 
+          <LandingPage setIsAuth = {setIsAuth} setIsNewUser={setIsNewUser}/>
           } 
           />
         <Route element={<ErrorPage />} />
