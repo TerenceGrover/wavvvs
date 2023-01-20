@@ -9,7 +9,6 @@ export interface CurrentUser {
   bio: string;
   email: string;
   name: string;
-  password: string;
   profile_pic_path: string;
   tracks: Array<TrackType>;
   user: string;

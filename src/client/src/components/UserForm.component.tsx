@@ -7,7 +7,7 @@ const UserForm = () => {
   const [info, setInfo] = React.useState({
     username: '',
     email: '',
-    password: '',
+    password: ''
   });
 
   const handleBack = () => {
@@ -15,16 +15,32 @@ const UserForm = () => {
   };
 
   const handleSubmit = () => {
+    if (!info.email || !info.password || !info.username) {
+      alert('Please fill in all fields');
+      return;
+    }
+    if (!info.email.includes('@') || !info.email.match(/^[a-zA-Z0-9]+$/)) {
+        alert('Email must contain @ and contain only letters and numbers');
+        return;
+    }
+    if (info.password.length < 8 || !info.password.match(/^[a-zA-Z0-9]+$/)) {
+        alert('Password must be at least 8 characters long and contain only letters and numbers');
+        return;
+    }
+    if (info.username.length < 3 || !info.username.match(/^[a-zA-Z0-9]+$/)) {
+        alert('Username must be at least 3 characters long and contain only letters and numbers');
+        return;
+    }
     if (clicked === 'login') {
-    console.log('login', info)
-    login(info)
+      console.log('login', info)
+      login(info)
     }
     if (clicked === 'register') {
-    console.log('register', info)
-    register(info)
+      console.log('register', info)
+      register(info)
     }
     setInfo({ username: '', email: '', password: '' });
-  };
+};
 
   return (
     // On click of the button, make the button disappear and two input fields appear
@@ -33,14 +49,13 @@ const UserForm = () => {
         className={`${clicked === '' && 'hidden'} 
     flex items-center gap-2 flex-col transition ease-in duration-400 w-20 rounded py-2 px-1 text-xs text-white
     [&>input]:bg-neutral-600 [&>input]:p-1 [&>input]:rounded [&>*:hover]:bg-neutral-500`}
-        // onSubmit={(e) => handleSubmit(e)}
       >
         <input
-          id="username"
-          placeholder="username"
-          className="w-40"
-          type="text"
-          autoComplete="username"
+          id='username'
+          placeholder='username'
+          className='w-40'
+          type='text'
+          autoComplete='username'
           onChange={(e) => {
             setInfo({ ...info, username: e.target.value });
           }}
