@@ -33,6 +33,9 @@ const User = __importStar(require("./controllers/User.controller"));
 const checkFileSize_1 = __importDefault(require("./middle-ware/checkFileSize"));
 const upload = (0, multer_1.default)({ dest: './public/tracks' });
 const router = express_1.default.Router();
+// LOGIN & REGISTER
+router.post('/login', User.loginOne);
+router.post('/register', User.registerOne);
 // refactored 
 router.post('/user/tracks', checkFileSize_1.default, upload.single('track'), Track.uploadTrack);
 router.delete('/delete/tracks', Track.deleteTrack);

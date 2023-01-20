@@ -2,10 +2,10 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
-import router from './router.js';
+import router from './router';
 import connect from './models/index';
-import seedScript from './seedScript.js';
-import removeExpiredTracksCronJob from './cronJob.js';
+import seedScript from './seedScript';
+import removeExpiredTracksCronJob from './cronJob';
 
 const { PORT, HOST_NAME } = process.env;
 
