@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import Home from './pages/Home';
 import ErrorPage from './pages/ErrorPage';
@@ -34,6 +34,7 @@ export default function App() {
     checkUser().then((res : CurrentUser) => {
       if (res) {
         setLoading(false)
+        console.log(res)
         setCurrentUser(res);
         if (res.isNew) {
           setIsNewUser(true);
@@ -67,31 +68,41 @@ export default function App() {
 
   return (
     <Router>
+      {!loading
+        ?
       <Routes>
+
         <Route path="/" element={
-          loading
-          ?
-          <main className="w-screen h-screen flex flex-col justify-center items-center">
-            <Logo/>
-          </main>
-          :
           valid 
           ? 
           (isNewUser
           ?
-          <CreateUser email={email}/>
+          <CreateUser setIsNewUser = {setIsNewUser}/>
           :
-          <Home /> )
+          <Home /> ) // TODO: change to home page
           : 
           <LandingPage setIsAuth = {setIsAuth} setIsNewUser={setIsNewUser}/>
           } 
           />
-        <Route path='/profile' element={
-          currentUser !== undefined &&  
-          <ProfilePage currentUser={currentUser} setCurrentUser={setCurrentUser}/>
-        } />
+
+        <Route path='/profile' 
+          element={
+            valid
+            ?
+            <ProfilePage currentUser={currentUser!} setCurrentUser={setCurrentUser}/>
+            :
+            <Navigate to='/' />
+          }
+          />
+
         <Route element={<ErrorPage />} />
+
       </Routes>
+        :
+        <main className="w-screen h-screen flex flex-col justify-center items-center">
+          <Logo/>
+        </main>
+      }
     </Router>
   );
 }

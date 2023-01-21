@@ -41,7 +41,7 @@ const ProfilePic = (props : { path : string }) => {
         <div className="w-4 mr-4"></div>
       )}
       <img
-        className="relative right-5 w-60 h-60 rounded-full"
+        className="relative right-5 w-60 h-60 rounded-full object-cover"
         src={props.path}
         alt="profile-pic"
       />
