@@ -32,7 +32,21 @@ const Track = __importStar(require("./controllers/Track.controller"));
 const User = __importStar(require("./controllers/User.controller"));
 const checkFileSize_1 = __importDefault(require("./middle-ware/checkFileSize"));
 const auth_1 = require("./middle-ware/auth");
-const upload = (0, multer_1.default)({ dest: './public/tracks' });
+const fs_1 = __importDefault(require("fs"));
+const storage = multer_1.default.diskStorage({
+    destination: (req, file, cb) => {
+        const { username } = req.body;
+        const path = `./public/tracks/${username}`;
+        if (!fs_1.default.existsSync(path)) {
+            fs_1.default.mkdirSync(path);
+        }
+        cb(null, path);
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${file.originalname}`);
+    },
+});
+const upload = (0, multer_1.default)({ storage });
 const router = express_1.default.Router();
 // LOGIN & REGISTER
 router.post('/login', User.loginOne);

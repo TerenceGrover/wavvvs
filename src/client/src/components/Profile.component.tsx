@@ -1,25 +1,27 @@
 import Bio from './Bio.component';
-import type {CurrentUser, TrackType, TrackListItemType} from '../Interfaces';
+import type { CurrentUser, TrackType, TrackListItemType } from '../Interfaces';
 import Track from './Track.component';
 import UploadTrack from './UploadTrack.component';
 import ProfilePic from './ProfilePic.component';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
 
-export default function Profile(
-  props : {
-  currentUser : CurrentUser;
+export default function Profile(props: {
+  currentUser: CurrentUser;
   // trackList : TrackListItemType[];
   // setTrackList : React.Dispatch<React.SetStateAction<any[]>>;
   // playOrPauseTrackByID : (id : string) => void;
-  setCurrentUser : React.Dispatch<React.SetStateAction<CurrentUser | undefined>>;
-  }
-) {
+  setCurrentUser: React.Dispatch<React.SetStateAction<CurrentUser | undefined>>;
+}) {
 
-  console.log(props.currentUser)
+  const [tracksto3, setTracksto3] = useState([1, 2, 3]);
+  const [isLoaoading, setIsLoading] = useState(true);
 
-  const [tracksto3, setTracksto3] = useState([1,2,3])
+  useEffect(() => {
+    if (props.currentUser) {
+      setIsLoading(false);
+    }
+  }, [props.currentUser]);
 
   // useEffect(() => {
   //   if(props.currentUser.tracks.length > 0){
