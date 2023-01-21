@@ -13,6 +13,8 @@ router.post('/login', User.loginOne);
 
 router.post('/register', User.registerOne);
 
+// GET ANOTHER USER INFO (protected only if user has set isPrivate to true so im gonna check it inside.)
+router.get('/user/:username', User.getAnotherUser);
 
 /** ------------ PROTECTED ROUTES ------------ **/
 
@@ -20,12 +22,7 @@ router.post('/register', User.registerOne);
 router.put('/me', auth, User.updateOne);
 
 // POST TRACK 
-router.post('/user/tracks',
-auth,
-checkFileSize,
-upload.single('track'),
-Track.uploadTrack
-);
+router.post('/user/tracks',auth,checkFileSize,upload.single('track'),Track.uploadTrack);
 
 // DELETE TRACK
 router.delete('/delete/tracks', auth, Track.deleteTrack);
@@ -38,5 +35,7 @@ router.get('/alltracks', auth, Track.getAllTracks);
 
 // GET USER INFO
 router.get('/user', auth, User.getUser);
+
+
 
 export default router;
