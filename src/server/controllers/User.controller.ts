@@ -84,7 +84,8 @@ const updateOne = async (req: Request, res: Response) => {
         profile_pic_path,
       };
       const user = await userServices.updateProfileInfo(userToUpdate);
-      res.status(204).send(user);
+      if (user) res.sendStatus(204);
+      else res.sendStatus(500);
     }
   } catch (error) {
     return res.status(500).send({ error: getErrorMessage(error) });
