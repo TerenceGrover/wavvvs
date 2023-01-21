@@ -1,20 +1,16 @@
 import { DocumentDefinition } from 'mongoose';
 import jwt from 'jsonwebtoken';
-import { User, IUser } from '../models/models';
+import { User } from '../models/models';
+import { IUser } from '../entities/allEntities.js';
 import bcrypt from 'bcrypt';
 const saltRounds = 8;
 const { SECRET_KEY } = process.env;
 
-// const userToRegister: IUser = {
-//   isNew: true,
-//   username,
-//   email,
-//   password
-// }
-
 // this works. Maybe sanitize inputs.
 export async function register(user: DocumentDefinition<IUser>) {
-  const exists = await User.findOne({ email: user.email });
+  let exists = null;
+  exists = await User.findOne({ email: user.email });
+  if(!exists) exists = await User.findOne({ username: user.username });
   if (exists) {
     throw new Error('User already exists');
   }
@@ -35,7 +31,7 @@ export async function register(user: DocumentDefinition<IUser>) {
 }
 
 // this works. Also sanitize inputs.
-export async function login(user: DocumentDefinition<IUser>) {
+export async function login(user:any) {
   try {
     const foundUser = await User.findOne({ email: user.email });
     if (!foundUser) {
@@ -47,7 +43,7 @@ export async function login(user: DocumentDefinition<IUser>) {
         { id: foundUser._id?.toString() },
         SECRET_KEY!,
         {
-          expiresIn: '2 days',
+          expiresIn: '1 day',
         }
       );
       let returnUser;
@@ -82,9 +78,10 @@ export async function updateProfileInfo(user:any) {
     if (!foundUser) {
       throw new Error('JWT doesnt correspond to any user');
     }
-    foundUser.name = user.name;
-    foundUser.bio = user.bio;
-    foundUser.profile_pic_path = user.profile_pic_path;
+    foundUser.name = user.name || foundUser.name;
+    foundUser.bio = user.bio || foundUser.bio;
+    foundUser.profile_pic_path = user.profile_pic_path || foundUser.profile_pic_path;
+    foundUser.isPrivate = user.isPrivate || foundUser.isPrivate;
     // change isNew to false since now it has logged in one time and from now on he will be redirected to dashboard
     foundUser.isNew = false;
     foundUser.save();
