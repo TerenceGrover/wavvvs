@@ -131,6 +131,7 @@ const updateUser = async (secondObject: AdditionalInfoObject) : Promise<JSON> =>
       method: 'PUT',
       headers: {
         'Content-type': 'Application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token'),
       },
       body: JSON.stringify(user),
     }).then((res) => res.json());
