@@ -6,7 +6,6 @@ export default function CreateUser(props : {setIsNewUser : React.Dispatch<React.
 
   const [name, setName] = React.useState('');
   const [bio, setBio] = React.useState('');
-  const [profile_pic_path, setProfile_pic_path] = React.useState('');
   const [path_pre_upload, setPath_pre_upload] = React.useState<File | null>(null);
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,13 +34,12 @@ export default function CreateUser(props : {setIsNewUser : React.Dispatch<React.
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(bio, name, profile_pic_path)
+    console.log(bio, name)
     if (path_pre_upload && name && bio) {
       uploadProfilePic(path_pre_upload).then(
         (res) => {
-          console.log(res)
-          setProfile_pic_path(res);
-          updateUser({ name, bio, profile_pic_path })
+          console.log(res.url)
+          updateUser({ name, bio, profile_pic_path : res.url })
         }
       )
       

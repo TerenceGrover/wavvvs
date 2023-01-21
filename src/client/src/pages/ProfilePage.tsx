@@ -13,7 +13,7 @@ export default function ProfilePage (props : {currentUser: CurrentUser, setCurre
     if (props.currentUser.name) {
       setLoading(false);
     }
-  }, [props.currentUser.name])
+  }, [props.currentUser])
   
   return (
     loading ? 
