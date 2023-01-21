@@ -57,6 +57,8 @@ const registerOne = async (req: Request, res: Response) => {
     const user = await userServices.register(userToRegister);
     res.status(200).send(user);
   } catch (error) {
+    let strError = getErrorMessage(error)
+    if (strError === 'User already exists') return res.sendStatus(409);
     return res.status(500).send({ error: getErrorMessage(error) });
   }
 };

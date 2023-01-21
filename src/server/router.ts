@@ -4,8 +4,23 @@ import * as Track from './controllers/Track.controller';
 import * as User from './controllers/User.controller';
 import checkFileSize from './middle-ware/checkFileSize';
 import { auth } from './middle-ware/auth';
+import fs from 'fs'
 
-const upload = multer({ dest: './public/tracks' });
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const { username } = req.body;
+    const path = `./public/tracks/${username}`;
+    if (!fs.existsSync(path)) {
+      fs.mkdirSync(path);
+    }
+    cb(null, path);
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${file.originalname}`);
+  },
+});
+
+const upload = multer({ storage });
 const router = express.Router();
 
 // LOGIN & REGISTER
