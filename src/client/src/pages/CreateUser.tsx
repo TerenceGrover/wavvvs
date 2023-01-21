@@ -6,6 +6,7 @@ export default function CreateUser(props : {setIsNewUser : React.Dispatch<React.
   const [name, setName] = React.useState('');
   const [bio, setBio] = React.useState('');
   const [profile_pic_path, setProfile_pic_path] = React.useState('');
+  const [path_pre_upload, setPath_pre_upload] = React.useState<File | null>(null);
 
   const uploadProfilePic = async (file : File) => {
     const formData = new FormData();
@@ -38,7 +39,7 @@ export default function CreateUser(props : {setIsNewUser : React.Dispatch<React.
             }
           };
           reader.readAsDataURL(file);
-          uploadProfilePic(file);
+          setPath_pre_upload(file);
           //upload file to cloudinary
         }
       }
@@ -48,7 +49,8 @@ export default function CreateUser(props : {setIsNewUser : React.Dispatch<React.
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(bio, name, profile_pic_path)
-    if (profile_pic_path && name && bio) {
+    if (path_pre_upload && name && bio) {
+      uploadProfilePic(path_pre_upload);
       updateUser({ name, bio, profile_pic_path });
       props.setIsNewUser(false);
     } else {
@@ -70,6 +72,7 @@ export default function CreateUser(props : {setIsNewUser : React.Dispatch<React.
                 className=" w-48 h-48 bg-neutral-700 rounded-full ring-2 ring-neutral-600 "
               ></div>
               <label
+              id='upload-button'
                 htmlFor="profilePicture"
                 className="bg-neutral-800 text-neutral-100 hover:bg-neutral-700 hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-neutral-600 focus:ring-opacity-50 rounded-md shadow-sm px-4 py-2 text-sm font-medium transition ease-in-out duration-150 inline-flex items-center justify-center border border-transparent mt-4"
               >

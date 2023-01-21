@@ -5,9 +5,10 @@ import Home from './pages/Home';
 import ErrorPage from './pages/ErrorPage';
 import './index.css'
 import CreateUser from './pages/CreateUser';
+import MediaController from './components/MediaController.component';
 import Logo from './components/Logo.component';
 import { checkUser } from './apiService/api-service';
-import type { CurrentUser } from './Interfaces';
+import type { CurrentUser, TrackListItemType } from './Interfaces';
 import ProfilePage from './pages/ProfilePage';
 
 export default function App() {
@@ -15,9 +16,81 @@ export default function App() {
   const [valid, setValid] = React.useState(false);
   const [isAuth, setIsAuth] = React.useState(false);
   const [isNewUser, setIsNewUser] = React.useState(false);
-  const [email, setEmail] = React.useState('');
   const [loading, setLoading] = React.useState(true);
   const [currentUser, setCurrentUser] = React.useState<CurrentUser>();
+
+  const [trackList, setTrackList] = React.useState<TrackListItemType[]>([]);
+  const [isAudioMuted, setIsAudioMuted] = React.useState(false);
+  const [repeat, setRepeat] = React.useState(false);
+  let user : any
+
+  const activeTrack = trackList.find((track) => track.isLastActive) ?? null;
+
+  const playOrPauseTrackByID = (id : string) => {
+    setTrackList((tracks) => {
+      // Loop trough the tracks and modify the status of th track you want to play/pause
+      const modifiedTrackList = tracks.map((track) => {
+        return track.waveformRef.id === id
+          ? { 
+              ...track,
+              isLastActive: track.isPlaying || true, // track.isPlaying being false here means you are clicking play.
+              // the last active track is the last track on which you clicked play.
+              isPlaying: !track.isPlaying, // toggle isPlaying flag on or off
+              isFinished: track.isPlaying && false,
+            }
+          : track;
+      });
+
+      // make sure only one track is playing, and only one track is active at the same time.
+      return modifiedTrackList.map((track) => {
+        if (track.isPlaying && track.waveformRef.id !== id) {
+          track.isPlaying = !track.isPlaying;
+        }
+        if (track.isLastActive && track.waveformRef.id !== id) {
+          track.isLastActive = !track.isLastActive;
+        }
+        return track;
+      });
+    });
+  };
+
+  const playNextTrack = () => {
+    let lastActiveTrackIndex = trackList.findIndex(
+      (track) => track.isLastActive
+    );
+
+    lastActiveTrackIndex === trackList.length - 1
+      ? (lastActiveTrackIndex = 0)
+      : lastActiveTrackIndex++;
+
+    const nextTrack = trackList.at(lastActiveTrackIndex);
+    nextTrack &&
+    playOrPauseTrackByID(nextTrack.waveformRef.id);
+  };
+
+  const playPrevTrack = () => {
+    let lastActiveTrackIndex = trackList.findIndex(
+      (track) => track.isLastActive
+    );
+
+    lastActiveTrackIndex === 0
+      ? (lastActiveTrackIndex = trackList.length - 1)
+      : lastActiveTrackIndex--;
+
+    const prevTrack = trackList.at(lastActiveTrackIndex);
+    prevTrack && playOrPauseTrackByID(prevTrack.waveformRef.id);
+  };
+
+  const pauseAllTracks = () => {
+    setTrackList((tracks) =>
+      tracks.map((track) => ({
+        ...track,
+        isPlaying: false,
+        isFinished: false,
+      }))
+    );
+  };
+
 
   //parseJWT
   const parseJWT = (token: string) => {
@@ -35,6 +108,7 @@ export default function App() {
       if (res) {
         setLoading(false)
         console.log(res)
+        user = res.username;
         setCurrentUser(res);
         if (res.isNew) {
           setIsNewUser(true);
@@ -58,7 +132,6 @@ export default function App() {
       }
       else {
         console.log('token valid');
-        setEmail(decodedJwt.name);
         setValid(true);
       }
     } else {
@@ -67,42 +140,54 @@ export default function App() {
   }, [isAuth]);
 
   return (
-    <Router>
-      {!loading
-        ?
-      <Routes>
-
-        <Route path="/" element={
-          valid 
-          ? 
-          (isNewUser
+    <div id='app-wrapper'>
+      <Router>
+        {!loading
           ?
-          <CreateUser setIsNewUser = {setIsNewUser}/>
-          :
-          <Home /> ) // TODO: change to home page
-          : 
-          <LandingPage setIsAuth = {setIsAuth} setIsNewUser={setIsNewUser}/>
-          } 
-          />
+        <Routes>
 
-        <Route path='/profile' 
-          element={
-            valid
+          <Route path="/" element={
+            valid 
+            ? 
+            (isNewUser
             ?
-            <ProfilePage currentUser={currentUser!} setCurrentUser={setCurrentUser}/>
+            <CreateUser setIsNewUser = {setIsNewUser}/>
             :
-            <Navigate to='/' />
-          }
-          />
+            <Home /> ) // TODO: change to home page
+            : 
+            <LandingPage setIsAuth = {setIsAuth} setIsNewUser={setIsNewUser}/>
+            } 
+            />
 
-        <Route element={<ErrorPage />} />
+          <Route path='/profile' 
+            element={
+              valid
+              ?
+              <ProfilePage currentUser={currentUser!} setCurrentUser={setCurrentUser}/>
+              :
+              <Navigate to='/' />
+            }
+            />
 
-      </Routes>
-        :
-        <main className="w-screen h-screen flex flex-col justify-center items-center">
-          <Logo/>
-        </main>
-      }
-    </Router>
+          <Route element={<ErrorPage />} />
+        </Routes>
+          :
+          <main className="w-screen h-screen flex flex-col justify-center items-center">
+            <Logo/>
+          </main>
+        }
+      </Router>
+      <MediaController
+          activeTrack = {activeTrack}
+          playOrPauseTrackByID = {playOrPauseTrackByID}
+          playNextTrack = {playNextTrack}
+          playPrevTrack = {playPrevTrack}
+          isAudioMuted = {isAudioMuted}
+          setIsAudioMuted = {setIsAudioMuted}
+          pauseAllTracks = {pauseAllTracks}
+          repeat = {repeat}
+          setRepeat = {setRepeat}
+      />
+    </div>
   );
 }
