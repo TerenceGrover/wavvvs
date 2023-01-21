@@ -85,7 +85,7 @@ export async function updateProfileInfo(user:any) {
     // change isNew to false since now it has logged in one time and from now on he will be redirected to dashboard
     foundUser.isNew = false;
     foundUser.save();
-    return JSON.stringify(foundUser);
+    return foundUser;
   } catch (error) {
     throw error;
   }
