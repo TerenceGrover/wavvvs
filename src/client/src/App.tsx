@@ -22,7 +22,6 @@ export default function App() {
   const [trackList, setTrackList] = React.useState<TrackListItemType[]>([]);
   const [isAudioMuted, setIsAudioMuted] = React.useState(false);
   const [repeat, setRepeat] = React.useState(false);
-  let user : any
 
   const activeTrack = trackList.find((track) => track.isLastActive) ?? null;
 
@@ -107,8 +106,6 @@ export default function App() {
     checkUser().then((res : CurrentUser) => {
       if (res) {
         setLoading(false)
-        console.log(res)
-        user = res.username;
         setCurrentUser(res);
         if (res.isNew) {
           setIsNewUser(true);
@@ -177,6 +174,7 @@ export default function App() {
           </main>
         }
       </Router>
+      { (valid && !isNewUser) &&
       <MediaController
           activeTrack = {activeTrack}
           playOrPauseTrackByID = {playOrPauseTrackByID}
@@ -187,7 +185,7 @@ export default function App() {
           pauseAllTracks = {pauseAllTracks}
           repeat = {repeat}
           setRepeat = {setRepeat}
-      />
+      />}
     </div>
   );
 }

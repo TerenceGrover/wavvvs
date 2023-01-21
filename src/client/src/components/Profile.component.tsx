@@ -3,7 +3,6 @@ import type {CurrentUser, TrackType, TrackListItemType} from '../Interfaces';
 import Track from './Track.component';
 import UploadTrack from './UploadTrack.component';
 import ProfilePic from './ProfilePic.component';
-import { useEffect } from 'react';
 import { useState } from 'react';
 import React from 'react';
 

@@ -9,7 +9,7 @@ import CentralHome from '../components/CentralHome.component';
 
 function Home() {
   const [currentUser, setCurrentUser] = useState<CurrentUser | undefined >();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [thereIsAnError, seThereIsAnError] = useState(false);
   const { user } : any = useParams();
 
