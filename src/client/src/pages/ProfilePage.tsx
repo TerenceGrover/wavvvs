@@ -10,13 +10,15 @@ export default function ProfilePage (props : {currentUser: CurrentUser, setCurre
   const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
-    if (props.currentUser) {
+    if (props.currentUser.name) {
       setLoading(false);
     }
-  }, [props.currentUser])
+  }, [props.currentUser.name])
   
   return (
-    loading ? <Logo /> :
+    loading ? 
+    <Logo /> 
+    :
     <div id="profile-container">
       <Header />
         <Profile currentUser={props.currentUser} setCurrentUser={props.setCurrentUser} />

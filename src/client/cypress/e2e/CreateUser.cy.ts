@@ -1,4 +1,4 @@
-describe('login and create user lead to profile page', () => {
+describe('login and create user leads to Home page', () => {
   it('connects', () => {
     cy.visit('http://localhost:3000/')
   })
@@ -23,8 +23,7 @@ describe('login and create user lead to profile page', () => {
     cy.get('#bio').type('I am a dummy user and I am very good at testing')
     cy.get('label#upload-button').selectFile('./cypress/fixtures/Profile.png')
 
-    // To uncomment when Home page is done
-    // cy.contains('button', 'ADD INFO').click()
+    cy.contains('button', 'ADD INFO').click()
 
   })
 

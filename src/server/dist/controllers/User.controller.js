@@ -46,7 +46,12 @@ const getUser = async (req, res) => {
             const id = decoded.id;
             // Fetch the user by id
             models_js_1.User.findOne({ _id: id }).then(function (user) {
-                return res.status(200).send(user);
+                if (user) {
+                    user.password = '';
+                    return res.status(200).send(user);
+                }
+                else
+                    return res.sendStatus(404);
             });
         }
         // return res.send(500);
@@ -86,6 +91,9 @@ const registerOne = async (req, res) => {
         res.status(200).send(user);
     }
     catch (error) {
+        let strError = (0, error_util_1.getErrorMessage)(error);
+        if (strError === 'User already exists')
+            return res.sendStatus(409);
         return res.status(500).send({ error: (0, error_util_1.getErrorMessage)(error) });
     }
 };

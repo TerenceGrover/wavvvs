@@ -1,5 +1,6 @@
 import React from 'react';
 import { updateUser } from '../apiService/api-service';
+import { uploadProfilePic } from '../Utils/functions';
 
 export default function CreateUser(props : {setIsNewUser : React.Dispatch<React.SetStateAction<boolean>>}) {
 
@@ -7,19 +8,6 @@ export default function CreateUser(props : {setIsNewUser : React.Dispatch<React.
   const [bio, setBio] = React.useState('');
   const [profile_pic_path, setProfile_pic_path] = React.useState('');
   const [path_pre_upload, setPath_pre_upload] = React.useState<File | null>(null);
-
-  const uploadProfilePic = async (file : File) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', 'frameit');
-    fetch('https://api.cloudinary.com/v1_1/dkqmqt1gr/image/upload', {
-      method: 'POST',
-      body: formData,
-    }).then((res) => res.json())
-      .then((data) => {
-        setProfile_pic_path(data.url);
-      })
-  }
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e) {
@@ -40,18 +28,23 @@ export default function CreateUser(props : {setIsNewUser : React.Dispatch<React.
           };
           reader.readAsDataURL(file);
           setPath_pre_upload(file);
-          //upload file to cloudinary
         }
       }
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(bio, name, profile_pic_path)
     if (path_pre_upload && name && bio) {
-      uploadProfilePic(path_pre_upload);
-      updateUser({ name, bio, profile_pic_path });
+      uploadProfilePic(path_pre_upload).then(
+        (res) => {
+          console.log(res)
+          setProfile_pic_path(res);
+          updateUser({ name, bio, profile_pic_path })
+        }
+      )
+      
       props.setIsNewUser(false);
     } else {
       alert('Please setup all fields before submitting.');
@@ -72,7 +65,7 @@ export default function CreateUser(props : {setIsNewUser : React.Dispatch<React.
                 className=" w-48 h-48 bg-neutral-700 rounded-full ring-2 ring-neutral-600 "
               ></div>
               <label
-              id='upload-button'
+                id='upload-button'
                 htmlFor="profilePicture"
                 className="bg-neutral-800 text-neutral-100 hover:bg-neutral-700 hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-neutral-600 focus:ring-opacity-50 rounded-md shadow-sm px-4 py-2 text-sm font-medium transition ease-in-out duration-150 inline-flex items-center justify-center border border-transparent mt-4"
               >

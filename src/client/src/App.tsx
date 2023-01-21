@@ -99,24 +99,22 @@ export default function App() {
   };
 
   React.useEffect(() => {
-    if (!localStorage.getItem('token')) {
-      setLoading(false);
-      return;
-    }
     checkUser().then((res : CurrentUser) => {
       if (res) {
-        setLoading(false)
+        console.log(res)
         setCurrentUser(res);
         if (res.isNew) {
           setIsNewUser(true);
         }
+        setLoading(false)
       }
     })
-  }, [isAuth])
+  }, [valid])
 
   React.useEffect(() => {
     if (localStorage.getItem('token') === null) {
       console.log('no token');
+      setLoading(false)
       return;
     }
     const token = localStorage.getItem('token');    
