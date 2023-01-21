@@ -49,7 +49,6 @@ const getUserTracks = async (req: Request, res: Response) => {
     const tracks: ITrack[] | undefined = await Track.find({
       uploaded_by: username,
     });
-
     // if user has tracks, send them. If not, 404
     tracks ? res.status(200).send(tracks) : res.sendStatus(404);
   } catch (error) {
