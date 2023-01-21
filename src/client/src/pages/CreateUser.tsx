@@ -11,11 +11,13 @@ export default function CreateUser(props : {email : string}) {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', 'frameit');
-    const string = await fetch('https://api.cloudinary.com/v1_1/dkqmqt1gr/image/upload', {
+    fetch('https://api.cloudinary.com/v1_1/dkqmqt1gr/image/upload', {
       method: 'POST',
       body: formData,
-    })
-    setProfile_pic_path(await string.json())
+    }).then((res) => res.json())
+      .then((data) => {
+        setProfile_pic_path(data.url);
+      })
   }
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,6 +47,7 @@ export default function CreateUser(props : {email : string}) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(bio, name, profile_pic_path)
     if (profile_pic_path) {
       updateUser({ name, email : props.email, bio, profile_pic_path });
     }
