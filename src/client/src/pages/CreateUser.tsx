@@ -1,7 +1,7 @@
 import React from 'react';
 import { updateUser } from '../apiService/api-service';
 
-export default function CreateUser(props : {email : string}) {
+export default function CreateUser(props : {setIsNewUser : React.Dispatch<React.SetStateAction<boolean>>}) {
 
   const [name, setName] = React.useState('');
   const [bio, setBio] = React.useState('');
@@ -48,14 +48,17 @@ export default function CreateUser(props : {email : string}) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(bio, name, profile_pic_path)
-    if (profile_pic_path) {
-      updateUser({ name, email : props.email, bio, profile_pic_path });
+    if (profile_pic_path && name && bio) {
+      updateUser({ name, bio, profile_pic_path });
+      props.setIsNewUser(false);
+    } else {
+      alert('Please setup all fields before submitting.');
     }
   }
 
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center">
-      <div className=" flex flex-row justify-center max-w-screen-xl w-[60vw] h-[75vh] md:h-[55vh] bg-neutral-800 rounded-2xl drop-shadow-xl">
+      <div className=" flex flex-row justify-center max-w-screen-xl w-[80vw] h-[75vh] md:h-[55vh] md:w-[60vw] bg-neutral-800 rounded-2xl drop-shadow-xl">
         <form className="flex flex-col justify-center" onSubmit={(e) => handleSubmit(e)}>
           <div
             id="filed-containers"

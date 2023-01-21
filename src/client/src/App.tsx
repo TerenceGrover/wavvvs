@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import Home from './pages/Home';
 import ErrorPage from './pages/ErrorPage';
@@ -7,7 +7,8 @@ import './index.css'
 import CreateUser from './pages/CreateUser';
 import Logo from './components/Logo.component';
 import { checkUser } from './apiService/api-service';
-import Bio from './components/Bio.component';
+import type { CurrentUser } from './Interfaces';
+import ProfilePage from './pages/ProfilePage';
 
 export default function App() {
 
@@ -16,6 +17,7 @@ export default function App() {
   const [isNewUser, setIsNewUser] = React.useState(false);
   const [email, setEmail] = React.useState('');
   const [loading, setLoading] = React.useState(true);
+  const [currentUser, setCurrentUser] = React.useState<CurrentUser>();
 
   //parseJWT
   const parseJWT = (token: string) => {
@@ -29,9 +31,11 @@ export default function App() {
       setLoading(false);
       return;
     }
-    checkUser().then((res) => {
+    checkUser().then((res : CurrentUser) => {
       if (res) {
         setLoading(false)
+        console.log(res)
+        setCurrentUser(res);
         if (res.isNew) {
           setIsNewUser(true);
         }
@@ -64,27 +68,41 @@ export default function App() {
 
   return (
     <Router>
+      {!loading
+        ?
       <Routes>
+
         <Route path="/" element={
-          loading
-          ?
-          <main className="w-screen h-screen flex flex-col justify-center items-center">
-            <Logo/>
-          </main>
-          :
           valid 
           ? 
           (isNewUser
           ?
-          <CreateUser email={email}/>
+          <CreateUser setIsNewUser = {setIsNewUser}/>
           :
-          <Home /> )
+          <Home /> ) // TODO: change to home page
           : 
           <LandingPage setIsAuth = {setIsAuth} setIsNewUser={setIsNewUser}/>
           } 
           />
+
+        <Route path='/profile' 
+          element={
+            valid
+            ?
+            <ProfilePage currentUser={currentUser!} setCurrentUser={setCurrentUser}/>
+            :
+            <Navigate to='/' />
+          }
+          />
+
         <Route element={<ErrorPage />} />
+
       </Routes>
+        :
+        <main className="w-screen h-screen flex flex-col justify-center items-center">
+          <Logo/>
+        </main>
+      }
     </Router>
   );
 }

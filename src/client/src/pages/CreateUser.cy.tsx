@@ -1,14 +1,16 @@
 import React from 'react'
 import CreateUser from './CreateUser'
 
+
 describe('<CreateUser />', () => {
+  const setIsNewUser : React.Dispatch<React.SetStateAction<boolean>> = () => {}
   it('renders', () => {
     // see: https://on.cypress.io/mounting-react
-    cy.mount(<CreateUser email='test@gmail.com' />)
+    cy.mount(<CreateUser setIsNewUser={setIsNewUser}/>)
   })
 
   beforeEach(() => {
-    cy.mount(<CreateUser email='test@gmail.com' />)
+    cy.mount(<CreateUser setIsNewUser={setIsNewUser}/>)
   })
 
   it('has a name input', () => {

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Track = exports.User = void 0;
 const mongoose_1 = require("mongoose");
 const userSchema = new mongoose_1.Schema({
+    isPrivate: Boolean,
     isNew: Boolean,
     name: String,
     username: String,

@@ -4,14 +4,15 @@ export interface ErrorType {
 }
 
 export interface CurrentUser {
+  username: string;
   _v: number;
   _id : string;
   bio: string;
   email: string;
   name: string;
   profile_pic_path: string;
-  tracks: Array<TrackType>;
-  user: string;
+  tracks: Array<any>;
+  isNew: boolean;
 }
 
 export interface TrackType {
@@ -37,8 +38,8 @@ export interface InfoObject {
 }
 
 export interface AdditionalInfoObject {
-  name: string;
-  bio: string;
-  email: string;
-  profile_pic_path: string;
+  name?: string;
+  bio?: string;
+  email?: string;
+  profile_pic_path?: string;
 }
