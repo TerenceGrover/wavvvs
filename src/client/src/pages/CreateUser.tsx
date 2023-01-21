@@ -49,7 +49,7 @@ export default function CreateUser(props : {email : string}) {
     e.preventDefault();
     console.log(bio, name, profile_pic_path)
     if (profile_pic_path) {
-      updateUser({ name, email : props.email, bio, profile_pic_path });
+      updateUser({ name, bio, profile_pic_path });
     }
   }
 

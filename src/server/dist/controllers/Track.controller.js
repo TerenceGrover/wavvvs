@@ -30,22 +30,29 @@ exports.getUserTracks = exports.deleteTrack = exports.getAllTracks = exports.upl
 const fs = __importStar(require("node:fs/promises"));
 const node_path_1 = __importDefault(require("node:path"));
 const models_js_1 = require("../models/models.js");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const { SECRET_KEY } = process.env;
 const uploadTrack = async (req, res) => {
     try {
-        const username = req.body.username;
-        const originalname = req.file.originalname;
-        const filename = req.file.filename;
-        const size = req.file.size;
-        const newTrack = {
-            uploaded_by: username,
-            path: filename,
-            title: originalname,
-            size: size,
-            date: Date.now(),
-        };
-        // .create() check for if the data conforms to the schema
-        await models_js_1.Track.create(newTrack);
-        res.status(200).send(newTrack);
+        if (req.headers && req.headers.authorization) {
+            console.log(req.headers.authorization);
+            let authorization = req.headers.authorization.split(' ')[1], decoded;
+            try {
+                decoded = jsonwebtoken_1.default.verify(authorization, SECRET_KEY);
+            }
+            catch (e) {
+                return res.status(401).send('unauthorized');
+            }
+            const newTrack = {
+                uploaded_by: decoded.id,
+                path: req.file.filename,
+                title: req.file.originalname,
+                size: req.file.size,
+                date: Date.now(),
+            };
+            await models_js_1.Track.create(newTrack);
+            res.status(200).send(newTrack);
+        }
     }
     catch (error) {
         console.log({ error });
@@ -67,7 +74,9 @@ exports.getAllTracks = getAllTracks;
 const getUserTracks = async (req, res) => {
     try {
         const { username } = req.body;
-        const tracks = await models_js_1.Track.find({ uploaded_by: username });
+        const tracks = await models_js_1.Track.find({
+            uploaded_by: username,
+        });
         // if user has tracks, send them. If not, 404
         tracks ? res.status(200).send(tracks) : res.sendStatus(404);
     }

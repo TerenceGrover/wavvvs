@@ -15,10 +15,9 @@ const Bio = (props: { bio: string }) => {
       inputRef.current.focus();
     }
     if(!editing){
-      // Wait for alessio to update the endpoint before uncommenting
-      // updateUser({
-      //   bio: bio
-      // })
+      updateUser({
+        bio: bio
+      })
     }
   }, [editing]);
 

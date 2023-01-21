@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateOne = exports.registerOne = exports.loginOne = exports.getUser = void 0;
+exports.getAnotherUser = exports.updateOne = exports.registerOne = exports.loginOne = exports.getUser = void 0;
 const models_js_1 = require("../models/models.js");
 const userServices = __importStar(require("../services/User.service"));
 const error_util_1 = require("../utils/error.util");
@@ -44,11 +44,8 @@ const getUser = async (req, res) => {
                 return res.status(401).send('unauthorized');
             }
             const id = decoded.id;
-            // Fetch the user by id 
+            // Fetch the user by id
             models_js_1.User.findOne({ _id: id }).then(function (user) {
-                // Do something with the user
-                // user!.password = '';
-                console.log(user);
                 return res.status(200).send(user);
             });
         }
@@ -79,6 +76,7 @@ const registerOne = async (req, res) => {
     try {
         const { username, email, password } = req.body;
         const userToRegister = {
+            isPrivate: false,
             isNew: true,
             username,
             email,
@@ -104,15 +102,15 @@ const updateOne = async (req, res) => {
                 return res.status(401).send('unauthorized');
             }
             const id = decoded.id;
-            const { name, email, bio, profile_pic_path } = req.body;
+            const { name, bio, profile_pic_path, isPrivate } = req.body;
+            // here whatever is not being passed in req body will be undefined.
             const userToUpdate = {
                 _id: id,
                 isNew: false,
+                isPrivate,
                 name,
-                email,
                 bio,
                 profile_pic_path,
-                password: '',
             };
             const user = await userServices.updateProfileInfo(userToUpdate);
             res.status(204).send(user);
@@ -123,3 +121,46 @@ const updateOne = async (req, res) => {
     }
 };
 exports.updateOne = updateOne;
+// gets info about another user.
+// if the user we want the info bout is private, im gonna check if you sent auth token.
+const getAnotherUser = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const userToFind = await models_js_1.User.findOne({ username: username });
+        if (!userToFind)
+            throw new Error('User not found');
+        const userToSend = {
+            name: userToFind.name,
+            bio: userToFind.bio,
+            username: userToFind.username,
+            email: userToFind.email,
+            profile_pic_path: userToFind.profile_pic_path,
+            // tracks ??
+        };
+        // if user asked is private, go on checking auth token.
+        if (userToFind.isPrivate) {
+            if (req.headers && req.headers.authorization) {
+                let authorization = req.headers.authorization.split(' ')[1], decoded;
+                try {
+                    decoded = jsonwebtoken_1.default.verify(authorization, SECRET_KEY);
+                }
+                catch (e) {
+                    return res.status(401).send('unauthorized');
+                }
+                if (decoded) {
+                    return res.status(200).send(userToSend);
+                }
+            }
+            else
+                return res.status(401).send('unauthorized');
+        }
+        else {
+            // here user asked for is not private, so send it straight away.
+            return res.status(200).send(userToSend);
+        }
+    }
+    catch (error) {
+        return res.status(500).send({ error: (0, error_util_1.getErrorMessage)(error) });
+    }
+};
+exports.getAnotherUser = getAnotherUser;

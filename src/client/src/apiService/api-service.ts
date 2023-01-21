@@ -123,7 +123,7 @@ const register = async (infoObject: InfoObject)  : Promise<JSON> => {
   }
 };
 
-const updateUser = async (secondObject: AdditionalInfoObject) : Promise<JSON> => {
+const updateUser = async (secondObject: AdditionalInfoObject) : Promise<number> => {
   const { name, bio, email, profile_pic_path } = secondObject;
   let user = { name, bio, email, profile_pic_path };
   try {
@@ -134,10 +134,12 @@ const updateUser = async (secondObject: AdditionalInfoObject) : Promise<JSON> =>
         'Authorization': 'Bearer ' + localStorage.getItem('token'),
       },
       body: JSON.stringify(user),
-    }).then((res) => res.json())
-      .then(data=> {
+    }).then((res) => res.status)
+    .then((data) => {
       console.log(data)
-      return data})}
+      return data
+    })
+  }
     catch (error) {
     console.log({ error });
     return Promise.reject(error);
@@ -153,7 +155,7 @@ const checkUser = async () => {
         'Content-type': 'Application/json',
         'Authorization': 'Bearer ' + token
       },
-    }).then((res) => res.json());
+    }).then((res) => res.json())
   }
 }
 

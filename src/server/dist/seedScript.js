@@ -32,6 +32,7 @@ const node_path_1 = __importDefault(require("node:path"));
 const fakeUsers = [
     {
         isNew: false,
+        isPrivate: false,
         name: 'Mateo Presa',
         username: 'mateopresa',
         email: 'mateopresacastro@gmail.com',
@@ -41,6 +42,7 @@ const fakeUsers = [
     },
     {
         isNew: true,
+        isPrivate: true,
         name: 'Random Producer',
         username: 'randomproducer',
         email: 'randomproducer@gmail.com',

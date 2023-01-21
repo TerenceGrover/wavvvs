@@ -17,7 +17,7 @@ export default function Profile(
   }
 ) {
 
-  console.log(props.currentUser.profile_pic_path)
+  console.log(props.currentUser)
 
   const [tracksto3, setTracksto3] = useState([1,2,3])
 
