@@ -75,7 +75,7 @@ export default function CreateUser(props : {email : string}) {
               <input
                 className="hidden"
                 type="file"
-                name="profilePicture"
+                name="profile_pic_path"
                 id="profilePicture"
                 accept=".jpg,.jpeg,.heic,.png"
                 onChange={(e) => handleUpload(e)}

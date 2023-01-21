@@ -134,8 +134,11 @@ const updateUser = async (secondObject: AdditionalInfoObject) : Promise<JSON> =>
         'Authorization': 'Bearer ' + localStorage.getItem('token'),
       },
       body: JSON.stringify(user),
-    }).then((res) => res.json());
-  } catch (error) {
+    }).then((res) => res.json())
+      .then(data=> {
+      console.log(data)
+      return data})}
+    catch (error) {
     console.log({ error });
     return Promise.reject(error);
   }
