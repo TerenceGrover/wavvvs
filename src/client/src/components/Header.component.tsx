@@ -2,11 +2,12 @@ import React from 'react';
 import { AiOutlineMenu, AiOutlineSearch } from 'react-icons/ai';
 import { Link, Router } from 'react-router-dom';
 import Logo from './Logo.component';
+import type { CurrentUser } from '../Interfaces';
 
 const { REACT_APP_BACKEND_HOST } = process.env;
 const staticPicUrl = `${REACT_APP_BACKEND_HOST}/pics/mateo_pic.jpeg`;
 
-export default function Header() {
+export default function Header( props: {currentUser: CurrentUser}) {
 
   const [search, setSearch] = React.useState(false);
 
@@ -39,7 +40,7 @@ export default function Header() {
             <img
               id='user'
               className="w-6 h-6 ml-3 rounded-full"
-              src={staticPicUrl}
+              src={props.currentUser.profile_pic_path ? props.currentUser.profile_pic_path : 'https://i.imgur.com/6VBx3io.png'}
               alt="User profile"
             />
             </Link>

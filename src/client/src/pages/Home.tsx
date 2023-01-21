@@ -1,32 +1,41 @@
 import type { CurrentUser, TrackListItemType } from '../Interfaces';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { checkUser } from "../apiService/api-service";
 import Header from '../components/Header.component';
 import Logo from '../components/Logo.component';
 import ErrorPage from './ErrorPage';
 import React from 'react';
 import CentralHome from '../components/CentralHome.component';
 
-function Home() {
-  const [currentUser, setCurrentUser] = useState<CurrentUser | undefined >();
-  const [isLoading, setIsLoading] = useState(false);
+function Home(props : {currentUser: CurrentUser, setCurrentUser: React.Dispatch<React.SetStateAction<CurrentUser | undefined>>}) {
+  
+  const [isLoading, setIsLoading] = useState(true);
   const [thereIsAnError, seThereIsAnError] = useState(false);
-  const { user } : any = useParams();
-
-  if (isLoading) {
-    return (
-      <div className="h-screen flex justify-center items-center">
-        <Logo />
-      </div>
-    );
-  }
+  
+  React.useEffect(() => {
+    if (props.currentUser.name) return setIsLoading(false);
+    setTimeout(() => {  
+      checkUser().then((res : CurrentUser) => {
+        if (res) {
+            props.setCurrentUser(res);
+            setIsLoading(false);
+        }
+      })
+    }, 1000)
+  }, [props.currentUser.name])
 
   if (thereIsAnError) return <ErrorPage />;
 
   return (
+    isLoading 
+    ?
+    <main className="w-screen h-screen flex flex-col justify-center items-center">
+      <Logo/>
+    </main>
+    :
     <div className="h-screen w-screen bg-neutral-900 flex flex-col">
-      <Header />
-      {currentUser && (
+      <Header currentUser={props.currentUser} />
+      {props.currentUser && (
         <CentralHome />
       )} 
     </div>
