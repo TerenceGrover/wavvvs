@@ -76,11 +76,11 @@ export async function login(user: DocumentDefinition<IUser>) {
   }
 }
 
-export async function updateProfileInfo(user: DocumentDefinition<IUser>) {
+export async function updateProfileInfo(user:any) {
   try {
-    const foundUser = await User.findOne({ email: user.email });
+    const foundUser = await User.findOne({ _id: user._id });
     if (!foundUser) {
-      throw new Error('Email of user is not correct');
+      throw new Error('JWT doesnt correspond to any user');
     }
     foundUser.name = user.name;
     foundUser.bio = user.bio;
