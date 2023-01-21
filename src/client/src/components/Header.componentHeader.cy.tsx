@@ -6,11 +6,32 @@ import Header from './Header.component';
 describe
 ('my function or component', () => {
   it('Should render Header component', () => {
-    render(<Header /> , { wrapper: Router });
+    render(<Header currentUser={{
+      _v : 0,
+      _id: '123',
+      isNew: false,
+      name: 'test',
+      email: 'test@gmail.com',
+      username: '123',
+      profile_pic_path: 'https://i.imgur.com/0y0y0y0.jpg',
+      bio: 'test',
+      tracks: []
+    }} /> , { wrapper: Router });
   });
 
   beforeEach(() => {
-    render(<Header /> , { wrapper: Router });
+    render(<Header
+      currentUser={{
+        _v : 0,
+        _id: '123',
+        isNew: false,
+        name: 'test',
+        email: 'test@gmail.com',
+        username: '123',
+        profile_pic_path: 'https://i.imgur.com/0y0y0y0.jpg',
+        bio: 'test',
+        tracks: []
+      }} /> , { wrapper: Router });
   });
 
   it('Should render an input field when the user clicks on the search icon', () => {

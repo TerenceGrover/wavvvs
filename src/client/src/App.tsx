@@ -148,7 +148,7 @@ export default function App() {
             ?
             <CreateUser setIsNewUser = {setIsNewUser}/>
             :
-            <Home /> ) // TODO: change to home page
+            <Home currentUser={currentUser!} setCurrentUser={setCurrentUser}  /> ) // TODO: change to home page
             : 
             <LandingPage setIsAuth = {setIsAuth} setIsNewUser={setIsNewUser}/>
             } 
