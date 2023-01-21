@@ -115,9 +115,9 @@ function App() {
         <Profile
           currentUser={currentUser}
           setCurrentUser={setCurrentUser}
-          trackList={trackList}
-          setTrackList={setTrackList}
-          playOrPauseTrackByID={playOrPauseTrackByID}
+          // trackList={trackList}
+          // setTrackList={setTrackList}
+          // playOrPauseTrackByID={playOrPauseTrackByID}
         />
       )} 
       {activeTrack && (

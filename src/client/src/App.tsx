@@ -7,7 +7,8 @@ import './index.css'
 import CreateUser from './pages/CreateUser';
 import Logo from './components/Logo.component';
 import { checkUser } from './apiService/api-service';
-import Bio from './components/Bio.component';
+import type { CurrentUser } from './Interfaces';
+import ProfilePage from './pages/ProfilePage';
 
 export default function App() {
 
@@ -16,6 +17,7 @@ export default function App() {
   const [isNewUser, setIsNewUser] = React.useState(false);
   const [email, setEmail] = React.useState('');
   const [loading, setLoading] = React.useState(true);
+  const [currentUser, setCurrentUser] = React.useState<CurrentUser>();
 
   //parseJWT
   const parseJWT = (token: string) => {
@@ -29,9 +31,10 @@ export default function App() {
       setLoading(false);
       return;
     }
-    checkUser().then((res) => {
+    checkUser().then((res : CurrentUser) => {
       if (res) {
         setLoading(false)
+        setCurrentUser(res);
         if (res.isNew) {
           setIsNewUser(true);
         }
@@ -83,6 +86,10 @@ export default function App() {
           <LandingPage setIsAuth = {setIsAuth} setIsNewUser={setIsNewUser}/>
           } 
           />
+        <Route path='/profile' element={
+          currentUser !== undefined &&  
+          <ProfilePage currentUser={currentUser} setCurrentUser={setCurrentUser}/>
+        } />
         <Route element={<ErrorPage />} />
       </Routes>
     </Router>
