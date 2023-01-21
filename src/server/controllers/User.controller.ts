@@ -73,15 +73,15 @@ const updateOne = async (req: Request, res: Response) => {
         return res.status(401).send('unauthorized');
       }
       const id = decoded.id;
-      const { name, email, bio, profile_pic_path } = req.body;
+      const { name, bio, profile_pic_path, isPrivate } = req.body;
+      // here whatever is not being passed in req body will be undefined.
       const userToUpdate = {
         _id: id,
         isNew: false,
+        isPrivate,
         name,
-        email,
         bio,
         profile_pic_path,
-        password: '',
       };
       const user = await userServices.updateProfileInfo(userToUpdate);
       res.status(204).send(user);

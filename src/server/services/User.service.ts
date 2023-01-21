@@ -43,7 +43,7 @@ export async function login(user:any) {
         { id: foundUser._id?.toString() },
         SECRET_KEY!,
         {
-          expiresIn: '2 days',
+          expiresIn: '1 day',
         }
       );
       let returnUser;
@@ -78,9 +78,10 @@ export async function updateProfileInfo(user:any) {
     if (!foundUser) {
       throw new Error('JWT doesnt correspond to any user');
     }
-    foundUser.name = user.name;
-    foundUser.bio = user.bio;
-    foundUser.profile_pic_path = user.profile_pic_path;
+    foundUser.name = user.name || foundUser.name;
+    foundUser.bio = user.bio || foundUser.bio;
+    foundUser.profile_pic_path = user.profile_pic_path || foundUser.profile_pic_path;
+    foundUser.isPrivate = user.isPrivate || foundUser.isPrivate;
     // change isNew to false since now it has logged in one time and from now on he will be redirected to dashboard
     foundUser.isNew = false;
     foundUser.save();
