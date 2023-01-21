@@ -1,25 +1,32 @@
 import * as fs from 'node:fs/promises';
 import { Request, Response } from 'express';
 import path from 'node:path';
-import { ITrack, Track } from '../models/models.js';
+import { Track } from '../models/models.js';
+import { ITrack } from '../entities/allEntities.js';
+import jwt from 'jsonwebtoken';
+const { SECRET_KEY } = process.env;
 
 const uploadTrack = async (req: Request, res: Response) => {
   try {
-    const username: string = req.body.username;
-    const originalname: string = req.file!.originalname;
-    const filename: string = req.file!.filename;
-    const size: number = req.file!.size;
-
-    const newTrack: ITrack = {
-      uploaded_by: username,
-      path: filename,
-      title: originalname,
-      size: size,
-      date: Date.now(),
-    };
-    // .create() check for if the data conforms to the schema
-    await Track.create(newTrack);
-    res.status(200).send(newTrack);
+    if (req.headers && req.headers.authorization) {
+      console.log(req.headers.authorization);
+      let authorization = req.headers.authorization.split(' ')[1],
+        decoded: any;
+      try {
+        decoded = jwt.verify(authorization, SECRET_KEY!);
+      } catch (e) {
+        return res.status(401).send('unauthorized');
+      }
+      const newTrack: ITrack = {
+        uploaded_by: decoded.id,
+        path: req.file!.filename,
+        title: req.file!.originalname,
+        size: req.file!.size,
+        date: Date.now(),
+      };
+      await Track.create(newTrack);
+      res.status(200).send(newTrack);
+    }
   } catch (error) {
     console.log({ error });
     res.status(500).send({ error });
@@ -39,10 +46,12 @@ const getAllTracks = async (req: Request, res: Response) => {
 const getUserTracks = async (req: Request, res: Response) => {
   try {
     const { username } = req.body;
-    const tracks: ITrack[] | undefined = await Track.find({ uploaded_by: username });
+    const tracks: ITrack[] | undefined = await Track.find({
+      uploaded_by: username,
+    });
 
     // if user has tracks, send them. If not, 404
-    tracks ? res.status(200).send(tracks) : res.sendStatus(404)
+    tracks ? res.status(200).send(tracks) : res.sendStatus(404);
   } catch (error) {
     console.log({ error });
     res.status(500).send({ error });

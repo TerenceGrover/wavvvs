@@ -1,20 +1,16 @@
 import { DocumentDefinition } from 'mongoose';
 import jwt from 'jsonwebtoken';
-import { User, IUser } from '../models/models';
+import { User } from '../models/models';
+import { IUser } from '../entities/allEntities.js';
 import bcrypt from 'bcrypt';
 const saltRounds = 8;
 const { SECRET_KEY } = process.env;
 
-// const userToRegister: IUser = {
-//   isNew: true,
-//   username,
-//   email,
-//   password
-// }
-
 // this works. Maybe sanitize inputs.
 export async function register(user: DocumentDefinition<IUser>) {
-  const exists = await User.findOne({ email: user.email });
+  let exists = null;
+  exists = await User.findOne({ email: user.email });
+  if(!exists) exists = await User.findOne({ username: user.username });
   if (exists) {
     throw new Error('User already exists');
   }
@@ -35,7 +31,7 @@ export async function register(user: DocumentDefinition<IUser>) {
 }
 
 // this works. Also sanitize inputs.
-export async function login(user: DocumentDefinition<IUser>) {
+export async function login(user:any) {
   try {
     const foundUser = await User.findOne({ email: user.email });
     if (!foundUser) {

@@ -1,10 +1,12 @@
-import { User, Track, ITrack, IUser } from './models/models';
+import { User, Track } from './models/models';
+import { ITrack, IUser } from './entities/allEntities.js';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 
 const fakeUsers = [
   {
     isNew: false,
+    isPrivate: false,
     name: 'Mateo Presa',
     username: 'mateopresa',
     email: 'mateopresacastro@gmail.com',
@@ -14,6 +16,7 @@ const fakeUsers = [
   },
   {
     isNew: true,
+    isPrivate: true,
     name: 'Random Producer',
     username: 'randomproducer',
     email: 'randomproducer@gmail.com',

@@ -1,24 +1,8 @@
 import { Schema, model } from 'mongoose';
-
-export interface ITrack {
-  uploaded_by: string;
-  path: string;
-  title: string;
-  size: number;
-  date: number;
-}
-
-export interface IUser {
-  isNew: boolean;
-  name?: string;
-  username?: string;
-  email: string;
-  password: string;
-  bio?: string;
-  profile_pic_path?: string;
-}
+import { ITrack, IUser } from '../entities/allEntities.js';
 
 const userSchema = new Schema<IUser>({
+  isPrivate: Boolean,
   isNew: Boolean,
   name: String,
   username: String,
