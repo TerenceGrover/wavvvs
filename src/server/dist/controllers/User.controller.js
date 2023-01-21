@@ -94,17 +94,29 @@ const registerOne = async (req, res) => {
 exports.registerOne = registerOne;
 const updateOne = async (req, res) => {
     try {
-        const { name, email, bio, profile_pic_path } = req.body;
-        const userToUpdate = {
-            isNew: false,
-            name,
-            email,
-            bio,
-            profile_pic_path,
-            password: '',
-        };
-        const user = await userServices.updateProfileInfo(userToUpdate);
-        res.status(204).send(user);
+        if (req.headers && req.headers.authorization) {
+            console.log(req.headers.authorization);
+            let authorization = req.headers.authorization.split(' ')[1], decoded;
+            try {
+                decoded = jsonwebtoken_1.default.verify(authorization, SECRET_KEY);
+            }
+            catch (e) {
+                return res.status(401).send('unauthorized');
+            }
+            const id = decoded.id;
+            const { name, email, bio, profile_pic_path } = req.body;
+            const userToUpdate = {
+                _id: id,
+                isNew: false,
+                name,
+                email,
+                bio,
+                profile_pic_path,
+                password: '',
+            };
+            const user = await userServices.updateProfileInfo(userToUpdate);
+            res.status(204).send(user);
+        }
     }
     catch (error) {
         return res.status(500).send({ error: (0, error_util_1.getErrorMessage)(error) });
