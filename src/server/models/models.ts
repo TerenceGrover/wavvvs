@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 import { ITrack, IUser } from '../entities/allEntities.js';
 
 const userSchema = new Schema<IUser>({
@@ -13,7 +13,7 @@ const userSchema = new Schema<IUser>({
 });
 
 const trackSchema = new Schema<ITrack>({
-  uploaded_by: String,
+  uploaded_by: Types.ObjectId,
   path: String,
   title: String,
   size: Number,

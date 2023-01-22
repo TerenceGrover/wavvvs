@@ -1,9 +1,9 @@
 export interface ITrack {
   uploaded_by: string;
   path: string;
-  title: string;
-  size: number;
-  date: number;
+  title?: string;
+  size?: number;
+  date?: number;
 }
 
 export interface IUser {
@@ -15,4 +15,5 @@ export interface IUser {
   password: string;
   bio?: string;
   profile_pic_path?: string;
+  tracks?: ITrack[],
 }

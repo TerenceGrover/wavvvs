@@ -54,8 +54,11 @@ router.get('/user', auth, User.getUser);
 
 /* -- TRACKS RELATED ROUTES --*/
 
+// // POST TRACK 
+// router.post('/user/tracks',auth,checkFileSize,upload.single('track'),Track.uploadTrack);
+
 // POST TRACK 
-router.post('/user/tracks',auth,checkFileSize,upload.single('track'),Track.uploadTrack);
+router.post('/user/tracks', auth, Track.saveTrackUrl);
 
 // DELETE TRACK
 router.delete('/delete/tracks', auth, Track.deleteTrack);
