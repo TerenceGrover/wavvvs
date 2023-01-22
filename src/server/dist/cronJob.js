@@ -28,15 +28,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = __importStar(require("node:fs/promises"));
 const node_path_1 = __importDefault(require("node:path"));
-const models_js_1 = require("./models/models.js");
+const models_1 = require("./models/models");
 const EVERY_30SECONDS = 30000;
 const DAY_IN_MS = 86400000;
 const removeExpiredTracksCronJob = () => {
     return setInterval(async () => {
         try {
             console.log('CRON JOB: Removing all expired tracks from db and file system ⏱...');
-            await models_js_1.Track.deleteMany({ date: { $lt: Date.now() - DAY_IN_MS } }); // remove expired tracks
-            const remainingTracksInDb = await models_js_1.Track.find({}, 'path -_id'); // get only the path field, removing also the _id field
+            await models_1.Track.deleteMany({ date: { $lt: Date.now() - DAY_IN_MS } }); // remove expired tracks
+            const remainingTracksInDb = await models_1.Track.find({}, 'path -_id'); // get only the path field, removing also the _id field
             const numberOfDeletedFiles = await removeExpiredTracksFromFileSystem(remainingTracksInDb);
             console.log(`${numberOfDeletedFiles} files deleted\n`);
         }

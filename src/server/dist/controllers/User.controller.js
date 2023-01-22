@@ -26,8 +26,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAnotherUser = exports.updateOne = exports.registerOne = exports.loginOne = exports.getUser = void 0;
-const models_js_1 = require("../models/models.js");
+exports.deleteUser = exports.getAnotherUser = exports.updateOne = exports.registerOne = exports.loginOne = exports.getUser = void 0;
+const models_1 = require("../models/models");
 const userServices = __importStar(require("../services/User.service"));
 const error_util_1 = require("../utils/error.util");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -45,7 +45,7 @@ const getUser = async (req, res) => {
             }
             const id = decoded.id;
             // Fetch the user by id
-            models_js_1.User.findOne({ _id: id }).then(function (user) {
+            models_1.User.findOne({ _id: id }).then(function (user) {
                 if (user) {
                     user.password = '';
                     return res.status(200).send(user);
@@ -137,7 +137,7 @@ exports.updateOne = updateOne;
 const getAnotherUser = async (req, res) => {
     try {
         const username = req.params.username;
-        const userToFind = await models_js_1.User.findOne({ username: username });
+        const userToFind = await models_1.User.findOne({ username: username });
         if (!userToFind)
             throw new Error('User not found');
         const userToSend = {
@@ -175,3 +175,31 @@ const getAnotherUser = async (req, res) => {
     }
 };
 exports.getAnotherUser = getAnotherUser;
+const deleteUser = async (req, res) => {
+    try {
+        if (req.headers && req.headers.authorization) {
+            let authorization = req.headers.authorization.split(' ')[1], decoded;
+            try {
+                decoded = jsonwebtoken_1.default.verify(authorization, SECRET_KEY);
+            }
+            catch (e) {
+                return res.status(401).send('unauthorized');
+            }
+            let deleted;
+            if (decoded) {
+                deleted = await models_1.User.deleteOne({ _id: decoded.id });
+            }
+            if (deleted) {
+                return res.sendStatus(204);
+            }
+            else
+                return res.sendStatus(500);
+        }
+        else
+            return res.status(401).send('unauthorized');
+    }
+    catch (error) {
+        return res.status(500).send({ error: (0, error_util_1.getErrorMessage)(error) });
+    }
+};
+exports.deleteUser = deleteUser;
