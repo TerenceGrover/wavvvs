@@ -21,13 +21,15 @@ export default function MediaController(props : {
   repeat : any;
   setRepeat : any;
 }) {
-  props.activeTrack.waveformRef.wavesurfer.setMute(props.isAudioMuted);
 
   useEffect(() => {
-    if (props.activeTrack.isFinished && props.activeTrack.isPlaying && props.repeat === false) {
-      props.pauseAllTracks();
+    if (props.activeTrack !== null && props.activeTrack.waveformRef) {
+      props.activeTrack.waveformRef.wavesurfer.setMute(props.isAudioMuted);
+      if (props.activeTrack.isFinished && props.activeTrack.isPlaying && props.repeat === false) {
+        props.pauseAllTracks();
+      }
     }
-  }, [props.repeat, props.activeTrack, props.pauseAllTracks]);
+  }, [props.isAudioMuted, props.activeTrack, props.repeat, props.activeTrack, props.pauseAllTracks]);
 
   const handlePlayClick = () => {
     props.playOrPauseTrackByID(props.activeTrack.waveformRef.id);

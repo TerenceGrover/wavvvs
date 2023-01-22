@@ -61,26 +61,6 @@ const deleteTrack = (id: string) => {
   }
 };
 
-const getUserTracks = (
-  username: string,
-  setter: React.Dispatch<React.SetStateAction<CurrentUser | undefined>>
-) => {
-  try {
-    const userData = getUser(username);
-    return fetch(baseURL + `/${username}/tracks`)
-      .then((res) => res.json())
-      .then((data) =>
-        setter((currentUser) => ({
-          ...currentUser,
-          ...userData,
-          tracks: [...data],
-        }))
-      );
-  } catch (error) {
-    console.log({ error });
-    return error;
-  }
-};
 
 const login = async (infoObject: InfoObject) : Promise<any> => {
   const { email, password } = infoObject;
@@ -164,7 +144,6 @@ export {
   getUser,
   getTracksFromBackend,
   deleteTrack,
-  getUserTracks,
   login,
   register,
   updateUser,
