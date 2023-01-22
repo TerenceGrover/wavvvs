@@ -49,7 +49,7 @@ app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 // dangerous, here you have all the songs from all the users.
 // TODO: to play a song u should call an endpoint that serves songs for users
-app.use(express_1.default.static('./public'));
+// app.use(express.static('./public'));
 app.use(router_1.default);
 app.get('*', (req, res) => {
     res.status(404);
