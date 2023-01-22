@@ -1,8 +1,8 @@
 import * as fs from 'node:fs/promises';
 import { Request, Response } from 'express';
 import path from 'node:path';
-import { Track } from '../models/models.js';
-import { ITrack } from '../entities/allEntities.js';
+import { Track } from '../models/models';
+import { ITrack } from '../entities/allEntities';
 import jwt from 'jsonwebtoken';
 const { SECRET_KEY } = process.env;
 

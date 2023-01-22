@@ -1,5 +1,5 @@
-import { User } from '../models/models.js';
-import { IUser } from '../entities/allEntities.js';
+import { User } from '../models/models';
+import { IUser } from '../entities/allEntities';
 import { Request, Response } from 'express';
 import * as userServices from '../services/User.service';
 import { getErrorMessage } from '../utils/error.util';
