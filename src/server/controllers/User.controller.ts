@@ -135,4 +135,34 @@ const getAnotherUser = async (req: Request, res: Response) => {
   }
 };
 
-export { getUser, loginOne, registerOne, updateOne, getAnotherUser };
+const deleteUser = async (req: Request, res: Response) => {
+  try {
+    if (req.headers && req.headers.authorization) {
+      let authorization = req.headers.authorization.split(' ')[1],
+        decoded: any;
+      try {
+        decoded = jwt.verify(authorization, SECRET_KEY!);
+      } catch (e) {
+        return res.status(401).send('unauthorized');
+      }
+      let deleted;
+      if (decoded) {
+        deleted = await User.deleteOne({ _id: decoded.id });
+      }
+      if (deleted) {
+        return res.sendStatus(204);
+      } else return res.sendStatus(500);
+    } else return res.status(401).send('unauthorized');
+  } catch (error) {
+    return res.status(500).send({ error: getErrorMessage(error) });
+  }
+};
+
+export {
+  getUser,
+  loginOne,
+  registerOne,
+  updateOne,
+  getAnotherUser,
+  deleteUser,
+};
