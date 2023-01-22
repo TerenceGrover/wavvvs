@@ -41,7 +41,7 @@ export default function Profile(props: {
             <h1 className="text-white text-2xl mt-7 mb-1">
               {props.currentUser.name}
             </h1>
-            <p className="text-neutral-400">{`@${props.currentUser.username}`}</p>
+            <p id='username' className="text-neutral-400">{`@${props.currentUser.username}`}</p>
           </section>
           <hr className="w-96 border-neutral-800 my-6" />
           <Bio bio={props.currentUser.bio} />

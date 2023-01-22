@@ -36,8 +36,10 @@ const UserForm = (props : {setIsAuth : React.Dispatch<React.SetStateAction<boole
     if (clicked === 'login') {
       login(info).then((res) => {
         if (res) {
-          if (res.user.isNew) {
+          if (res.user.isNew === true) {
             props.setIsNewUser(true);
+          } else {
+            props.setIsNewUser(false);
           }
           props.setIsAuth(true);
         }

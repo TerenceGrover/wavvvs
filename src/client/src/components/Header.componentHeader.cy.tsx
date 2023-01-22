@@ -2,36 +2,17 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter as Router } from 'react-router-dom';
 import Header from './Header.component';
+import { newdummyUser } from '../../cypress/fixtures/dummyUser';
 
 describe
 ('my function or component', () => {
   it('Should render Header component', () => {
-    render(<Header currentUser={{
-      _v : 0,
-      _id: '123',
-      isNew: false,
-      name: 'test',
-      email: 'test@gmail.com',
-      username: '123',
-      profile_pic_path: 'https://i.imgur.com/0y0y0y0.jpg',
-      bio: 'test',
-      tracks: []
-    }} /> , { wrapper: Router });
+    render(<Header currentUser={newdummyUser} /> , { wrapper: Router });
   });
 
   beforeEach(() => {
     render(<Header
-      currentUser={{
-        _v : 0,
-        _id: '123',
-        isNew: false,
-        name: 'test',
-        email: 'test@gmail.com',
-        username: '123',
-        profile_pic_path: 'https://i.imgur.com/0y0y0y0.jpg',
-        bio: 'test',
-        tracks: []
-      }} /> , { wrapper: Router });
+      currentUser={newdummyUser} /> , { wrapper: Router });
   });
 
   it('Should render an input field when the user clicks on the search icon', () => {
@@ -39,8 +20,20 @@ describe
     cy.get('input').should('be.visible');
   })
 
-  it('Should render the user profile picture when the user clicks on the user icon', () => {
+  it('Should render the user profile pic', () => {
+    cy.get('img').should('have.attr', 'src', 'https://i.imgur.com/1Q9ZQ9r.jpg');
+  })
+
+  it('Should redirects to the profile page when the user clicks on the user icon', () => {
     cy.get('#link-to-profile').should('be.visible');
+  })
+  
+  // TO DO WHEN 
+
+  it('Should do nothing when the menu icon is pressed ... For now', () => {
+    cy.get('#hamburger-menu').click();
+    cy.wait(500);
+    // ADD HERE WHAT IT SHOULD DO
   })
 
 });

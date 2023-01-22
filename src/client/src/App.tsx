@@ -102,6 +102,7 @@ export default function App() {
     checkUser().then((res : CurrentUser) => {
       if (res) {
         console.log(res)
+        console.log('AAAAAAAA JE SUIS UN TEST')
         setCurrentUser(res);
         if (res.isNew) {
           setIsNewUser(true);
@@ -148,7 +149,7 @@ export default function App() {
             ?
             <CreateUser setIsNewUser = {setIsNewUser}/>
             :
-            <Home currentUser={currentUser!} setCurrentUser={setCurrentUser}  /> ) // TODO: change to home page
+            <Home currentUser={currentUser!} setCurrentUser={setCurrentUser}  /> )
             : 
             <LandingPage setIsAuth = {setIsAuth} setIsNewUser={setIsNewUser}/>
             } 
