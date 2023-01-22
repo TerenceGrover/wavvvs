@@ -13,7 +13,7 @@ const userSchema = new Schema<IUser>({
 });
 
 const trackSchema = new Schema<ITrack>({
-  uploaded_by: Types.ObjectId,
+  uploaded_by: String,
   path: String,
   title: String,
   size: Number,
