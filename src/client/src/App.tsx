@@ -30,6 +30,7 @@ export default function App() {
   const activeTrack = trackList.find((track) => track.isLastActive) ?? null;
 
   const playOrPauseTrackByID = (id: string) => {
+
     setTrackList((tracks) => {
       // Loop trough the tracks and modify the status of th track you want to play/pause
       const modifiedTrackList = tracks.map((track) => {
@@ -113,7 +114,7 @@ export default function App() {
           setLoading(false);
         }
       });
-    }, 250);
+    }, 1000);
   }, [valid]);
 
   React.useEffect(() => {
