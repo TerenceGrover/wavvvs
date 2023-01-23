@@ -1,6 +1,5 @@
-import * as fs from 'node:fs/promises';
 import { Request, Response } from 'express';
-import path from 'node:path';
+import { v2 as cloudinary } from 'cloudinary';
 import { Track } from '../models/models';
 import { ITrack } from '../entities/allEntities';
 import jwt from 'jsonwebtoken';
@@ -57,16 +56,27 @@ const getUserTracks = async (req: Request, res: Response) => {
   }
 };
 
-const tracksPublicDirectory = './public/tracks'; // path relative to the node process
 const deleteTrack = async (req: Request, res: Response) => {
   try {
-    // The name of the file is the id of the track, and the path to it, at the same time.
-    const { id } = req.body; // refactored
-    const { deletedCount } = await Track.deleteOne({ path: id });
-    if (deletedCount) {
-      await fs.unlink(path.join(tracksPublicDirectory, id));
+    // get the id of the track to delete
+    const { id } = req.body;
+    // take the url of the track to delete from the database
+    const track: ITrack | null = await Track.findOne({ path: id });
+    // if the track doesn't exist, send 404
+    if (!track) {
+      return res.sendStatus(404);
     }
-    res.status(200).send({ deletedCount });
+    // store the url of the track to delete
+    const { path } = track;
+    // delete the track from cloudinary
+    const { deleted } = await cloudinary.uploader.destroy(path);
+    // if its deleted, delete it from the database
+    if (deleted) {
+      // delete the track from the database
+      await Track.deleteOne({ path: id });
+      console.log('deleted from cloudinary');
+    }
+    res.sendStatus(204);
   } catch (error) {
     console.log({ error });
     res.status(500).send({ error });
@@ -89,7 +99,7 @@ const saveTrackUrl = async (req: Request, res: Response) => {
       const track: ITrack = {
         uploaded_by: id,
         path: url,
-      }
+      };
       await Track.create(track);
     }
   } catch (error) {
@@ -97,4 +107,4 @@ const saveTrackUrl = async (req: Request, res: Response) => {
     res.status(500).send({ error });
   }
 };
-export { uploadTrack, getAllTracks, deleteTrack, getUserTracks, saveTrackUrl};
+export { uploadTrack, getAllTracks, deleteTrack, getUserTracks, saveTrackUrl };
