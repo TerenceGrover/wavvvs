@@ -7,7 +7,6 @@ const getUser = (user: string): any => {
       method: 'GET',
       body: JSON.stringify({ username: user }),
     }).then((res) => {
-      console.log(res);
       res.json();
     });
   } catch (error) {
@@ -111,7 +110,12 @@ const checkUser = async () => {
         'Content-type': 'Application/json',
         'Authorization': 'Bearer ' + token
       },
-    }).then((res) => res.json())
+    }).then((res) => {
+      return res.json()})
+    .then((data) => {
+      console.log(data)
+      return data
+    })
   }
 }
 
@@ -131,6 +135,23 @@ const postTrack = async (trackURL : string) => {
     return Promise.reject(error);
   }
 }
+
+// Retrieve all tracks from the backend
+export const getAllTracks = async () => {
+  try {
+    return fetch(baseURL + `/alltracks`, 
+    {
+      method: 'GET',
+      headers: {
+        'Content-type': 'Application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+    }}
+    ).then((res) => res.json());
+  } catch (error) {
+    console.log({ error });
+    return error;
+  }
+};
 
 export {
   postTrack,

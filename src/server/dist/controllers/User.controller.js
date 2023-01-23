@@ -48,7 +48,11 @@ const getUser = async (req, res) => {
             models_1.User.findOne({ _id: id }).then(function (user) {
                 if (user) {
                     user.password = '';
-                    return res.status(200).send(user);
+                    // seach in Track all the tracks that have the user id as uploaded by
+                    models_1.Track.find({ uploadedBy: id }).then(function (tracks) {
+                        user.tracks = tracks;
+                        return res.status(200).send(user);
+                    });
                 }
                 else
                     return res.sendStatus(404);
