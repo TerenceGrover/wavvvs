@@ -69,7 +69,7 @@ router.get('/user', auth_1.auth, User.getUser);
 // POST TRACK 
 router.post('/user/tracks', auth_1.auth, Track.saveTrackUrl);
 // DELETE TRACK
-router.delete('/delete/tracks', auth_1.auth, Track.deleteTrack);
+router.delete('/track', auth_1.auth, Track.deleteTrack);
 // THIS NEVER GETS CALLED. DELETE ?
 router.get('/alltracks', auth_1.auth, Track.getAllTracks);
 exports.default = router;

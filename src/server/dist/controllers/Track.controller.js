@@ -1,37 +1,13 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.saveTrackUrl = exports.getUserTracks = exports.deleteTrack = exports.getAllTracks = exports.uploadTrack = void 0;
-const fs = __importStar(require("node:fs/promises"));
-const node_path_1 = __importDefault(require("node:path"));
+const cloudinary_1 = require("cloudinary");
 const models_1 = require("../models/models");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const { SECRET_KEY } = process.env;
+const { SECRET_KEY, CLOUD_NAME, API_KEY, API_SECRET } = process.env;
 const uploadTrack = async (req, res) => {
     try {
         if (req.headers && req.headers.authorization) {
@@ -86,16 +62,34 @@ const getUserTracks = async (req, res) => {
     }
 };
 exports.getUserTracks = getUserTracks;
-const tracksPublicDirectory = './public/tracks'; // path relative to the node process
 const deleteTrack = async (req, res) => {
     try {
-        // The name of the file is the id of the track, and the path to it, at the same time.
-        const { id } = req.body; // refactored
-        const { deletedCount } = await models_1.Track.deleteOne({ path: id });
-        if (deletedCount) {
-            await fs.unlink(node_path_1.default.join(tracksPublicDirectory, id));
+        // get the id of the track to delete
+        const { id } = req.body;
+        // take the url of the track to delete from the database
+        const track = await models_1.Track.findOne({ _id: id });
+        // if the track doesn't exist, send 404
+        if (!track) {
+            return res.sendStatus(404);
         }
-        res.status(200).send({ deletedCount });
+        // store the url of the track to delete
+        const { path } = track;
+        // delete the track from cloudinary
+        // delete track from cloudinary using api key and secret
+        cloudinary_1.v2.config({
+            cloud_name: CLOUD_NAME,
+            api_key: API_KEY,
+            api_secret: API_SECRET,
+        });
+        // delete the track from cloudinary
+        const { deleted } = await cloudinary_1.v2.uploader.destroy(path);
+        // if its deleted, delete it from the database
+        if (deleted) {
+            // delete the track from the database
+            await models_1.Track.deleteOne({ path: id });
+            console.log('deleted from cloudinary');
+        }
+        res.sendStatus(204);
     }
     catch (error) {
         console.log({ error });
@@ -121,6 +115,7 @@ const saveTrackUrl = async (req, res) => {
                 path: url,
             };
             await models_1.Track.create(track);
+            res.sendStatus(204);
         }
     }
     catch (error) {
