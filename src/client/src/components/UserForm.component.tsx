@@ -1,6 +1,8 @@
 import React from 'react';
 import { login, register } from '../apiService/api-service';
-const UserForm = (props : {setIsAuth : React.Dispatch<React.SetStateAction<boolean>>, setIsNewUser : React.Dispatch<React.SetStateAction<boolean>>}) => {
+import type { CurrentUser } from '../Interfaces';
+
+const UserForm = (props : {currentUser : CurrentUser | undefined, setCurrentUser : React.Dispatch<React.SetStateAction<CurrentUser | undefined>>, setIsAuth : React.Dispatch<React.SetStateAction<boolean>>, setIsNewUser : React.Dispatch<React.SetStateAction<boolean>>}) => {
 
   const [clicked, setClicked] = React.useState('');
   const [info, setInfo] = React.useState({
@@ -35,13 +37,17 @@ const UserForm = (props : {setIsAuth : React.Dispatch<React.SetStateAction<boole
 
     if (clicked === 'login') {
       login(info).then((res) => {
-        if (res) {
-          if (res.user.isNew === true) {
+        if (res.token) {
+          props.setCurrentUser(res);
+          if (res.user.isNewUser === true) {
             props.setIsNewUser(true);
           } else {
             props.setIsNewUser(false);
           }
           props.setIsAuth(true);
+        }
+        else {
+          alert('Invalid username or password');
         }
       })
     }
@@ -49,7 +55,10 @@ const UserForm = (props : {setIsAuth : React.Dispatch<React.SetStateAction<boole
     if (clicked === 'register') {
       register(info).then((res) => {
         if (res) {
+          console.log(res);
           setClicked('login');
+        } else {
+          alert('User already exists');
         }
       })
     }

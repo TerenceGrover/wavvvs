@@ -106,6 +106,7 @@ const register = async (infoObject: InfoObject)  : Promise<JSON> => {
 const updateUser = async (secondObject: AdditionalInfoObject) : Promise<number> => {
   const { name, bio, email, profile_pic_path } = secondObject;
   let user = { name, bio, email, profile_pic_path };
+  console.log(user)
   try {
     return fetch(baseURL + `/me`, {
       method: 'PUT',

@@ -21,7 +21,7 @@ describe
   })
 
   it('Should render the user profile pic', () => {
-    cy.get('img').should('have.attr', 'src', 'https://i.imgur.com/1Q9ZQ9r.jpg');
+    cy.get('#user-profile-pic').should('have.attr', 'src').and('include', 'https://www.cloudinary.com')
   })
 
   it('Should redirects to the profile page when the user clicks on the user icon', () => {

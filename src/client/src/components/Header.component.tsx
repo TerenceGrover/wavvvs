@@ -10,7 +10,7 @@ export default function Header( props: {currentUser: CurrentUser}) {
   const [loading , setLoading] = React.useState(true);
 
   useEffect(() => {
-    if (props.currentUser.name) return setLoading(false);
+    if (props.currentUser.profile_pic_path) return setLoading(false);
   }, [props.currentUser.profile_pic_path])
 
   return (
@@ -42,7 +42,7 @@ export default function Header( props: {currentUser: CurrentUser}) {
             }
             <Link to ="/profile" id='link-to-profile'>
             <img
-              id='user'
+              id='user-profile-pic'
               className="w-6 h-6 ml-3 rounded-full"
               src={props.currentUser.profile_pic_path}
               alt="User profile"

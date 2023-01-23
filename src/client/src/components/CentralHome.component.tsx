@@ -4,7 +4,7 @@ import React from 'react';
 
 export default function CentralHome() {
   return (
-    <div>
+    <div className='w-screen h-screen flex flex-col justify-center items-center'>
       <h1>Central Home</h1>
     </div>
   );

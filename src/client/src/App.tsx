@@ -1,9 +1,14 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import Home from './pages/Home';
 import ErrorPage from './pages/ErrorPage';
-import './index.css'
+import './index.css';
 import CreateUser from './pages/CreateUser';
 import MediaController from './components/MediaController.component';
 import Logo from './components/Logo.component';
@@ -12,7 +17,6 @@ import type { CurrentUser, TrackListItemType } from './Interfaces';
 import ProfilePage from './pages/ProfilePage';
 
 export default function App() {
-
   const [valid, setValid] = React.useState(false);
   const [isAuth, setIsAuth] = React.useState(false);
   const [isNewUser, setIsNewUser] = React.useState(false);
@@ -25,12 +29,12 @@ export default function App() {
 
   const activeTrack = trackList.find((track) => track.isLastActive) ?? null;
 
-  const playOrPauseTrackByID = (id : string) => {
+  const playOrPauseTrackByID = (id: string) => {
     setTrackList((tracks) => {
       // Loop trough the tracks and modify the status of th track you want to play/pause
       const modifiedTrackList = tracks.map((track) => {
         return track.waveformRef.id === id
-          ? { 
+          ? {
               ...track,
               isLastActive: track.isPlaying || true, // track.isPlaying being false here means you are clicking play.
               // the last active track is the last track on which you clicked play.
@@ -63,8 +67,7 @@ export default function App() {
       : lastActiveTrackIndex++;
 
     const nextTrack = trackList.at(lastActiveTrackIndex);
-    nextTrack &&
-    playOrPauseTrackByID(nextTrack.waveformRef.id);
+    nextTrack && playOrPauseTrackByID(nextTrack.waveformRef.id);
   };
 
   const playPrevTrack = () => {
@@ -90,7 +93,6 @@ export default function App() {
     );
   };
 
-
   //parseJWT
   const parseJWT = (token: string) => {
     const base64Url = token.split('.')[1];
@@ -99,34 +101,33 @@ export default function App() {
   };
 
   React.useEffect(() => {
-    checkUser().then((res : CurrentUser) => {
+    checkUser().then((res: CurrentUser) => {
       if (res) {
-        console.log(res)
-        console.log('AAAAAAAA JE SUIS UN TEST')
         setCurrentUser(res);
-        if (res.isNew) {
+        if (res.isNewUser === true || !res.hasOwnProperty('isNewUser')) {
           setIsNewUser(true);
+        } else {
+          setIsNewUser(false);
         }
-        setLoading(false)
+        setLoading(false);
       }
-    })
-  }, [valid])
+    });
+  }, [valid]);
 
   React.useEffect(() => {
     if (localStorage.getItem('token') === null) {
       console.log('no token');
-      setLoading(false)
+      setLoading(false);
       return;
     }
-    const token = localStorage.getItem('token');    
+    const token = localStorage.getItem('token');
     if (token) {
       const decodedJwt = parseJWT(token);
-      console.log(decodedJwt)
+      console.log(decodedJwt);
       if (decodedJwt.exp * 1000 < Date.now()) {
         console.log('token expired');
         localStorage.removeItem('token');
-      }
-      else {
+      } else {
         console.log('token valid');
         setValid(true);
       }
@@ -136,55 +137,70 @@ export default function App() {
   }, [isAuth]);
 
   return (
-    <div id='app-wrapper'>
+    <div id="app-wrapper">
       <Router>
-        {!loading
-          ?
-        <Routes>
-
-          <Route path="/" element={
-            valid 
-            ? 
-            (isNewUser
-            ?
-            <CreateUser setIsNewUser = {setIsNewUser}/>
-            :
-            <Home currentUser={currentUser!} setCurrentUser={setCurrentUser}  /> )
-            : 
-            <LandingPage setIsAuth = {setIsAuth} setIsNewUser={setIsNewUser}/>
-            } 
+        {!loading ? (
+          <Routes>
+            <Route
+              path="/"
+              element={
+                valid ? (
+                  isNewUser ? (
+                    <CreateUser setIsNewUser={setIsNewUser} />
+                  ) : (
+                    <Home
+                      currentUser={currentUser!}
+                      setCurrentUser={setCurrentUser}
+                    />
+                  )
+                ) : (
+                  <LandingPage
+                    currentUser={currentUser}
+                    setCurrentUser={setCurrentUser}
+                    setIsAuth={setIsAuth}
+                    setIsNewUser={setIsNewUser}
+                  />
+                )
+              }
             />
 
-          <Route path='/profile' 
-            element={
-              valid
-              ?
-              <ProfilePage currentUser={currentUser!} setCurrentUser={setCurrentUser}/>
-              :
-              <Navigate to='/' />
-            }
+            <Route
+              path="/profile"
+              element={
+                valid ? (
+                  <ProfilePage
+                    setTrackList={setTrackList}
+                    playOrPauseTrackByID={playOrPauseTrackByID}
+                    currentUser={currentUser!}
+                    setCurrentUser={setCurrentUser}
+                  />
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
             />
 
-          <Route element={<ErrorPage />} />
-        </Routes>
-          :
+            <Route element={<ErrorPage />} />
+          </Routes>
+        ) : (
           <main className="w-screen h-screen flex flex-col justify-center items-center">
-            <Logo/>
+            <Logo />
           </main>
-        }
+        )}
       </Router>
-      { (valid && !isNewUser) &&
-      <MediaController
-          activeTrack = {activeTrack}
-          playOrPauseTrackByID = {playOrPauseTrackByID}
-          playNextTrack = {playNextTrack}
-          playPrevTrack = {playPrevTrack}
-          isAudioMuted = {isAudioMuted}
-          setIsAudioMuted = {setIsAudioMuted}
-          pauseAllTracks = {pauseAllTracks}
-          repeat = {repeat}
-          setRepeat = {setRepeat}
-      />}
+      {valid && !isNewUser && (
+        <MediaController
+          activeTrack={activeTrack}
+          playOrPauseTrackByID={playOrPauseTrackByID}
+          playNextTrack={playNextTrack}
+          playPrevTrack={playPrevTrack}
+          isAudioMuted={isAudioMuted}
+          setIsAudioMuted={setIsAudioMuted}
+          pauseAllTracks={pauseAllTracks}
+          repeat={repeat}
+          setRepeat={setRepeat}
+        />
+      )}
     </div>
   );
 }

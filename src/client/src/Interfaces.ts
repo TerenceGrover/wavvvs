@@ -12,7 +12,7 @@ export interface CurrentUser {
   name: string;
   profile_pic_path: string;
   tracks: Array<any>;
-  isNew: boolean;
+  isNewUser: boolean;
 }
 
 export interface TrackType {
