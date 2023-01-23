@@ -5,7 +5,7 @@ import path from 'node:path';
 
 const fakeUsers = [
   {
-    isNew: false,
+    isNewUser: false,
     isPrivate: false,
     name: 'Mateo Presa',
     username: 'mateopresa',
@@ -15,7 +15,7 @@ const fakeUsers = [
     profile_pic_path: 'mateo_pic.jpeg',
   },
   {
-    isNew: true,
+    isNewUser: true,
     isPrivate: true,
     name: 'Random Producer',
     username: 'randomproducer',

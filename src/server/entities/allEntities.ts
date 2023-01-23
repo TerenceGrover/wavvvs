@@ -8,7 +8,7 @@ export interface ITrack {
 
 export interface IUser {
   isPrivate: boolean;
-  isNew: boolean;
+  isNewUser: boolean;
   name?: string;
   username?: string;
   email: string;
