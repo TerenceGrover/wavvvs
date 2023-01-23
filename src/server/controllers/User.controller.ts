@@ -86,7 +86,7 @@ const updateOne = async (req: Request, res: Response) => {
         isPrivate,
         name,
         bio,
-        profile_pic_path,
+        profile_pic_path
       };
       const user = await userServices.updateProfileInfo(userToUpdate);
       if (user) res.sendStatus(204);

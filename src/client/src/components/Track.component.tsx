@@ -7,9 +7,6 @@ import { MdClose } from 'react-icons/md';
 import DeleteWarningModal from './DeleteWarningModal.component';
 import React from 'react';
 
-const { REACT_APP_BACKEND_HOST } = process.env;
-const staticTrackURL = `${REACT_APP_BACKEND_HOST}/tracks/`;
-
 export default function Track(props : {
   trackMetaData : TrackType;
   track : TrackListItemType;
@@ -39,7 +36,7 @@ export default function Track(props : {
     const wavesurfer = WaveSurfer.create(options);
 
     //The load method handles the actual fetching of the audio
-    wavesurfer.load(staticTrackURL + path);
+    wavesurfer.load(props.track + path);
 
     waveformRef.id = path;
     waveformRef.wavesurfer = wavesurfer;
