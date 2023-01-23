@@ -1,6 +1,8 @@
 import React from 'react';
 import { updateUser } from '../apiService/api-service';
 import { uploadProfilePic } from '../Utils/functions';
+import { compressImage } from '../Utils/functions';
+
 
 export default function CreateUser(props : {setIsNewUser : React.Dispatch<React.SetStateAction<boolean>>}) {
 
@@ -24,6 +26,7 @@ export default function CreateUser(props : {setIsNewUser : React.Dispatch<React.
               profilePictureContainer.style.backgroundSize = 'cover';
               profilePictureContainer.style.backgroundPosition = 'center';
             }
+            compressImage(reader!.result!.toString())
           };
           reader.readAsDataURL(file);
           setPath_pre_upload(file);

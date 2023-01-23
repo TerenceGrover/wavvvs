@@ -102,7 +102,6 @@ export default function App() {
   };
 
   React.useEffect(() => {
-    setTimeout(() => {
       checkUser().then((res: CurrentUser) => {
         if (res) {
           setCurrentUser(res);
@@ -114,7 +113,6 @@ export default function App() {
           setLoading(false);
         }
       });
-    }, 1000);
   }, [valid]);
 
   React.useEffect(() => {

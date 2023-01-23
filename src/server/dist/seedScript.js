@@ -61,6 +61,7 @@ async function default_1() {
     //     console.log('Deleting files from public track directory...');
     await models_1.User.deleteMany({});
     await models_1.Track.deleteMany({});
+    console.log('DELETED EVERYTHIIIIING');
     //     console.log('Starting seed: all users and tracks deleted from database');
     //     for (const fakeUser of fakeUsers) {
     //       const user : IUser = fakeUser;

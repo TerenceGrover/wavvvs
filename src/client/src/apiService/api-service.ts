@@ -24,17 +24,6 @@ const getTracksFromBackend = () => {
   }
 };
 
-const deleteTrack = (id: string) => {
-  try {
-    return fetch(baseURL + `/delete/tracks/${id}`, {
-      method: 'DELETE',
-    }).then((res) => res.json());
-  } catch (error) {
-    console.log({ error });
-    return error;
-  }
-};
-
 
 const login = async (infoObject: InfoObject) : Promise<any> => {
   const { email, password } = infoObject;
@@ -135,7 +124,7 @@ const postTrack = async (trackURL : string) => {
 }
 
 // Retrieve all tracks from the backend
-export const getAllTracks = async () => {
+const getAllTracks = async () => {
   try {
     return fetch(baseURL + `/alltracks`, 
     {
@@ -151,10 +140,27 @@ export const getAllTracks = async () => {
   }
 };
 
+const deleteTrack = async (id: string) => {
+  try {
+    return fetch(baseURL + `/track`, {
+      method: 'DELETE',
+      headers: {
+        'Content-type': 'Application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      },
+      body: JSON.stringify({id: id})
+    }).then((res) => res.text());
+  } catch (error) {
+    console.log({ error });
+    return error;
+  }
+};
+
 export {
   postTrack,
   getUser,
   getTracksFromBackend,
+  getAllTracks,
   deleteTrack,
   login,
   register,
