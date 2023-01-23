@@ -24,6 +24,7 @@ export interface TrackType {
 }
 
 export interface TrackListItemType {
+  [x: string]: any;
   waveformRef:  any;
   isPlaying: boolean;
   isLastActive?: boolean;
