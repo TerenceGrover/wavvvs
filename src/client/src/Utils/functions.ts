@@ -35,3 +35,14 @@ export function compressImage(dataUrl : string) {
   }
 }
 
+
+export async function compressAndStoreFromUrl(url : string) {
+  return fetch(url).then((res) => res.blob())
+  .then((blob) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = function() {
+      compressImage(reader.result!.toString());
+    }
+  })
+}

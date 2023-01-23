@@ -37,7 +37,7 @@ export default function Header( props: {currentUser: CurrentUser | undefined}) {
             <img
               id='user-profile-pic'
               className="w-6 h-6 ml-3 rounded-full"
-              src={sessionStorage.getItem('image') || props.currentUser!.profile_pic_path}
+              src={sessionStorage.getItem('compressedImage') || props.currentUser!.profile_pic_path}
               alt="User profile"
             />
             </Link>

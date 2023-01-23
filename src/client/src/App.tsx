@@ -15,6 +15,7 @@ import Logo from './components/Logo.component';
 import { checkUser } from './apiService/api-service';
 import type { CurrentUser, TrackListItemType } from './Interfaces';
 import ProfilePage from './pages/ProfilePage';
+import { compressAndStoreFromUrl } from './Utils/functions';
 
 export default function App() {
   const [valid, setValid] = React.useState(false);
@@ -108,6 +109,7 @@ export default function App() {
           if (res.isNewUser === true || !res.hasOwnProperty('isNewUser')) {
             setIsNewUser(true);
           } else {
+            compressAndStoreFromUrl(res.profile_pic_path);
             setIsNewUser(false);
           }
           setLoading(false);
