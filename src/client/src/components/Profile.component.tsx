@@ -19,6 +19,7 @@ export default function Profile(props: {
 
   useEffect(() => {
     if (props.currentUser) {
+      console.log(props.currentUser);
       setIsLoading(false);
     }
   }, [props.currentUser]);
