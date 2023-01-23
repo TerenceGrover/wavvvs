@@ -1,4 +1,4 @@
-import { User } from '../models/models';
+import { User, Track } from '../models/models';
 import { IUser } from '../entities/allEntities';
 import { Request, Response } from 'express';
 import * as userServices from '../services/User.service';
@@ -22,7 +22,11 @@ const getUser = async (req: Request, res: Response) => {
       User.findOne({ _id: id }).then(function (user) {
         if (user) {
           user.password = '';
-          return res.status(200).send(user);
+          // seach in Track all the tracks that have the user id as uploaded by
+          Track.find({ uploadedBy: id }).then(function (tracks) {
+            user.tracks = tracks;
+            return res.status(200).send(user);
+          });
         } else return res.sendStatus(404);
       });
     }
