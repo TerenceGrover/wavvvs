@@ -118,7 +118,7 @@ const updateOne = async (req, res) => {
                 isPrivate,
                 name,
                 bio,
-                profile_pic_path,
+                profile_pic_path
             };
             const user = await userServices.updateProfileInfo(userToUpdate);
             if (user)

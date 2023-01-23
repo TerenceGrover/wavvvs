@@ -1,31 +1,6 @@
 import { CurrentUser, InfoObject, AdditionalInfoObject } from '../Interfaces';
 const baseURL = 'http://localhost:3001';
 
-const postTrack = async (
-  selectedFile: File,
-  setter: Function,
-  userID = 'mateopresa'
-) => {
-  try {
-    const formData = new FormData();
-    formData.append('track', selectedFile);
-    return fetch(baseURL + `/${userID}/tracks`, {
-      method: 'POST',
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setter((currentUser: { tracks: any }) => ({
-          ...currentUser,
-          tracks: [...currentUser.tracks, data],
-        }));
-      });
-  } catch (error) {
-    console.log({ error });
-    return error;
-  }
-};
-
 const getUser = (user: string): any => {
   try {
     return fetch(baseURL + `/users`, {
@@ -137,6 +112,23 @@ const checkUser = async () => {
         'Authorization': 'Bearer ' + token
       },
     }).then((res) => res.json())
+  }
+}
+
+const postTrack = async (trackURL : string) => {
+  try {
+    return fetch(baseURL + `/user/tracks`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'Application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      },
+      body: JSON.stringify({url: trackURL})
+    }).then((res) => res.json())
+  }
+  catch (error) {
+    console.log({ error });
+    return Promise.reject(error);
   }
 }
 

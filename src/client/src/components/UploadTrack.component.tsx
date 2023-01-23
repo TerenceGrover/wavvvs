@@ -3,8 +3,11 @@ import { CurrentUser } from '../Interfaces';
 import { useState } from 'react';
 import { FiUpload } from 'react-icons/fi';
 import { postTrack } from '../apiService/api-service';
+import { uploadTrack } from '../Utils/functions';
 
-export default function UploadTrack(props : { setCurrentUser : React.Dispatch<React.SetStateAction<CurrentUser | undefined>> }) {
+export default function UploadTrack(props : { 
+  currentUser: CurrentUser;
+  setCurrentUser : React.Dispatch<React.SetStateAction<CurrentUser | undefined>> }) {
   
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [thereIsAnError, setError] = useState<Boolean>(false);
@@ -13,7 +16,12 @@ export default function UploadTrack(props : { setCurrentUser : React.Dispatch<Re
     try {
       e.preventDefault();
       if(selectedFile) {
-        await postTrack(selectedFile, props.setCurrentUser);
+        uploadTrack(selectedFile).then(
+          (res) => {
+            console.log(res.url)
+            postTrack(res.url);
+          }
+        )
       }
     } catch (error) {
       console.log({ error });

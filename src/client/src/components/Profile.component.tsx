@@ -18,24 +18,24 @@ export default function Profile(props: {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    console.log(props.currentUser)
     if (props.currentUser) {
       setIsLoading(false);
     }
   }, [props.currentUser]);
 
   useEffect(() => {
-    if (props.currentUser.tracks.length > 0) {
+    if (props.currentUser.tracks && props.currentUser.tracks.length > 0) {
       const buff: any[] = [...props.currentUser.tracks];
       setTracksto3(buff.concat([1, 2, 3]).slice(0, 3));
     } else {
       setTracksto3([1, 2, 3]);
     }
-  }, [props.currentUser.tracks]);
+  }, [props.currentUser]);
 
   return (
-    <div className="h-screen w-screen ">
-      { isLoading 
+    <div className="h-screen w-screen">
+      <h1>HAAAAAAA</h1>
+      { !isLoading 
       ? 
       <div className="flex flex-col justify-start mt-14 items-center content-start p-6">
         <div className="">
@@ -67,6 +67,7 @@ export default function Profile(props: {
                 />
               ) : (
                 <UploadTrack
+                  currentUser={props.currentUser}
                   setCurrentUser={props.setCurrentUser}
                   key={track}
                 />
@@ -76,7 +77,7 @@ export default function Profile(props: {
         </div>
       </div>
       :
-      <main className=''>
+      <main className="flex flex-col justify-start mt-14 items-center content-start p-6">
         <Logo />
       </main>
           }

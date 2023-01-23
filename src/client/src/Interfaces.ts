@@ -42,4 +42,5 @@ export interface AdditionalInfoObject {
   bio?: string;
   email?: string;
   profile_pic_path?: string;
+  tracks?: Array<any>;
 }
