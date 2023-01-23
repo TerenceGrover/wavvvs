@@ -4,7 +4,7 @@ exports.Track = exports.User = void 0;
 const mongoose_1 = require("mongoose");
 const userSchema = new mongoose_1.Schema({
     isPrivate: Boolean,
-    isNew: Boolean,
+    isNewUser: Boolean,
     name: String,
     username: String,
     email: String,

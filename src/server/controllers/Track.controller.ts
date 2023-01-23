@@ -3,7 +3,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import { Track } from '../models/models';
 import { ITrack } from '../entities/allEntities';
 import jwt from 'jsonwebtoken';
-const { SECRET_KEY } = process.env;
+const { SECRET_KEY, CLOUD_NAME, API_KEY, API_SECRET } = process.env;
 
 const uploadTrack = async (req: Request, res: Response) => {
   try {
@@ -61,13 +61,20 @@ const deleteTrack = async (req: Request, res: Response) => {
     // get the id of the track to delete
     const { id } = req.body;
     // take the url of the track to delete from the database
-    const track: ITrack | null = await Track.findOne({ path: id });
+    const track: ITrack | null = await Track.findOne({ _id: id });
     // if the track doesn't exist, send 404
     if (!track) {
       return res.sendStatus(404);
     }
     // store the url of the track to delete
     const { path } = track;
+    // delete the track from cloudinary
+    // delete track from cloudinary using api key and secret
+    cloudinary.config({
+      cloud_name: CLOUD_NAME,
+      api_key: API_KEY,
+      api_secret: API_SECRET,
+    });
     // delete the track from cloudinary
     const { deleted } = await cloudinary.uploader.destroy(path);
     // if its deleted, delete it from the database
@@ -101,6 +108,7 @@ const saveTrackUrl = async (req: Request, res: Response) => {
         path: url,
       };
       await Track.create(track);
+      res.sendStatus(204);
     }
   } catch (error) {
     console.log({ error });
