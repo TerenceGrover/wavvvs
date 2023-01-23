@@ -61,7 +61,7 @@ router.get('/user', auth, User.getUser);
 router.post('/user/tracks', auth, Track.saveTrackUrl);
 
 // DELETE TRACK
-router.delete('/delete/tracks', auth, Track.deleteTrack);
+router.delete('/track', auth, Track.deleteTrack);
 
 // THIS NEVER GETS CALLED. DELETE ?
 router.get('/alltracks', auth, Track.getAllTracks);
