@@ -48,7 +48,6 @@ const login = async (infoObject: InfoObject) : Promise<any> => {
       body: JSON.stringify(user),
     }).then((res) => res.json())
     .then((data) => {
-      console.log(data)
       if (data.token){
         localStorage.setItem('token', data.token)
       }
@@ -80,7 +79,6 @@ const register = async (infoObject: InfoObject)  : Promise<JSON> => {
 const updateUser = async (secondObject: AdditionalInfoObject) : Promise<number> => {
   const { name, bio, email, profile_pic_path } = secondObject;
   let user = { name, bio, email, profile_pic_path };
-  console.log(user)
   try {
     return fetch(baseURL + `/me`, {
       method: 'PUT',
@@ -102,7 +100,6 @@ const updateUser = async (secondObject: AdditionalInfoObject) : Promise<number> 
 };
 
 const checkUser = async () => {
-  console.log('PORCAMADONNA');
   const token = localStorage.getItem('token')
   if (token){
     return fetch(baseURL + `/user`, {
@@ -112,7 +109,6 @@ const checkUser = async () => {
         'Authorization': 'Bearer ' + token
       },
     }).then((res) => {
-      console.log(res);
       return res.json()})
     .then((data) => {
       console.log(data)

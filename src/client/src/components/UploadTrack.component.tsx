@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { FiUpload } from 'react-icons/fi';
 import { postTrack } from '../apiService/api-service';
 import { uploadTrack } from '../Utils/functions';
+import { checkUser } from '../apiService/api-service';
 
 export default function UploadTrack(props : { 
   currentUser: CurrentUser;
@@ -16,10 +17,15 @@ export default function UploadTrack(props : {
     try {
       e.preventDefault();
       if(selectedFile) {
+        // Wait for the uploadTrack function to return the url of the uploaded file
         uploadTrack(selectedFile).then(
           (res) => {
             console.log(res.url)
             postTrack(res.url);
+            checkUser().then(
+              (res) => {
+                props.setCurrentUser(res);
+              })
           }
         )
       }
