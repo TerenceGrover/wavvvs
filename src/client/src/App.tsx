@@ -101,17 +101,19 @@ export default function App() {
   };
 
   React.useEffect(() => {
-    checkUser().then((res: CurrentUser) => {
-      if (res) {
-        setCurrentUser(res);
-        if (res.isNewUser === true || !res.hasOwnProperty('isNewUser')) {
-          setIsNewUser(true);
-        } else {
-          setIsNewUser(false);
+    setTimeout(() => {
+      checkUser().then((res: CurrentUser) => {
+        if (res) {
+          setCurrentUser(res);
+          if (res.isNewUser === true || !res.hasOwnProperty('isNewUser')) {
+            setIsNewUser(true);
+          } else {
+            setIsNewUser(false);
+          }
+          setLoading(false);
         }
-        setLoading(false);
-      }
-    });
+      });
+    }, 250);
   }, [valid]);
 
   React.useEffect(() => {

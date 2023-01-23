@@ -6,7 +6,6 @@ import { IoPlay, IoStop } from 'react-icons/io5';
 import { MdClose } from 'react-icons/md';
 import DeleteWarningModal from './DeleteWarningModal.component';
 import React from 'react';
-import { getAllTracks } from '../apiService/api-service.js';
 
 export default function Track(props : {
   trackMetaData : TrackType;
@@ -37,7 +36,7 @@ export default function Track(props : {
     const wavesurfer = WaveSurfer.create(options);
 
     //The load method handles the actual fetching of the audio
-    wavesurfer.load(props.track + path);
+    wavesurfer.load(props.trackMetaData.path);
 
     waveformRef.id = path;
     waveformRef.wavesurfer = wavesurfer;
