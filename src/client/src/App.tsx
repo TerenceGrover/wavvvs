@@ -15,6 +15,7 @@ import Logo from './components/Logo.component';
 import { checkUser } from './apiService/api-service';
 import type { CurrentUser, TrackListItemType } from './Interfaces';
 import ProfilePage from './pages/ProfilePage';
+import { compressAndStoreFromUrl, parseJWT } from './Utils/functions';
 
 export default function App() {
   const [valid, setValid] = React.useState(false);
@@ -34,6 +35,7 @@ export default function App() {
     setTrackList((tracks) => {
       // Loop trough the tracks and modify the status of th track you want to play/pause
       const modifiedTrackList = tracks.map((track) => {
+        console.log(track.waveformRef)
         return track.waveformRef.id === id
           ? {
               ...track,
@@ -94,13 +96,6 @@ export default function App() {
     );
   };
 
-  //parseJWT
-  const parseJWT = (token: string) => {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace('-', '+').replace('_', '/');
-    return JSON.parse(window.atob(base64));
-  };
-
   React.useEffect(() => {
       checkUser().then((res: CurrentUser) => {
         if (res) {
@@ -108,6 +103,7 @@ export default function App() {
           if (res.isNewUser === true || !res.hasOwnProperty('isNewUser')) {
             setIsNewUser(true);
           } else {
+            compressAndStoreFromUrl(res.profile_pic_path);
             setIsNewUser(false);
           }
           setLoading(false);
@@ -171,6 +167,7 @@ export default function App() {
                 valid ? (
                   <ProfilePage
                     setTrackList={setTrackList}
+                    trackList={trackList}
                     playOrPauseTrackByID={playOrPauseTrackByID}
                     currentUser={currentUser!}
                     setCurrentUser={setCurrentUser}

@@ -1,5 +1,3 @@
-import { pathToFileURL } from "url";
-
 export async function uploadProfilePic (file : File) : Promise<{url : string}> {
   const formData = new FormData();
   formData.append('file', file);
@@ -35,3 +33,20 @@ export function compressImage(dataUrl : string) {
   }
 }
 
+
+export async function compressAndStoreFromUrl(url : string) {
+  return fetch(url).then((res) => res.blob())
+  .then((blob) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = function() {
+      compressImage(reader.result!.toString());
+    }
+  })
+}
+
+export function parseJWT (token: string) {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace('-', '+').replace('_', '/');
+  return JSON.parse(window.atob(base64));
+};

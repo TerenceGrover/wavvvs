@@ -10,7 +10,8 @@ import type { CurrentUser } from '../Interfaces.js';
 
 export default function Track(props : {
   trackMetaData : TrackType;
-  track : TrackListItemType;
+  track : TrackListItemType | undefined;
+  trackList : TrackListItemType[];
   setTrackList : React.Dispatch<React.SetStateAction<TrackListItemType[]>>;
   playOrPauseTrackByID : (id : string) => void;
   setCurrentUser : React.Dispatch<React.SetStateAction<any>>;
@@ -39,6 +40,7 @@ export default function Track(props : {
 
     //The load method handles the actual fetching of the audio
     wavesurfer.load(props.trackMetaData.path);
+
 
     waveformRef.id = path;
     waveformRef.wavesurfer = wavesurfer;
@@ -78,6 +80,7 @@ export default function Track(props : {
   }, [path, props.setTrackList]);
 
   if (props.track) {
+    console.log(props.track)
     if (props.track.isPlaying) {
       props.track.waveformRef?.wavesurfer.play();
     } else {

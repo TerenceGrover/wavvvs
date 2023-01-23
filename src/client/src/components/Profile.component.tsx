@@ -9,7 +9,7 @@ import Logo from './Logo.component';
 
 export default function Profile(props: {
   currentUser: CurrentUser;
-  // trackList : TrackListItemType[];
+  trackList : TrackListItemType[];
   setTrackList : React.Dispatch<React.SetStateAction<TrackListItemType[]>>;
   playOrPauseTrackByID: (id: string) => void;
   setCurrentUser: React.Dispatch<React.SetStateAction<CurrentUser | undefined>>;
@@ -58,9 +58,12 @@ export default function Profile(props: {
             {tracksto3.map((track: any) => {
               return typeof track === 'object' ? (
                 <Track
-                currentUser={props.currentUser}
+                  currentUser={props.currentUser}
                   trackMetaData={track}
-                  track={track[0]}
+                  trackList={props.trackList}
+                  track={props.trackList.find(
+                    (trackListItem) => trackListItem.waveformRef.id === track.path
+                  )}
                   setTrackList={props.setTrackList}
                   playOrPauseTrackByID={props.playOrPauseTrackByID}
                   setCurrentUser={props.setCurrentUser}

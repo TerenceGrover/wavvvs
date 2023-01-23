@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { CurrentUser } from '../Interfaces';
 import { IoPlay, IoStop } from 'react-icons/io5';
 import {
   TbPlayerSkipBack,
