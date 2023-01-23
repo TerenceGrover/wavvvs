@@ -102,6 +102,7 @@ const updateUser = async (secondObject: AdditionalInfoObject) : Promise<number> 
 };
 
 const checkUser = async () => {
+  console.log('PORCAMADONNA');
   const token = localStorage.getItem('token')
   if (token){
     return fetch(baseURL + `/user`, {
@@ -111,6 +112,7 @@ const checkUser = async () => {
         'Authorization': 'Bearer ' + token
       },
     }).then((res) => {
+      console.log(res);
       return res.json()})
     .then((data) => {
       console.log(data)
@@ -128,7 +130,7 @@ const postTrack = async (trackURL : string) => {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       },
       body: JSON.stringify({url: trackURL})
-    }).then((res) => res.json())
+    }).then((res) => res.text())
   }
   catch (error) {
     console.log({ error });

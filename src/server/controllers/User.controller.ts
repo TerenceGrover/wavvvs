@@ -19,16 +19,29 @@ const getUser = async (req: Request, res: Response) => {
       }
       const id = decoded.id;
       // Fetch the user by id
-      User.findOne({ _id: id }).then(function (user) {
-        if (user) {
-          user.password = '';
-          // seach in Track all the tracks that have the user id as uploaded by
-          Track.find({ uploadedBy: id }).then(function (tracks) {
-            user.tracks = tracks;
-            return res.status(200).send(user);
+      const user = await User.findOne({ _id: id });
+      let userToSend: any = {};
+      if (user) {
+        userToSend.username = user.username;
+        userToSend.email = user.email;
+        userToSend.isPrivate = user.isPrivate;
+        userToSend.isNewUser = user.isNewUser;
+        userToSend.profile_pic_path = user.profile_pic_path;
+        userToSend.bio = user.bio;
+        // user.password = '';
+        // seach in Track all the tracks that have the user id as uploaded by
+        const tracks = await Track.find({ uploaded_by: id });
+        let arrOfTracks: any = [];
+        tracks.forEach((track) => {
+          arrOfTracks.push({
+            _id: track._id,
+            path: track.path,
           });
-        } else return res.sendStatus(404);
-      });
+        });
+        userToSend.tracks = arrOfTracks;
+        console.log(userToSend);
+        return res.status(200).send(userToSend);
+      } else return res.sendStatus(404);
     }
     // return res.send(500);
   } catch (error) {
@@ -90,7 +103,7 @@ const updateOne = async (req: Request, res: Response) => {
         isPrivate,
         name,
         bio,
-        profile_pic_path
+        profile_pic_path,
       };
       const user = await userServices.updateProfileInfo(userToUpdate);
       if (user) res.sendStatus(204);

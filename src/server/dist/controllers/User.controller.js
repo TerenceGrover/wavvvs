@@ -45,18 +45,31 @@ const getUser = async (req, res) => {
             }
             const id = decoded.id;
             // Fetch the user by id
-            models_1.User.findOne({ _id: id }).then(function (user) {
-                if (user) {
-                    user.password = '';
-                    // seach in Track all the tracks that have the user id as uploaded by
-                    models_1.Track.find({ uploadedBy: id }).then(function (tracks) {
-                        user.tracks = tracks;
-                        return res.status(200).send(user);
+            const user = await models_1.User.findOne({ _id: id });
+            let userToSend = {};
+            if (user) {
+                userToSend.username = user.username;
+                userToSend.email = user.email;
+                userToSend.isPrivate = user.isPrivate;
+                userToSend.isNewUser = user.isNewUser;
+                userToSend.profile_pic_path = user.profile_pic_path;
+                userToSend.bio = user.bio;
+                // user.password = '';
+                // seach in Track all the tracks that have the user id as uploaded by
+                const tracks = await models_1.Track.find({ uploaded_by: id });
+                let arrOfTracks = [];
+                tracks.forEach((track) => {
+                    arrOfTracks.push({
+                        _id: track._id,
+                        path: track.path,
                     });
-                }
-                else
-                    return res.sendStatus(404);
-            });
+                });
+                userToSend.tracks = arrOfTracks;
+                console.log(userToSend);
+                return res.status(200).send(userToSend);
+            }
+            else
+                return res.sendStatus(404);
         }
         // return res.send(500);
     }
@@ -122,7 +135,7 @@ const updateOne = async (req, res) => {
                 isPrivate,
                 name,
                 bio,
-                profile_pic_path
+                profile_pic_path,
             };
             const user = await userServices.updateProfileInfo(userToUpdate);
             if (user)
