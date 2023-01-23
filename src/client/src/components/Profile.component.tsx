@@ -35,7 +35,6 @@ export default function Profile(props: {
 
   return (
     <div className="h-screen w-screen">
-      <h1>HAAAAAAA</h1>
       { !isLoading 
       ? 
       <div className="flex flex-col justify-start mt-14 items-center content-start p-6">
@@ -59,6 +58,7 @@ export default function Profile(props: {
             {tracksto3.map((track: any) => {
               return typeof track === 'object' ? (
                 <Track
+                currentUser={props.currentUser}
                   trackMetaData={track}
                   track={track[0]}
                   setTrackList={props.setTrackList}

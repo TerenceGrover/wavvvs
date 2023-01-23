@@ -6,6 +6,7 @@ import { IoPlay, IoStop } from 'react-icons/io5';
 import { MdClose } from 'react-icons/md';
 import DeleteWarningModal from './DeleteWarningModal.component';
 import React from 'react';
+import type { CurrentUser } from '../Interfaces.js';
 
 export default function Track(props : {
   trackMetaData : TrackType;
@@ -13,6 +14,7 @@ export default function Track(props : {
   setTrackList : React.Dispatch<React.SetStateAction<TrackListItemType[]>>;
   playOrPauseTrackByID : (id : string) => void;
   setCurrentUser : React.Dispatch<React.SetStateAction<any>>;
+  currentUser : CurrentUser;
 }) {
   const [open, setOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
@@ -100,6 +102,7 @@ export default function Track(props : {
   };
 
   return (
+
     <div
       onMouseOver={handleMouseOver}
       onMouseOut={handleMouseOut}
@@ -112,7 +115,7 @@ export default function Track(props : {
         setCurrentUser={props.setCurrentUser}
       />
       <div className="relative flex justify-between w-full">
-        {isHovering && uploaded_by === 'mateopresa' ? (
+        {isHovering && uploaded_by === props.currentUser._id ? (
           <MdClose
             className="text-neutral-300 p-0 m-0 cursor-pointer hover:text-red-500 ease-in transition duration-100"
             onClick={handleDelete}

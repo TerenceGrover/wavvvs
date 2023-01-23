@@ -27,17 +27,19 @@ function Home(props : {currentUser: CurrentUser, setCurrentUser: React.Dispatch<
   if (thereIsAnError) return <ErrorPage />;
 
   return (
-    isLoading 
-    ?
-    <main className="w-screen h-screen flex flex-col justify-center items-center">
-      <Logo/>
-    </main>
-    :
-    <div className="h-screen w-screen bg-neutral-900 flex flex-col">
+    <div id='home-wrapper'>
       <Header currentUser={props.currentUser} />
-      {props.currentUser && (
-        <CentralHome />
-      )} 
+      {isLoading 
+      ?
+      <main className="w-screen h-screen flex flex-col justify-center items-center">
+        <Logo/>
+      </main>
+      :
+      <div className="h-screen w-screen bg-neutral-900 flex flex-col">
+        {props.currentUser && (
+          <CentralHome />
+        )} 
+      </div>}
     </div>
   );
 }
