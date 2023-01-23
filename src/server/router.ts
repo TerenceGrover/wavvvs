@@ -23,6 +23,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 const router = express.Router();
 
+
+/** ---------- NON - PROTECTED ROUTES ---------- **/
+
 // LOGIN & REGISTER
 router.post('/login', User.loginOne);
 
@@ -31,25 +34,38 @@ router.post('/register', User.registerOne);
 // GET ANOTHER USER INFO (protected only if user has set isPrivate to true so im gonna check it inside.)
 router.get('/user/:username', User.getAnotherUser);
 
+
 /** ------------ PROTECTED ROUTES ------------ **/
+
+
+/* -- USER RELATED ROUTES --*/
 
 // UPDATE PROFILE INFO
 router.put('/me', auth, User.updateOne);
 
-// POST TRACK 
-router.post('/user/tracks',auth,checkFileSize,upload.single('track'),Track.uploadTrack);
-
-// DELETE TRACK
-router.delete('/delete/tracks', auth, Track.deleteTrack);
+// DELETE USER
+router.delete('/user', auth, User.deleteUser);
 
 // GET TRACKS OF USER 
 router.get('/user/tracks', auth, Track.getUserTracks);
 
+// GET USER INFO
+router.get('/user', auth, User.getUser);
+
+/* -- TRACKS RELATED ROUTES --*/
+
+// // POST TRACK 
+// router.post('/user/tracks',auth,checkFileSize,upload.single('track'),Track.uploadTrack);
+
+// POST TRACK 
+router.post('/user/tracks', auth, Track.saveTrackUrl);
+
+// DELETE TRACK
+router.delete('/delete/tracks', auth, Track.deleteTrack);
+
 // THIS NEVER GETS CALLED. DELETE ?
 router.get('/alltracks', auth, Track.getAllTracks);
 
-// GET USER INFO
-router.get('/user', auth, User.getUser);
 
 
 

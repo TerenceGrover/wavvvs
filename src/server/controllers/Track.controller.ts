@@ -1,8 +1,8 @@
 import * as fs from 'node:fs/promises';
 import { Request, Response } from 'express';
 import path from 'node:path';
-import { Track } from '../models/models.js';
-import { ITrack } from '../entities/allEntities.js';
+import { Track } from '../models/models';
+import { ITrack } from '../entities/allEntities';
 import jwt from 'jsonwebtoken';
 const { SECRET_KEY } = process.env;
 
@@ -73,4 +73,28 @@ const deleteTrack = async (req: Request, res: Response) => {
   }
 };
 
-export { uploadTrack, getAllTracks, deleteTrack, getUserTracks };
+const saveTrackUrl = async (req: Request, res: Response) => {
+  try {
+    if (req.headers && req.headers.authorization) {
+      console.log(req.headers.authorization);
+      let authorization = req.headers.authorization.split(' ')[1],
+        decoded: any;
+      try {
+        decoded = jwt.verify(authorization, SECRET_KEY!);
+      } catch (e) {
+        return res.status(401).send('unauthorized');
+      }
+      const id = decoded.id;
+      const { url } = req.body;
+      const track: ITrack = {
+        uploaded_by: id,
+        path: url,
+      }
+      await Track.create(track);
+    }
+  } catch (error) {
+    console.log({ error });
+    res.status(500).send({ error });
+  }
+};
+export { uploadTrack, getAllTracks, deleteTrack, getUserTracks, saveTrackUrl};

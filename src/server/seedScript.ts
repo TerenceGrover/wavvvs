@@ -1,5 +1,5 @@
 import { User, Track } from './models/models';
-import { ITrack, IUser } from './entities/allEntities.js';
+import { ITrack, IUser } from './entities/allEntities';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 

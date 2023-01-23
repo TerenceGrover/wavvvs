@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 import { ITrack, IUser } from '../entities/allEntities.js';
 
 const userSchema = new Schema<IUser>({

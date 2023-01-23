@@ -1,7 +1,7 @@
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
-import { Track } from './models/models.js';
-import { ITrack } from './entities/allEntities.js';
+import { Track } from './models/models';
+import { ITrack } from './entities/allEntities';
 
 const EVERY_30SECONDS = 30000;
 const DAY_IN_MS = 86400000;
