@@ -82,7 +82,7 @@ const registerOne = async (req, res) => {
         const { username, email, password } = req.body;
         const userToRegister = {
             isPrivate: false,
-            isNew: true,
+            isNewUser: true,
             username,
             email,
             password,
@@ -114,7 +114,7 @@ const updateOne = async (req, res) => {
             // here whatever is not being passed in req body will be undefined.
             const userToUpdate = {
                 _id: id,
-                isNew: false,
+                isNewUser: false,
                 isPrivate,
                 name,
                 bio,
