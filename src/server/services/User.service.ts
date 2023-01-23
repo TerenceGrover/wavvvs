@@ -18,7 +18,6 @@ export async function register(user: DocumentDefinition<IUser>) {
     user.password = await bcrypt.hash(user.password, saltRounds);
   }
   try {
-    // setting isNew to true so next time he logs in he will be automatically redirected to modify user page.
     const createdUser = await User.create(user);
     if (createdUser) {
       createdUser.toJSON();
@@ -47,16 +46,16 @@ export async function login(user:any) {
         }
       );
       let returnUser;
-      if (foundUser.isNew) {
+      if (foundUser.isNewUser) {
         returnUser = {
-          user: { email: foundUser.email, isNew: foundUser.isNew },
+          user: { email: foundUser.email, isNewUser: foundUser.isNewUser },
           token: token,
         };
       } else {
         returnUser = {
           user: {
             email: foundUser.email,
-            isNew: foundUser.isNew,
+            isNewUser: foundUser.isNewUser,
             bio: foundUser.bio,
             profile_pic_path: foundUser.profile_pic_path,
           },
@@ -82,8 +81,8 @@ export async function updateProfileInfo(user:any) {
     foundUser.bio = user.bio || foundUser.bio;
     foundUser.profile_pic_path = user.profile_pic_path || foundUser.profile_pic_path;
     foundUser.isPrivate = user.isPrivate || foundUser.isPrivate;
-    // change isNew to false since now it has logged in one time and from now on he will be redirected to dashboard
-    foundUser.isNew = false;
+    // change isNewUser to false since now it has logged in one time and from now on he will be redirected to dashboard
+    foundUser.isNewUser = false;
     foundUser.save();
     return foundUser;
   } catch (error) {
