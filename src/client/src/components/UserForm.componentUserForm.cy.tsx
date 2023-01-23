@@ -1,5 +1,6 @@
 import React from 'react'
 import UserForm from './UserForm.component'
+import { newdummyUser } from '../../cypress/fixtures/dummyUser'
 
 describe('<UserForm />', () => {
 
@@ -13,11 +14,11 @@ describe('<UserForm />', () => {
 
   it('renders', () => {
     // see: https://on.cypress.io/mounting-react
-    cy.mount(<UserForm setIsAuth={setIsAuth} setIsNewUser={setIsAuth} />)
+    cy.mount(<UserForm currentUser={newdummyUser} setCurrentUser={() => {}} setIsAuth={setIsAuth} setIsNewUser={setIsAuth} />)
   })
 
   beforeEach(() => {
-    cy.mount(<UserForm setIsAuth={setIsAuth} setIsNewUser={setIsAuth} />)
+    cy.mount(<UserForm currentUser={newdummyUser} setCurrentUser={() => {}} setIsAuth={setIsAuth} setIsNewUser={setIsAuth} />)
   })
 
   it('Clicking each buttons hide the others', () => {

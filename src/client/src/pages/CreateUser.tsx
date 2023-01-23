@@ -42,7 +42,6 @@ export default function CreateUser(props : {setIsNewUser : React.Dispatch<React.
           updateUser({ name, bio, profile_pic_path : res.url })
         }
       )
-      
       props.setIsNewUser(false);
     } else {
       alert('Please setup all fields before submitting.');
