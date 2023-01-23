@@ -4,7 +4,7 @@ import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import router from './router';
 import connect from './models/index';
-import seedScript from './seedScript';
+import deleteEverythingFromDB from './seedScript';
 import removeExpiredTracksCronJob from './cronJob';
 
 const { PORT, HOST_NAME } = process.env;
@@ -33,7 +33,9 @@ app.get('*', (req: Request, res: Response) => {
   res.send('Not Found');
 });
 
-seedScript();
+// UNCOMMENT THIS if u want to wipe the DB
+// deleteEverythingFromDB();
+
 
 const intervalID = removeExpiredTracksCronJob();
 
