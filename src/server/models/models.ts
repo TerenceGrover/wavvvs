@@ -3,7 +3,7 @@ import { ITrack, IUser } from '../entities/allEntities.js';
 
 const userSchema = new Schema<IUser>({
   isPrivate: Boolean,
-  isNew: Boolean,
+  isNewUser: Boolean,
   name: String,
   username: String,
   email: String,
