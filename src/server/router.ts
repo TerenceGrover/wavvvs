@@ -52,10 +52,10 @@ router.get('/user/tracks', auth, Track.getUserTracks);
 // GET USER INFO
 router.get('/user', auth, User.getUser);
 
-/* -- TRACKS RELATED ROUTES --*/
 
-// // POST TRACK 
-// router.post('/user/tracks',auth,checkFileSize,upload.single('track'),Track.uploadTrack);
+
+
+/* -- TRACKS RELATED ROUTES --*/
 
 // POST TRACK 
 router.post('/user/tracks', auth, Track.saveTrackUrl);

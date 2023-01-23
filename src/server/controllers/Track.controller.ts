@@ -68,20 +68,26 @@ const deleteTrack = async (req: Request, res: Response) => {
     }
     // store the url of the track to delete
     const { path } = track;
-    // delete the track from cloudinary
-    // delete track from cloudinary using api key and secret
+    // using api key and secret
     cloudinary.config({
       cloud_name: CLOUD_NAME,
       api_key: API_KEY,
       api_secret: API_SECRET,
     });
     // delete the track from cloudinary
-    const { deleted } = await cloudinary.uploader.destroy(path);
+    // get last part of the url
+    const lastPartOfUrl = path.split('/').pop();
+    const lastPartOfUrlWithoutExtension = lastPartOfUrl?.split('.').shift();
+    console.log(lastPartOfUrlWithoutExtension);
+    const buff = await cloudinary.uploader.destroy(
+      lastPartOfUrlWithoutExtension!,
+      { type: 'upload', resource_type: 'video' }
+    );
     // if its deleted, delete it from the database
-    if (deleted) {
+    if (buff.result === 'ok') {
       // delete the track from the database
-      await Track.deleteOne({ path: id });
-      console.log('deleted from cloudinary');
+      await Track.deleteOne({ _id: id });
+      console.log('deleted from cloudinary AND database');
     }
     res.sendStatus(204);
   } catch (error) {
