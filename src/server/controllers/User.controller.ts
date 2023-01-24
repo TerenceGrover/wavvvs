@@ -16,6 +16,7 @@ const getUser = async (req: Request, res: Response) => {
       let userToSend: any = {};
       if (user) {
         userToSend = {
+          _id: user._id.toString(),
           username: user.username,
           email: user.email,
           name: user.name,
@@ -39,6 +40,7 @@ const getUser = async (req: Request, res: Response) => {
             size: track.size,
             date: track.date,
             likes: track.likes,
+            liked_by: track.liked_by,
           });
         });
         userToSend.tracks = arrOfTracks;
@@ -143,6 +145,7 @@ const getAnotherUser = async (req: Request, res: Response) => {
         size: track.size,
         date: track.date,
         likes: track.likes,
+        liked_by: track.liked_by,
       });
     });
     userToSend.tracks = arrOfTracks;

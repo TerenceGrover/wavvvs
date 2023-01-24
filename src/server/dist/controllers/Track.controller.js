@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.likeTrack = exports.saveTrackUrl = exports.deleteTrack = exports.getAllTracks = void 0;
+exports.TESTsaveTrackUrl = exports.likeTrack = exports.saveTrackUrl = exports.deleteTrack = exports.getAllTracks = void 0;
 const models_1 = require("../models/models");
 const general_util_1 = require("../utils/general.util");
 const getAllTracks = async (req, res) => {
@@ -149,3 +149,37 @@ const likeTrack = async (req, res) => {
     }
 };
 exports.likeTrack = likeTrack;
+const TESTsaveTrackUrl = async (req, res) => {
+    try {
+        const decoded = (0, general_util_1.getIdOfUserFromJWT)(req);
+        if (decoded) {
+            const id = decoded.id;
+            const { url } = req.body;
+            const { title } = req.body;
+            const twoDaysAgo = new Date(Date.now());
+            twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+            const newTimestamp = twoDaysAgo.getTime();
+            const track = {
+                likes: 0,
+                liked_by: [],
+                uploaded_by: id,
+                path: url,
+                date: newTimestamp,
+                title: title,
+            };
+            await models_1.Track.create(track);
+            res.sendStatus(204);
+        }
+        else {
+            // getIdOfUserFromJWT returns null if the token is invalid so we send 401
+            res.status(401).send('Unauthorized');
+        }
+    }
+    catch (error) {
+        // TODO : notify user of the error (means send back the error)
+        // TODO : notify the developer of the error (maybe email the error)
+        console.log({ error });
+        res.status(500).send({ error });
+    }
+};
+exports.TESTsaveTrackUrl = TESTsaveTrackUrl;
