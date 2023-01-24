@@ -16,4 +16,6 @@ export interface IUser {
   bio?: string;
   profile_pic_path?: string;
   tracks?: ITrack[],
+  followers: string[];
+  isPremium: boolean;
 }

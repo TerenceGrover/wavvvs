@@ -63,6 +63,8 @@ router.delete('/user', auth_1.auth, User.deleteUser);
 router.get('/user/tracks', auth_1.auth, Track.getUserTracks);
 // GET USER INFO
 router.get('/user', auth_1.auth, User.getUser);
+// GET PROFILE INFO FROM SONG ID
+router.get('/user/tracks/:id', auth_1.auth, User.getUserFromSongId);
 /* -- TRACKS RELATED ROUTES --*/
 // POST TRACK 
 router.post('/user/tracks', auth_1.auth, Track.saveTrackUrl);
