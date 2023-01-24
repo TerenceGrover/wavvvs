@@ -10,6 +10,8 @@ const userSchema = new Schema<IUser>({
   password: String,
   bio: String,
   profile_pic_path: String,
+  followers: [String],
+  isPremium: Boolean,
 });
 
 const trackSchema = new Schema<ITrack>({

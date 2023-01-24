@@ -53,6 +53,8 @@ router.get('/user/tracks', auth, Track.getUserTracks);
 // GET USER INFO
 router.get('/user', auth, User.getUser);
 
+// GET PROFILE INFO FROM SONG ID
+router.get('/user/tracks/:id', auth, User.getUserFromSongId);
 
 /* -- TRACKS RELATED ROUTES --*/
 

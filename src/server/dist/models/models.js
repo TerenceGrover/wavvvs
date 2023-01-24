@@ -11,6 +11,8 @@ const userSchema = new mongoose_1.Schema({
     password: String,
     bio: String,
     profile_pic_path: String,
+    followers: [String],
+    isPremium: Boolean,
 });
 const trackSchema = new mongoose_1.Schema({
     uploaded_by: String,

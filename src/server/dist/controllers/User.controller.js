@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.getAnotherUser = exports.updateOne = exports.registerOne = exports.loginOne = exports.getUser = void 0;
+exports.getUserFromSongId = exports.deleteUser = exports.getAnotherUser = exports.updateOne = exports.registerOne = exports.loginOne = exports.getUser = void 0;
 const models_1 = require("../models/models");
 const userServices = __importStar(require("../services/User.service"));
 const general_util_1 = require("../utils/general.util");
@@ -45,6 +45,8 @@ const getUser = async (req, res) => {
                     isNewUser: user.isNewUser,
                     profile_pic_path: user.profile_pic_path,
                     bio: user.bio,
+                    followers: user.followers.length,
+                    isPremium: user.isPremium,
                     tracks: [],
                 };
                 // seach in Track all the tracks that have the user id as uploaded by
@@ -97,6 +99,8 @@ const registerOne = async (req, res) => {
             username,
             email,
             password,
+            followers: [],
+            isPremium: false,
         };
         const user = await userServices.register(userToRegister);
         res.status(200).send(user);
@@ -150,6 +154,8 @@ const getAnotherUser = async (req, res) => {
             username: userToFind.username,
             email: userToFind.email,
             profile_pic_path: userToFind.profile_pic_path,
+            followers: userToFind.followers,
+            isPremium: userToFind.isPremium,
             isPrivate: userToFind.isPrivate,
             // TODO : tracks ??
         };
@@ -193,3 +199,45 @@ const deleteUser = async (req, res) => {
     }
 };
 exports.deleteUser = deleteUser;
+const getUserFromSongId = async (req, res) => {
+    try {
+        console.log('inizio');
+        const songId = req.params.id;
+        console.log(songId);
+        const song = await models_1.Track.findOne({ _id: songId });
+        console.log(song);
+        const ownerId = song === null || song === void 0 ? void 0 : song.uploaded_by;
+        console.log(ownerId);
+        const owner = await models_1.User.findOne({ _id: ownerId === null || ownerId === void 0 ? void 0 : ownerId.toString() });
+        if (owner) {
+            const userToSend = {
+                name: owner.name,
+                bio: owner.bio,
+                username: owner.username,
+                profile_pic_path: owner.profile_pic_path,
+                followers: owner.followers.length,
+                isPremium: owner.isPremium,
+            };
+            if (owner.isPrivate) {
+                // check if the user who made the request follows the owner of the song.
+                const decoded = (0, general_util_2.getIdOfUserFromJWT)(req);
+                if (decoded) {
+                    const user = await models_1.User.findOne({ _id: decoded.id });
+                    if (user) {
+                        if (owner.followers.includes(user._id.toString())) {
+                            return res.status(200).send(userToSend);
+                        }
+                    }
+                }
+                return res.status(401).send({ error: 'Private' });
+            }
+            return res.status(200).send(userToSend);
+        }
+        return res.status(404).send({ error: 'User not found' });
+    }
+    catch (error) {
+        console.log(error);
+        return res.status(500).send({ error: (0, general_util_1.getErrorMessage)(error) });
+    }
+};
+exports.getUserFromSongId = getUserFromSongId;
