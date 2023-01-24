@@ -7,9 +7,7 @@ import React from 'react';
 import Logo from './Logo.component';
 import { Context } from '../Utils/Context';
 
-export default function Profile(props: {
-  playOrPauseTrackByID: (id: string) => void;
-}) {
+export default function Profile() {
 
   const { currentUser, trackList} = React.useContext(Context);
 
@@ -61,7 +59,6 @@ export default function Profile(props: {
                       (trackListItem) =>
                         trackListItem.waveformRef.id === track.path
                     )}
-                    playOrPauseTrackByID={props.playOrPauseTrackByID}
                     key={track.path}
                   />
                 ) : (

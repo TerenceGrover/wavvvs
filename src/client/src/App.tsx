@@ -18,6 +18,8 @@ import { compressAndStoreFromUrl, parseJWT } from './Utils/functions';
 import { Context } from './Utils/Context';
 
 export default function App() {
+
+  const [mobile, setMobile] = React.useState(false);
   const [valid, setValid] = React.useState(false);
   const [isAuth, setIsAuth] = React.useState(false);
   const [isNewUser, setIsNewUser] = React.useState(false);
@@ -36,6 +38,19 @@ export default function App() {
     tracks: [],
     isNewUser: true,
   });
+
+  React.useEffect(() => {
+    const checkIfMobile = () => {
+      if (window.innerWidth <= 768) {
+        setMobile(true);
+      } else {
+        setMobile(false);
+      }
+    };
+    window.addEventListener('resize', checkIfMobile);
+    checkIfMobile();
+    return () => window.removeEventListener('resize', checkIfMobile);
+  }, []);
 
   const activeTrack = trackList.find((track) => track.isLastActive) ?? null;
 
@@ -118,7 +133,8 @@ export default function App() {
   }, [valid]);
 
   React.useEffect(() => {
-    if (localStorage.getItem('token') === (null || undefined)) {
+    console.log(localStorage.getItem('token'))
+    if (localStorage.getItem('token') === null || localStorage.getItem('token') === undefined) {
       console.log('no token');
       setIsAuth(false);
       setLoading(false);
@@ -127,6 +143,7 @@ export default function App() {
       const token = localStorage.getItem('token')!;
       const decodedJwt = parseJWT(token);
       console.log(decodedJwt);
+
       if (decodedJwt.exp * 1000 < Date.now()) {
         console.log('token expired');
         localStorage.removeItem('token');
@@ -157,6 +174,7 @@ export default function App() {
         setIsAudioMuted,
         repeat,
         setRepeat,
+        playOrPauseTrackByID,
       }}
     >
       <div id="app-wrapper">
@@ -182,7 +200,7 @@ export default function App() {
                 path="/profile"
                 element={
                   valid ? (
-                    <ProfilePage playOrPauseTrackByID={playOrPauseTrackByID} />
+                    <ProfilePage />
                   ) : (
                     <Navigate to="/" />
                   )

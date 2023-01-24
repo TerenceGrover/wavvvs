@@ -33,3 +33,7 @@ export const RepeatContext = React.createContext({
   repeat: false,
   setRepeat: (repeat: boolean) => {},
 });
+
+export const playContext = React.createContext({
+  playOrPauseTrackByID: (id: string) => {},
+});

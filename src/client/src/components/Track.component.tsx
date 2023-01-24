@@ -11,12 +11,11 @@ import { Context } from '../Utils/Context';
 export default function Track(props: {
   trackMetaData: TrackType;
   track: TrackListItemType | undefined;
-  playOrPauseTrackByID: (id: string) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
 
-  const { currentUser, setTrackList } = React.useContext(Context);
+  const { currentUser, setTrackList, playOrPauseTrackByID } = React.useContext(Context);
 
   const waveformRef: any = useRef('waveform');
 
@@ -85,7 +84,7 @@ export default function Track(props: {
   }
 
   const handleClick = () => {
-    props.playOrPauseTrackByID(path);
+    playOrPauseTrackByID(path);
   };
 
   return (
