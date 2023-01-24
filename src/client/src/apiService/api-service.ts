@@ -101,7 +101,7 @@ const checkUser = async () => {
   }
 };
 
-const postTrack = async (trackURL: string) => {
+const postTrack = async (trackURL: string, name: string) => {
   try {
     return fetch(baseURL + `/user/tracks`, {
       method: 'POST',
@@ -109,7 +109,7 @@ const postTrack = async (trackURL: string) => {
         'Content-type': 'Application/json',
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       },
-      body: JSON.stringify({ url: trackURL }),
+      body: JSON.stringify({ url: trackURL, title: name }),
     }).then((res) => res.text());
   } catch (error) {
     console.log({ error });

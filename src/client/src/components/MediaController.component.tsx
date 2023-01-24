@@ -12,12 +12,11 @@ import { Context } from '../Utils/Context';
 
 export default function MediaController(props: {
   activeTrack: any;
-  playOrPauseTrackByID: any;
   playNextTrack: any;
   playPrevTrack: any;
   pauseAllTracks: any;
 }) {
-  const { isAudioMuted, setIsAudioMuted, repeat, setRepeat } =
+  const { isAudioMuted, setIsAudioMuted, repeat, setRepeat, playOrPauseTrackByID } =
     React.useContext(Context);
 
   useEffect(() => {
@@ -34,7 +33,7 @@ export default function MediaController(props: {
   }, [isAudioMuted, repeat, props]);
 
   const handlePlayClick = () => {
-    props.playOrPauseTrackByID(props.activeTrack.waveformRef.id);
+    playOrPauseTrackByID(props.activeTrack.waveformRef.id);
   };
 
   const handleNextClick = () => {
