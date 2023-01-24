@@ -1,36 +1,50 @@
 import { Request, Response } from 'express';
 import { Track } from '../models/models';
 import { ITrack } from '../entities/allEntities';
-import { getIdOfUserFromJWT, deleteTrackFromCloudinaryAndDb } from '../utils/general.util';
-
-const uploadTrack = async (req: Request, res: Response) => {
-  try {
-    // get the id from the token
-    const decoded = getIdOfUserFromJWT(req);
-    if (decoded) {
-      const newTrack: ITrack = {
-        uploaded_by: decoded.id,
-        path: req.file!.filename,
-        title: req.file!.originalname,
-        size: req.file!.size,
-        date: Date.now(),
-      };
-      await Track.create(newTrack);
-      res.status(200).send(newTrack);
-    } else {
-      // getIdOfUserFromJWT returns null if the token is invalid so we send 401
-      res.status(401).send('Unauthorized');
-    }
-  } catch (error) {
-    console.log({ error });
-    res.status(500).send({ error });
-  }
-};
+import {
+  getIdOfUserFromJWT,
+  deleteTrackFromCloudinaryAndDb,
+} from '../utils/general.util';
 
 const getAllTracks = async (req: Request, res: Response) => {
   try {
-    const tracks: ITrack[] = await Track.find({});
-    res.status(200).send(tracks);
+    let { limit } = req.body;
+    if (!limit) limit = 20;
+    let { sort } = req.body;
+    // if sort is not passed in the body, i dont want to sort
+    const tracks = await Track.find({}, null, { limit: limit });
+    let arrOfTracks: any = [];
+    tracks.forEach((track) => {
+      arrOfTracks.push({
+        _id: track._id.toString(),
+        path: track.path,
+        title: track.title,
+        size: track.size,
+        date: track.date,
+        likes: track.likes,
+      });
+    });
+    if (sort) {
+      const now = Date.now();
+      switch (sort) {
+        case 'date':
+          arrOfTracks.sort((a: any, b: any) => {
+            now - b.date - (now - a.date);
+          });
+          break;
+        case 'likes':
+          arrOfTracks.sort((a: any, b: any) => {
+            b.likes - a.likes;
+          });
+          break;
+        default:
+          arrOfTracks.sort((a: any, b: any) => {
+            b.likes - a.likes;
+          });
+          break;
+      }
+    }
+    res.status(200).send(arrOfTracks);
   } catch (error) {
     console.log({ error });
     res.status(500).send({ error });
@@ -51,7 +65,7 @@ const deleteTrack = async (req: Request, res: Response) => {
     const { path } = track;
     const del = await deleteTrackFromCloudinaryAndDb(id, path);
     if (del) {
-    res.sendStatus(204);
+      res.sendStatus(204);
     } else {
       res.sendStatus(404);
     }
@@ -71,6 +85,8 @@ const saveTrackUrl = async (req: Request, res: Response) => {
       const { url } = req.body;
       const { title } = req.body;
       const track: ITrack = {
+        likes: 0,
+        liked_by: [],
         uploaded_by: id,
         path: url,
         date: Date.now(),
@@ -89,4 +105,41 @@ const saveTrackUrl = async (req: Request, res: Response) => {
     res.status(500).send({ error });
   }
 };
-export { uploadTrack, getAllTracks, deleteTrack, saveTrackUrl };
+
+const likeTrack = async (req: Request, res: Response) => {
+  try {
+    const decoded = getIdOfUserFromJWT(req);
+    if (decoded) {
+      const id = decoded.id;
+      const { trackId } = req.body;
+      const track: ITrack | null = await Track.findOne({ _id: trackId });
+      if (track) {
+        // if the user already liked the track, we remove the like
+        if (track.liked_by.includes(id)) {
+          await Track.updateOne({ _id: trackId }, { $pull: { liked_by: id } });
+          await Track.updateOne({ _id: trackId }, { $inc: { likes: -1 } });
+          console.log('removed like, likes of the track is now: ' + track.likes);
+          return res.sendStatus(204);
+        } else {
+          // if the user didn't like the track, we add the like
+          await Track.updateOne({ _id: trackId }, { $push: { liked_by: id } });
+          await Track.updateOne({ _id: trackId }, { $inc: { likes: 1 } });
+          console.log('added like, likes of the track is now: ' + track.likes);
+          return res.sendStatus(204);
+        }
+      } else {
+        return res.sendStatus(404);
+      }
+    } else {
+      // getIdOfUserFromJWT returns null if the token is invalid so we send 401
+      return res.status(401).send('Unauthorized');
+    }
+  } catch (error) {
+    // TODO : notify user of the error (means send back the error)
+    // TODO : notify the developer of the error (maybe email the error)
+    console.log({ error });
+    return res.status(500).send({ error });
+  }
+};
+
+export { getAllTracks, deleteTrack, saveTrackUrl, likeTrack };
