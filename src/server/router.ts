@@ -7,7 +7,7 @@ import { auth } from './middle-ware/auth';
 import fs from 'fs'
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
+  destination: (req, _, cb) => {
     const { username } = req.body;
     const path = `./public/tracks/${username}`;
     if (!fs.existsSync(path)) {
@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
     }
     cb(null, path);
   },
-  filename: (req, file, cb) => {
+  filename: (_, file, cb) => {
     cb(null, `${file.originalname}`);
   },
 });
@@ -25,6 +25,7 @@ const router = express.Router();
 
 
 /** ---------- NON - PROTECTED ROUTES ---------- **/
+
 
 // LOGIN & REGISTER
 router.post('/login', User.loginOne);
@@ -53,9 +54,8 @@ router.get('/user/tracks', auth, Track.getUserTracks);
 router.get('/user', auth, User.getUser);
 
 
-
-
 /* -- TRACKS RELATED ROUTES --*/
+
 
 // POST TRACK 
 router.post('/user/tracks', auth, Track.saveTrackUrl);
