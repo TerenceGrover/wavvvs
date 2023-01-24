@@ -1,90 +1,83 @@
 import Bio from './Bio.component';
-import type { CurrentUser, TrackType, TrackListItemType } from '../Interfaces';
 import Track from './Track.component';
 import UploadTrack from './UploadTrack.component';
 import ProfilePic from './ProfilePic.component';
 import { useEffect, useState } from 'react';
 import React from 'react';
 import Logo from './Logo.component';
+import { Context } from '../Utils/Context';
 
 export default function Profile(props: {
-  currentUser: CurrentUser;
-  trackList : TrackListItemType[];
-  setTrackList : React.Dispatch<React.SetStateAction<TrackListItemType[]>>;
   playOrPauseTrackByID: (id: string) => void;
-  setCurrentUser: React.Dispatch<React.SetStateAction<CurrentUser | undefined>>;
 }) {
+
+  const { currentUser, trackList} = React.useContext(Context);
+
   const [tracksto3, setTracksto3] = useState([1, 2, 3]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (props.currentUser) {
-      console.log(props.currentUser);
+    if (currentUser) {
+      console.log(currentUser);
       setIsLoading(false);
     }
-  }, [props.currentUser]);
+  }, [currentUser]);
 
   useEffect(() => {
-    if (props.currentUser.tracks && props.currentUser.tracks.length > 0) {
-      const buff: any[] = [...props.currentUser.tracks];
+    if (currentUser.tracks && currentUser.tracks.length > 0) {
+      const buff: any[] = [...currentUser.tracks];
       setTracksto3(buff.concat([1, 2, 3]).slice(0, 3));
     } else {
       setTracksto3([1, 2, 3]);
     }
-  }, [props.currentUser]);
+  }, [currentUser]);
 
   return (
     <div className="h-screen w-screen">
-      { !isLoading 
-      ? 
-      <div className="flex flex-col justify-start mt-14 items-center content-start p-6">
-        <div className="">
-          <section className="flex flex-col justify-center items-center mt-3">
-            <ProfilePic path={props.currentUser.profile_pic_path} />
-            <h1 className="text-white text-2xl mt-7 mb-1">
-              {props.currentUser.name}
-            </h1>
-            <p
-              id="username"
-              className="text-neutral-400"
-            >{`@${props.currentUser.username}`}</p>
-          </section>
-          <hr className="w-96 border-neutral-800 my-6" />
-          <Bio bio={props.currentUser.bio} />
-          <hr className="w-96 border-neutral-800 my-6" />
+      {!isLoading ? (
+        <div className="flex flex-col justify-start mt-14 items-center content-start p-6">
+          <div className="">
+            <section className="flex flex-col justify-center items-center mt-3">
+              <ProfilePic path={currentUser.profile_pic_path} />
+              <h1 className="text-white text-2xl mt-7 mb-1">
+                {currentUser.name}
+              </h1>
+              <p
+                id="username"
+                className="text-neutral-400"
+              >{`@${currentUser.username}`}</p>
+            </section>
+            <hr className="w-96 border-neutral-800 my-6" />
+            <Bio bio={currentUser.bio} />
+            <hr className="w-96 border-neutral-800 my-6" />
+          </div>
+          <div className="w-full flex justify-center items-center">
+            <section className="w-96">
+              {tracksto3.map((track: any) => {
+                return typeof track === 'object' ? (
+                  <Track
+                    trackMetaData={track}
+                    track={trackList.find(
+                      (trackListItem) =>
+                        trackListItem.waveformRef.id === track.path
+                    )}
+                    playOrPauseTrackByID={props.playOrPauseTrackByID}
+                    key={track.path}
+                  />
+                ) : (
+                  <UploadTrack
+                    key={track}
+                  />
+                );
+              })}
+            </section>
+          </div>
         </div>
-        <div className="w-full flex justify-center items-center">
-          <section className="w-96">
-            {tracksto3.map((track: any) => {
-              return typeof track === 'object' ? (
-                <Track
-                  currentUser={props.currentUser}
-                  trackMetaData={track}
-                  trackList={props.trackList}
-                  track={props.trackList.find(
-                    (trackListItem) => trackListItem.waveformRef.id === track.path
-                  )}
-                  setTrackList={props.setTrackList}
-                  playOrPauseTrackByID={props.playOrPauseTrackByID}
-                  setCurrentUser={props.setCurrentUser}
-                  key={track.path}
-                />
-              ) : (
-                <UploadTrack
-                  currentUser={props.currentUser}
-                  setCurrentUser={props.setCurrentUser}
-                  key={track}
-                />
-              );
-            })}
-          </section>
-        </div>
-      </div>
-      :
-      <main className="flex flex-col justify-start mt-14 items-center content-start p-6">
-        <Logo />
-      </main>
-          }
+      ) : (
+        <main className="flex flex-col justify-start mt-14 items-center content-start p-6">
+          <Logo />
+        </main>
+      )}
     </div>
   );
 }

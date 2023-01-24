@@ -7,7 +7,6 @@ import {
 } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import Home from './pages/Home';
-import ErrorPage from './pages/ErrorPage';
 import './index.css';
 import CreateUser from './pages/CreateUser';
 import MediaController from './components/MediaController.component';
@@ -16,31 +15,38 @@ import { checkUser } from './apiService/api-service';
 import type { CurrentUser, TrackListItemType } from './Interfaces';
 import ProfilePage from './pages/ProfilePage';
 import { compressAndStoreFromUrl, parseJWT } from './Utils/functions';
+import { Context } from './Utils/Context';
 
 export default function App() {
   const [valid, setValid] = React.useState(false);
   const [isAuth, setIsAuth] = React.useState(false);
   const [isNewUser, setIsNewUser] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
-  const [currentUser, setCurrentUser] = React.useState<CurrentUser>();
-
   const [trackList, setTrackList] = React.useState<TrackListItemType[]>([]);
   const [isAudioMuted, setIsAudioMuted] = React.useState(false);
   const [repeat, setRepeat] = React.useState(false);
+  const [currentUser, setCurrentUser] = React.useState<CurrentUser>({
+    username: '',
+    _v: 0,
+    _id: '',
+    bio: '',
+    email: '',
+    name: '',
+    profile_pic_path: '',
+    tracks: [],
+    isNewUser: true,
+  });
 
   const activeTrack = trackList.find((track) => track.isLastActive) ?? null;
 
   const playOrPauseTrackByID = (id: string) => {
-
     setTrackList((tracks) => {
       // Loop trough the tracks and modify the status of th track you want to play/pause
       const modifiedTrackList = tracks.map((track) => {
-        console.log(track.waveformRef)
         return track.waveformRef.id === id
           ? {
               ...track,
               isLastActive: track.isPlaying || true, // track.isPlaying being false here means you are clicking play.
-              // the last active track is the last track on which you clicked play.
               isPlaying: !track.isPlaying, // toggle isPlaying flag on or off
               isFinished: track.isPlaying && false,
             }
@@ -97,108 +103,108 @@ export default function App() {
   };
 
   React.useEffect(() => {
-      checkUser().then((res: CurrentUser) => {
-        if (res) {
-          setCurrentUser(res);
-          if (res.isNewUser === true || !res.hasOwnProperty('isNewUser')) {
-            setIsNewUser(true);
-          } else {
-            compressAndStoreFromUrl(res.profile_pic_path);
-            setIsNewUser(false);
-          }
-          setLoading(false);
+    checkUser().then((res: CurrentUser) => {
+      if (res) {
+        setCurrentUser(res);
+        if (res.isNewUser === true || !res.hasOwnProperty('isNewUser')) {
+          setIsNewUser(true);
+        } else {
+          compressAndStoreFromUrl(res.profile_pic_path);
+          setIsNewUser(false);
         }
-      });
+        setLoading(false);
+      }
+    });
   }, [valid]);
 
   React.useEffect(() => {
-    if (localStorage.getItem('token') === null) {
+    if (localStorage.getItem('token') === (null || undefined)) {
       console.log('no token');
+      setIsAuth(false);
       setLoading(false);
       return;
-    }
-    const token = localStorage.getItem('token');
-    if (token) {
+    } else {
+      const token = localStorage.getItem('token')!;
       const decodedJwt = parseJWT(token);
       console.log(decodedJwt);
       if (decodedJwt.exp * 1000 < Date.now()) {
         console.log('token expired');
         localStorage.removeItem('token');
+        setIsAuth(false);
       } else {
         console.log('token valid');
         setValid(true);
       }
-    } else {
-      console.log('no token');
     }
   }, [isAuth]);
 
   return (
-    <div id="app-wrapper">
-      <Router>
-        {!loading ? (
-          <Routes>
-            <Route
-              path="/"
-              element={
-                valid ? (
-                  isNewUser ? (
-                    <CreateUser setIsNewUser={setIsNewUser} />
+    <Context.Provider
+      value={{
+        valid,
+        setValid,
+        isAuth,
+        setIsAuth,
+        isNewUser,
+        setIsNewUser,
+        loading,
+        setLoading,
+        trackList,
+        setTrackList,
+        currentUser,
+        setCurrentUser,
+        isAudioMuted,
+        setIsAudioMuted,
+        repeat,
+        setRepeat,
+      }}
+    >
+      <div id="app-wrapper">
+        <Router>
+          {!loading ? (
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  valid ? (
+                    isNewUser ? (
+                      <CreateUser />
+                    ) : (
+                      <Home />
+                    )
                   ) : (
-                    <Home
-                      currentUser={currentUser!}
-                      setCurrentUser={setCurrentUser}
-                    />
+                    <LandingPage />
                   )
-                ) : (
-                  <LandingPage
-                    currentUser={currentUser}
-                    setCurrentUser={setCurrentUser}
-                    setIsAuth={setIsAuth}
-                    setIsNewUser={setIsNewUser}
-                  />
-                )
-              }
-            />
+                }
+              />
 
-            <Route
-              path="/profile"
-              element={
-                valid ? (
-                  <ProfilePage
-                    setTrackList={setTrackList}
-                    trackList={trackList}
-                    playOrPauseTrackByID={playOrPauseTrackByID}
-                    currentUser={currentUser!}
-                    setCurrentUser={setCurrentUser}
-                  />
-                ) : (
-                  <Navigate to="/" />
-                )
-              }
-            />
-
-            <Route element={<ErrorPage />} />
-          </Routes>
-        ) : (
-          <main className="w-screen h-screen flex flex-col justify-center items-center">
-            <Logo />
-          </main>
+              <Route
+                path="/profile"
+                element={
+                  valid ? (
+                    <ProfilePage playOrPauseTrackByID={playOrPauseTrackByID} />
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                }
+              />
+            </Routes>
+          ) : (
+            <main className="w-screen h-screen flex flex-col justify-center items-center">
+              <Logo />
+            </main>
+          )}
+        </Router>
+        {valid && !isNewUser && (
+          <MediaController
+            activeTrack={activeTrack}
+            playOrPauseTrackByID={playOrPauseTrackByID}
+            playNextTrack={playNextTrack}
+            playPrevTrack={playPrevTrack}
+            pauseAllTracks={pauseAllTracks}
+          />
         )}
-      </Router>
-      {valid && !isNewUser && (
-        <MediaController
-          activeTrack={activeTrack}
-          playOrPauseTrackByID={playOrPauseTrackByID}
-          playNextTrack={playNextTrack}
-          playPrevTrack={playPrevTrack}
-          isAudioMuted={isAudioMuted}
-          setIsAudioMuted={setIsAudioMuted}
-          pauseAllTracks={pauseAllTracks}
-          repeat={repeat}
-          setRepeat={setRepeat}
-        />
-      )}
-    </div>
+      </div>
+    </Context.Provider>
   );
 }

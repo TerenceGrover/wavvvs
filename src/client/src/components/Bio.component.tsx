@@ -11,13 +11,13 @@ const Bio = (props: { bio: string }) => {
   const [bio, setBio] = useState(props.bio);
 
   useEffect(() => {
-    if(inputRef.current){
+    if (inputRef.current) {
       inputRef.current.focus();
     }
-    if(!editing && bio !== props.bio){
+    if (!editing && bio !== props.bio) {
       updateUser({
-        bio: bio
-      })
+        bio: bio,
+      });
     }
   }, [editing]);
 
@@ -40,11 +40,11 @@ const Bio = (props: { bio: string }) => {
         <p
           ref={inputRef}
           contentEditable={editing}
-          onBlur = {(e) => {
-            setediting(false)
+          onBlur={(e) => {
+            setediting(false);
             const input = e.target as HTMLInputElement;
-            console.log(input.innerText)
-            setBio(input.innerText)
+            console.log(input.innerText);
+            setBio(input.innerText);
           }}
           suppressContentEditableWarning={true}
           id="bio"

@@ -1,4 +1,4 @@
-export async function uploadProfilePic (file : File) : Promise<{url : string}> {
+export async function uploadProfilePic(file: File): Promise<{ url: string }> {
   const formData = new FormData();
   formData.append('file', file);
   formData.append('upload_preset', 'frameit');
@@ -8,7 +8,7 @@ export async function uploadProfilePic (file : File) : Promise<{url : string}> {
   }).then((res) => res.json());
 }
 
-export async function uploadTrack (file : File) : Promise<{url : string}> {
+export async function uploadTrack(file: File): Promise<{ url: string }> {
   const formData = new FormData();
   formData.append('file', file);
   formData.append('upload_preset', 'frameit');
@@ -19,10 +19,10 @@ export async function uploadTrack (file : File) : Promise<{url : string}> {
   }).then((res) => res.json());
 }
 
-export function compressImage(dataUrl : string) {
+export function compressImage(dataUrl: string) {
   const image = new Image();
   image.src = dataUrl;
-  image.onload = function() {
+  image.onload = function () {
     const canvas = document.createElement('canvas');
     canvas.width = image.width / 3;
     canvas.height = image.height / 3;
@@ -30,23 +30,23 @@ export function compressImage(dataUrl : string) {
     ctx!.drawImage(image, 0, 0, canvas.width, canvas.height);
     const compressedImage = canvas.toDataURL();
     sessionStorage.setItem('compressedImage', compressedImage);
-  }
+  };
 }
 
-
-export async function compressAndStoreFromUrl(url : string) {
-  return fetch(url).then((res) => res.blob())
-  .then((blob) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(blob);
-    reader.onloadend = function() {
-      compressImage(reader.result!.toString());
-    }
-  })
+export async function compressAndStoreFromUrl(url: string) {
+  return fetch(url)
+    .then((res) => res.blob())
+    .then((blob) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = function () {
+        compressImage(reader.result!.toString());
+      };
+    });
 }
 
-export function parseJWT (token: string) {
+export function parseJWT(token: string) {
   const base64Url = token.split('.')[1];
   const base64 = base64Url.replace('-', '+').replace('_', '/');
   return JSON.parse(window.atob(base64));
-};
+}

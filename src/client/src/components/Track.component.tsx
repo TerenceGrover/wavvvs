@@ -6,21 +6,19 @@ import { IoPlay, IoStop } from 'react-icons/io5';
 import { MdClose } from 'react-icons/md';
 import DeleteWarningModal from './DeleteWarningModal.component';
 import React from 'react';
-import type { CurrentUser } from '../Interfaces.js';
+import { Context } from '../Utils/Context';
 
-export default function Track(props : {
-  trackMetaData : TrackType;
-  track : TrackListItemType | undefined;
-  trackList : TrackListItemType[];
-  setTrackList : React.Dispatch<React.SetStateAction<TrackListItemType[]>>;
-  playOrPauseTrackByID : (id : string) => void;
-  setCurrentUser : React.Dispatch<React.SetStateAction<any>>;
-  currentUser : CurrentUser;
+export default function Track(props: {
+  trackMetaData: TrackType;
+  track: TrackListItemType | undefined;
+  playOrPauseTrackByID: (id: string) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
 
-  const waveformRef : any = useRef("waveform");
+  const { currentUser, setTrackList } = React.useContext(Context);
+
+  const waveformRef: any = useRef('waveform');
 
   const { path, title, date, uploaded_by } = props.trackMetaData;
   const hoursSinceUploaded = millisecondsToHours(Number(Date.now() - date));
@@ -41,32 +39,31 @@ export default function Track(props : {
     //The load method handles the actual fetching of the audio
     wavesurfer.load(props.trackMetaData.path);
 
-
     waveformRef.id = path;
     waveformRef.wavesurfer = wavesurfer;
 
     // add on finish event listener
     wavesurfer.on('finish', () => {
-      props.setTrackList((tracks) =>
+      setTrackList((tracks: TrackListItemType[]) =>
         tracks.map((track) =>
           track.waveformRef.id === path ? { ...track, isFinished: true } : track
         )
       );
     });
 
-    props.setTrackList((tracks) => [
+    setTrackList((tracks: TrackListItemType[]) => [
       ...tracks,
       { waveformRef, isPlaying: false, isActive: false, isFinished: false },
     ]);
 
     return () => {
       // clean up function
-      props.setTrackList((tracks) => {
+      setTrackList((tracks: TrackListItemType[]) => {
         return tracks.filter((track) => track.waveformRef.id !== path);
       });
       // remove event listener
       wavesurfer.un('finish', () => {
-        props.setTrackList((tracks) =>
+        setTrackList((tracks: TrackListItemType[]) =>
           tracks.map((track) =>
             track.waveformRef.id === path
               ? { ...track, isFinished: false }
@@ -77,10 +74,9 @@ export default function Track(props : {
       // destroy the instance
       wavesurfer.destroy();
     };
-  }, [path, props.setTrackList]);
+  }, [path, setTrackList]);
 
   if (props.track) {
-    console.log(props.track)
     if (props.track.isPlaying) {
       props.track.waveformRef?.wavesurfer.play();
     } else {
@@ -92,36 +88,24 @@ export default function Track(props : {
     props.playOrPauseTrackByID(path);
   };
 
-  const handleMouseOver = () => {
-    setIsHovering(true);
-  };
-
-  const handleMouseOut = () => {
-    setIsHovering(false);
-  };
-
-  const handleDelete = () => {
-    setOpen(true);
-  };
-
   return (
-
     <div
-      onMouseOver={handleMouseOver}
-      onMouseOut={handleMouseOut}
+      onMouseOver={() => {
+        setIsHovering(true);
+      }}
+      onMouseOut={() => {
+        setIsHovering(false);
+      }}
       className="h-12 mb-10"
     >
-      <DeleteWarningModal
-        setOpen={setOpen}
-        open={open}
-        trackPath={path}
-        setCurrentUser={props.setCurrentUser}
-      />
+      <DeleteWarningModal setOpen={setOpen} open={open} trackPath={path} />
       <div className="relative flex justify-between w-full">
-        {isHovering && uploaded_by === props.currentUser._id ? (
+        {isHovering && uploaded_by === currentUser._id ? (
           <MdClose
             className="text-neutral-300 p-0 m-0 cursor-pointer hover:text-red-500 ease-in transition duration-100"
-            onClick={handleDelete}
+            onClick={() => {
+              setOpen(true);
+            }}
           />
         ) : (
           <div className="w-4"></div>

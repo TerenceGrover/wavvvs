@@ -4,15 +4,17 @@ import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { deleteTrack } from '../apiService/api-service';
 import React from 'react';
+import { Context } from '../Utils/Context';
 
-export default function DeleteWarningModal(props : {
+export default function DeleteWarningModal(props: {
   open: boolean;
-  setOpen : React.Dispatch<React.SetStateAction<boolean>>;
-  trackPath : string;
-  setCurrentUser : React.Dispatch<React.SetStateAction<CurrentUser>>;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  trackPath: string;
 }) {
   const cancelButtonRef = useRef(null);
   const [thereIsAnError, setError] = useState(false);
+
+  const { setCurrentUser } = React.useContext(Context);
 
   const handleDeleteInModal = async () => {
     try {
@@ -21,9 +23,11 @@ export default function DeleteWarningModal(props : {
         throw new Error(`${{ cause: resultOfDeleting }}`);
       }
       props.setOpen(false);
-      props.setCurrentUser((currentUser) => ({
+      setCurrentUser((currentUser: CurrentUser) => ({
         ...currentUser,
-        tracks: currentUser.tracks.filter((track) => track.path !== props.trackPath),
+        tracks: currentUser.tracks.filter(
+          (track) => track.path !== props.trackPath
+        ),
       }));
     } catch (error) {
       console.log({ error });
