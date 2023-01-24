@@ -65,6 +65,8 @@ router.get('/user/tracks', auth_1.auth, Track.getUserTracks);
 router.get('/user', auth_1.auth, User.getUser);
 // GET PROFILE INFO FROM SONG ID
 router.get('/user/tracks/:id', auth_1.auth, User.getUserFromSongId);
+// FOLLOWS USER PASSED IN BODY 
+router.put('/user/follow', auth_1.auth, User.followUser);
 /* -- TRACKS RELATED ROUTES --*/
 // POST TRACK 
 router.post('/user/tracks', auth_1.auth, Track.saveTrackUrl);
