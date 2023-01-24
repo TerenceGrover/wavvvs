@@ -1,33 +1,28 @@
 import React from 'react';
-import { CurrentUser } from '../Interfaces';
 import { useState } from 'react';
 import { FiUpload } from 'react-icons/fi';
 import { postTrack } from '../apiService/api-service';
 import { uploadTrack } from '../Utils/functions';
 import { checkUser } from '../apiService/api-service';
+import { Context } from '../Utils/Context';
 
-export default function UploadTrack(props : { 
-  currentUser: CurrentUser;
-  setCurrentUser : React.Dispatch<React.SetStateAction<CurrentUser | undefined>> }) {
-  
+export default function UploadTrack() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [thereIsAnError, setError] = useState<Boolean>(false);
 
-  const handleSubmit = async (e : React.FormEvent<HTMLFormElement>) => {
+  const { setCurrentUser } = React.useContext(Context);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
-      if(selectedFile) {
+      if (selectedFile) {
         // Wait for the uploadTrack function to return the url of the uploaded file
-        uploadTrack(selectedFile).then(
-          (res) => {
-            console.log(res.url)
-            postTrack(res.url);
-            checkUser().then(
-              (res) => {
-                props.setCurrentUser(res);
-              })
-          }
-        )
+        uploadTrack(selectedFile).then((res) => {
+          postTrack(res.url);
+          checkUser().then((res) => {
+            setCurrentUser(res);
+          });
+        });
       }
     } catch (error) {
       console.log({ error });
@@ -35,13 +30,13 @@ export default function UploadTrack(props : {
     }
   };
 
-  const handleFileChange = (e : React.ChangeEvent) => {
+  const handleFileChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
     if (target && target.files?.[0]) {
       setSelectedFile(target.files[0]);
-    };
+    }
   };
-    
+
   return (
     <form className="h-12 mb-10" onSubmit={handleSubmit}>
       <div className="flex items-center justify-center w-full mb-9 ">

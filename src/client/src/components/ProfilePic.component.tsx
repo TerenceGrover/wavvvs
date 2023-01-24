@@ -47,21 +47,21 @@ const ProfilePic = (props: { path: string }) => {
             onChange={(e) => {
               handleUpload(e);
             }}
-            />
-          <label id='edit' htmlFor="file" onClick={() => setEditing(true)}>
+          />
+          <label id="edit" htmlFor="file" onClick={() => setEditing(true)}>
             <TbDotsVertical className="relative text-neutral-300 right-16 backdrop:top-2 p-0 mr-4 cursor-pointer hover:text-neutral-600 active:text-neutral-800 ease-in transition duration-100" />
           </label>
         </div>
       ) : (
         <div className="w-4 mr-4"></div>
-        )}
+      )}
       <img
         className={`${
           !props.path && 'bg-neutral-400'
         } relative right-5 w-60 h-60 rounded-full object-cover`}
         src={props.path}
         alt=""
-        />
+      />
     </div>
   );
 };

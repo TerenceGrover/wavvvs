@@ -1,18 +1,25 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter as Router } from 'react-router-dom';
-import Header from './Header.component';
+import Header from '../components/Header.component';
 import { newdummyUser } from '../../cypress/fixtures/dummyUser';
+import { CurrentUserContext } from './TestContext';
 
-describe
-('my function or component', () => {
+describe('my function or component', () => {
+  const currentUser = newdummyUser;
   it('Should render Header component', () => {
-    render(<Header currentUser={newdummyUser} /> , { wrapper: Router });
+    render(
+      <CurrentUserContext.Provider value = {{
+        currentUser,
+        setCurrentUser: () => {}
+      }}>
+        <Header /> 
+      </ CurrentUserContext.Provider>
+    , { wrapper: Router })
   });
 
   beforeEach(() => {
-    render(<Header
-      currentUser={newdummyUser} /> , { wrapper: Router });
+    render(<Header /> , { wrapper: Router });
   });
 
   it('Should render an input field when the user clicks on the search icon', () => {

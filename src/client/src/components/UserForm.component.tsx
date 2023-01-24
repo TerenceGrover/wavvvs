@@ -1,8 +1,10 @@
 import React from 'react';
 import { login, register } from '../apiService/api-service';
-import type { CurrentUser } from '../Interfaces';
+import { Context } from '../Utils/Context';
 
-const UserForm = (props : {currentUser : CurrentUser | undefined, setCurrentUser : React.Dispatch<React.SetStateAction<CurrentUser | undefined>>, setIsAuth : React.Dispatch<React.SetStateAction<boolean>>, setIsNewUser : React.Dispatch<React.SetStateAction<boolean>>}) => {
+const UserForm = () => {
+
+  const {setCurrentUser, setIsAuth, setIsNewUser} = React.useContext(Context);
 
   const [clicked, setClicked] = React.useState('');
   const [info, setInfo] = React.useState({
@@ -10,10 +12,6 @@ const UserForm = (props : {currentUser : CurrentUser | undefined, setCurrentUser
     email: '',
     password: ''
   });
-
-  const handleBack = () => {
-    setClicked('');
-  };
 
   const handleSubmit = () => {
     if ((clicked === 'register' && !info.username) || !info.password || !info.email) {
@@ -38,13 +36,13 @@ const UserForm = (props : {currentUser : CurrentUser | undefined, setCurrentUser
     if (clicked === 'login') {
       login(info).then((res) => {
         if (res.token) {
-          props.setCurrentUser(res);
+          setCurrentUser(res);
           if (res.user.isNewUser === true) {
-            props.setIsNewUser(true);
+            setIsNewUser(true);
           } else {
-            props.setIsNewUser(false);
+            setIsNewUser(false);
           }
-          props.setIsAuth(true);
+          setIsAuth(true);
         }
         else {
           alert('Invalid username or password');
@@ -145,7 +143,7 @@ const UserForm = (props : {currentUser : CurrentUser | undefined, setCurrentUser
         className={`${
           clicked === '' && 'hidden'
         } mt-6 underline underline-offset-2 text-sm text-neutral-200`}
-        onClick={handleBack}
+        onClick={() => {setClicked('');}}
       >
         Go back
       </button>
