@@ -216,7 +216,6 @@ export default function App() {
         {valid && !isNewUser && (
           <MediaController
             activeTrack={activeTrack}
-            playOrPauseTrackByID={playOrPauseTrackByID}
             playNextTrack={playNextTrack}
             playPrevTrack={playPrevTrack}
             pauseAllTracks={pauseAllTracks}
