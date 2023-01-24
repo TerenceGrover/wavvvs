@@ -55,6 +55,7 @@ router.get('/user/tracks/:id', auth, User.getUserFromSongId);
 // FOLLOWS USER PASSED IN BODY 
 router.put('/user/follow', auth, User.followUser);
 
+
 /* -- TRACKS RELATED ROUTES --*/
 
 
@@ -69,6 +70,5 @@ router.get('/tracks/all', auth, Track.getAllTracks);
 
 // LIKE A TRACK 
 router.put('/track/like', auth, Track.likeTrack);
-
 
 export default router;
