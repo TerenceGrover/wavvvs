@@ -36,7 +36,6 @@ app.get('*', (req: Request, res: Response) => {
 // UNCOMMENT THIS if u want to wipe the DB
 // deleteEverythingFromDB();
 
-
 const intervalID = removeExpiredTracksCronJob();
 
 app.listen(PORT, () => {

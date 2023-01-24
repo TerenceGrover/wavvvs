@@ -2,33 +2,27 @@ import { User, Track } from '../models/models';
 import { IUser } from '../entities/allEntities';
 import { Request, Response } from 'express';
 import * as userServices from '../services/User.service';
-import { getErrorMessage } from '../utils/error.util';
-import jwt from 'jsonwebtoken';
-const { SECRET_KEY } = process.env;
+import { getErrorMessage } from '../utils/general.util';
+import { getIdOfUserFromJWT } from '../utils/general.util';
 
 const getUser = async (req: Request, res: Response) => {
   try {
-    if (req.headers && req.headers.authorization) {
-      console.log(req.headers.authorization);
-      let authorization = req.headers.authorization.split(' ')[1],
-        decoded: any;
-      try {
-        decoded = jwt.verify(authorization, SECRET_KEY!);
-      } catch (e) {
-        return res.status(401).send('unauthorized');
-      }
+    const decoded = getIdOfUserFromJWT(req);
+    if (decoded) {
       const id = decoded.id;
       // Fetch the user by id
       const user = await User.findOne({ _id: id });
       let userToSend: any = {};
       if (user) {
-        userToSend.username = user.username;
-        userToSend.email = user.email;
-        userToSend.isPrivate = user.isPrivate;
-        userToSend.isNewUser = user.isNewUser;
-        userToSend.profile_pic_path = user.profile_pic_path;
-        userToSend.bio = user.bio;
-        // user.password = '';
+        userToSend = {
+          username: user.username,
+          email: user.email,
+          isPrivate: user.isPrivate,
+          isNewUser: user.isNewUser,
+          profile_pic_path: user.profile_pic_path,
+          bio: user.bio,
+          tracks: [],
+        };
         // seach in Track all the tracks that have the user id as uploaded by
         const tracks = await Track.find({ uploaded_by: id });
         let arrOfTracks: any = [];
@@ -39,7 +33,6 @@ const getUser = async (req: Request, res: Response) => {
           });
         });
         userToSend.tracks = arrOfTracks;
-        console.log(userToSend);
         return res.status(200).send(userToSend);
       } else return res.sendStatus(404);
     }
@@ -85,15 +78,8 @@ const registerOne = async (req: Request, res: Response) => {
 
 const updateOne = async (req: Request, res: Response) => {
   try {
-    if (req.headers && req.headers.authorization) {
-      console.log(req.headers.authorization);
-      let authorization = req.headers.authorization.split(' ')[1],
-        decoded: any;
-      try {
-        decoded = jwt.verify(authorization, SECRET_KEY!);
-      } catch (e) {
-        return res.status(401).send('unauthorized');
-      }
+    const decoded = getIdOfUserFromJWT(req);
+    if (decoded) {
       const id = decoded.id;
       const { name, bio, profile_pic_path, isPrivate } = req.body;
       // here whatever is not being passed in req body will be undefined.
@@ -127,21 +113,14 @@ const getAnotherUser = async (req: Request, res: Response) => {
       username: userToFind.username,
       email: userToFind.email,
       profile_pic_path: userToFind.profile_pic_path,
-      // tracks ??
+      isPrivate: userToFind.isPrivate,
+      // TODO : tracks ??
     };
     // if user asked is private, go on checking auth token.
     if (userToFind.isPrivate) {
-      if (req.headers && req.headers.authorization) {
-        let authorization = req.headers.authorization.split(' ')[1],
-          decoded: any;
-        try {
-          decoded = jwt.verify(authorization, SECRET_KEY!);
-        } catch (e) {
-          return res.status(401).send('unauthorized');
-        }
-        if (decoded) {
-          return res.status(200).send(userToSend);
-        }
+      const decoded = getIdOfUserFromJWT(req);
+      if (decoded) {
+        return res.status(200).send(userToSend);
       } else return res.status(401).send('unauthorized');
     } else {
       // here user asked for is not private, so send it straight away.
@@ -154,22 +133,16 @@ const getAnotherUser = async (req: Request, res: Response) => {
 
 const deleteUser = async (req: Request, res: Response) => {
   try {
-    if (req.headers && req.headers.authorization) {
-      let authorization = req.headers.authorization.split(' ')[1],
-        decoded: any;
-      try {
-        decoded = jwt.verify(authorization, SECRET_KEY!);
-      } catch (e) {
-        return res.status(401).send('unauthorized');
-      }
-      let deleted;
-      if (decoded) {
-        deleted = await User.deleteOne({ _id: decoded.id });
-      }
-      if (deleted) {
-        return res.sendStatus(204);
-      } else return res.sendStatus(500);
-    } else return res.status(401).send('unauthorized');
+    const decoded = getIdOfUserFromJWT(req);
+    let deleted;
+    if (decoded) {
+      deleted = await User.deleteOne({ _id: decoded.id });
+    } else {
+      return res.status(401).send('unauthorized');
+    }
+    if (deleted) {
+      return res.sendStatus(204);
+    } else return res.sendStatus(500);
   } catch (error) {
     return res.status(500).send({ error: getErrorMessage(error) });
   }

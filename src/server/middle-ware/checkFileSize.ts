@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 const MAX_FILE_SIZE_IN_BYTES = 104857600; // 100MB;
 
+// middleware to check if the file size is not exceeded
 const checkFileSize = (req: Request, res: Response, next: NextFunction) => {
   try {
     let fileSize: number = 0;
@@ -13,7 +14,6 @@ const checkFileSize = (req: Request, res: Response, next: NextFunction) => {
     }
     next();
   } catch (error) {
-    // why 407 ?
     res.status(407).send({ error });
   }
 };

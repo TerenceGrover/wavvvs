@@ -8,17 +8,25 @@ const cloudinary_1 = require("cloudinary");
 const models_1 = require("../models/models");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const { SECRET_KEY, CLOUD_NAME, API_KEY, API_SECRET } = process.env;
+const getIdOfUserFromJWT = (req) => {
+    if (req.headers && req.headers.authorization) {
+        let authorization = req.headers.authorization.split(' ')[1];
+        let decoded = null;
+        try {
+            decoded = jsonwebtoken_1.default.verify(authorization, SECRET_KEY);
+        }
+        catch (e) {
+            console.log(e);
+        }
+        return decoded;
+    }
+    return null;
+};
 const uploadTrack = async (req, res) => {
     try {
-        if (req.headers && req.headers.authorization) {
-            console.log(req.headers.authorization);
-            let authorization = req.headers.authorization.split(' ')[1], decoded;
-            try {
-                decoded = jsonwebtoken_1.default.verify(authorization, SECRET_KEY);
-            }
-            catch (e) {
-                return res.status(401).send('unauthorized');
-            }
+        // get the id from the token
+        const decoded = getIdOfUserFromJWT(req);
+        if (decoded) {
             const newTrack = {
                 uploaded_by: decoded.id,
                 path: req.file.filename,
@@ -28,6 +36,10 @@ const uploadTrack = async (req, res) => {
             };
             await models_1.Track.create(newTrack);
             res.status(200).send(newTrack);
+        }
+        else {
+            // getIdOfUserFromJWT returns null if the token is invalid so we send 401
+            res.status(401).send('Unauthorized');
         }
     }
     catch (error) {
@@ -102,15 +114,8 @@ const deleteTrack = async (req, res) => {
 exports.deleteTrack = deleteTrack;
 const saveTrackUrl = async (req, res) => {
     try {
-        if (req.headers && req.headers.authorization) {
-            console.log(req.headers.authorization);
-            let authorization = req.headers.authorization.split(' ')[1], decoded;
-            try {
-                decoded = jsonwebtoken_1.default.verify(authorization, SECRET_KEY);
-            }
-            catch (e) {
-                return res.status(401).send('unauthorized');
-            }
+        const decoded = getIdOfUserFromJWT(req);
+        if (decoded) {
             const id = decoded.id;
             const { url } = req.body;
             const track = {
@@ -120,8 +125,14 @@ const saveTrackUrl = async (req, res) => {
             await models_1.Track.create(track);
             res.sendStatus(204);
         }
+        else {
+            // getIdOfUserFromJWT returns null if the token is invalid so we send 401
+            res.status(401).send('Unauthorized');
+        }
     }
     catch (error) {
+        // notify user of the error (means send back the error)
+        // notify the developer of the error (means log the error)
         console.log({ error });
         res.status(500).send({ error });
     }

@@ -6,7 +6,7 @@ import bcrypt from 'bcrypt';
 const saltRounds = 8;
 const { SECRET_KEY } = process.env;
 
-// this works. Maybe sanitize inputs.
+// TODO : sanitize inputs
 export async function register(user: DocumentDefinition<IUser>) {
   let exists = null;
   exists = await User.findOne({ email: user.email });
@@ -29,7 +29,7 @@ export async function register(user: DocumentDefinition<IUser>) {
   }
 }
 
-// this works. Also sanitize inputs.
+// TODO : sanitize inputs
 export async function login(user:any) {
   try {
     const foundUser = await User.findOne({ email: user.email });

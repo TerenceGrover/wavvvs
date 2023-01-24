@@ -2,20 +2,14 @@ import { Request, Response } from 'express';
 import { v2 as cloudinary } from 'cloudinary';
 import { Track } from '../models/models';
 import { ITrack } from '../entities/allEntities';
-import jwt from 'jsonwebtoken';
-const { SECRET_KEY, CLOUD_NAME, API_KEY, API_SECRET } = process.env;
+import { getIdOfUserFromJWT } from '../utils/general.util';
+const { CLOUD_NAME, API_KEY, API_SECRET } = process.env;
 
 const uploadTrack = async (req: Request, res: Response) => {
   try {
-    if (req.headers && req.headers.authorization) {
-      console.log(req.headers.authorization);
-      let authorization = req.headers.authorization.split(' ')[1],
-        decoded: any;
-      try {
-        decoded = jwt.verify(authorization, SECRET_KEY!);
-      } catch (e) {
-        return res.status(401).send('unauthorized');
-      }
+    // get the id from the token
+    const decoded = getIdOfUserFromJWT(req);
+    if (decoded) {
       const newTrack: ITrack = {
         uploaded_by: decoded.id,
         path: req.file!.filename,
@@ -25,6 +19,9 @@ const uploadTrack = async (req: Request, res: Response) => {
       };
       await Track.create(newTrack);
       res.status(200).send(newTrack);
+    } else {
+      // getIdOfUserFromJWT returns null if the token is invalid so we send 401
+      res.status(401).send('Unauthorized');
     }
   } catch (error) {
     console.log({ error });
@@ -91,6 +88,8 @@ const deleteTrack = async (req: Request, res: Response) => {
     }
     res.sendStatus(204);
   } catch (error) {
+    // TODO : notify user of the error (means send back the error)
+    // TODO : notify the developer of the error (maybe email the error)
     console.log({ error });
     res.status(500).send({ error });
   }
@@ -98,15 +97,8 @@ const deleteTrack = async (req: Request, res: Response) => {
 
 const saveTrackUrl = async (req: Request, res: Response) => {
   try {
-    if (req.headers && req.headers.authorization) {
-      console.log(req.headers.authorization);
-      let authorization = req.headers.authorization.split(' ')[1],
-        decoded: any;
-      try {
-        decoded = jwt.verify(authorization, SECRET_KEY!);
-      } catch (e) {
-        return res.status(401).send('unauthorized');
-      }
+    const decoded = getIdOfUserFromJWT(req);
+    if (decoded) {
       const id = decoded.id;
       const { url } = req.body;
       const track: ITrack = {
@@ -115,8 +107,13 @@ const saveTrackUrl = async (req: Request, res: Response) => {
       };
       await Track.create(track);
       res.sendStatus(204);
+    } else {
+      // getIdOfUserFromJWT returns null if the token is invalid so we send 401
+      res.status(401).send('Unauthorized');
     }
   } catch (error) {
+    // TODO : notify user of the error (means send back the error)
+    // TODO : notify the developer of the error (maybe email the error)
     console.log({ error });
     res.status(500).send({ error });
   }
