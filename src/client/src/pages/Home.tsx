@@ -5,6 +5,8 @@ import Header from '../components/Header.component';
 import Logo from '../components/Logo.component';
 import React from 'react';
 import CentralHome from '../components/CentralHome.component';
+import SideBar from '../components/SideBar.component';
+import ProfileCard from '../components/ProfileCard.component';
 import { Context } from '../Utils/Context';
 
 function Home() {
@@ -32,8 +34,10 @@ function Home() {
           <Logo />
         </main>
       ) : (
-        <div className="h-screen w-screen bg-neutral-900 flex flex-col">
-          {currentUser && <CentralHome />}
+        <div className="grid grid-cols-3 w-screen h-screen justify-items-center">
+          <SideBar />
+          <CentralHome />
+          <ProfileCard />
         </div>
       )}
     </div>
