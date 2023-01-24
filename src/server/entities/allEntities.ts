@@ -3,7 +3,7 @@ export interface ITrack {
   path: string;
   title?: string;
   size?: number;
-  date?: number;
+  date: number;
 }
 
 export interface IUser {

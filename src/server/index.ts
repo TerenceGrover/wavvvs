@@ -5,7 +5,7 @@ import cors from 'cors';
 import router from './router';
 import connect from './models/index';
 import deleteEverythingFromDB from './seedScript';
-import removeExpiredTracksCronJob from './cronJob';
+import deleteExpiredTracks from './cronJob';
 
 const { PORT, HOST_NAME } = process.env;
 
@@ -36,7 +36,8 @@ app.get('*', (req: Request, res: Response) => {
 // UNCOMMENT THIS if u want to wipe the DB
 // deleteEverythingFromDB();
 
-// const intervalID = removeExpiredTracksCronJob();
+const ONE_MINUTE = 60000;
+setInterval(deleteExpiredTracks, ONE_MINUTE);
 
 app.listen(PORT, () => {
   console.log(`Web server running: ${HOST_NAME}:${PORT}`);
