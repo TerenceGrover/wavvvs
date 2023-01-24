@@ -21,3 +21,8 @@ export const Context = React.createContext({
   setRepeat: (repeat: boolean) => {},
   playOrPauseTrackByID: (id: string) => {},
 });
+
+export const HomeContext = React.createContext({
+  centralHome: 'Home',
+  setCentralHome: (centralHome: string) => {}
+});
