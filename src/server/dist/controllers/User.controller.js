@@ -22,12 +22,16 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.followUser = exports.getUserFromSongId = exports.deleteUser = exports.getAnotherUser = exports.updateOne = exports.registerOne = exports.loginOne = exports.getUser = void 0;
 const models_1 = require("../models/models");
 const userServices = __importStar(require("../services/User.service"));
 const general_util_1 = require("../utils/general.util");
 const general_util_2 = require("../utils/general.util");
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const getUser = async (req, res) => {
     try {
         const decoded = (0, general_util_2.getIdOfUserFromJWT)(req);
@@ -57,6 +61,10 @@ const getUser = async (req, res) => {
                     arrOfTracks.push({
                         _id: track._id.toString(),
                         path: track.path,
+                        title: track.title,
+                        size: track.size,
+                        date: track.date,
+                        likes: track.likes,
                     });
                 });
                 userToSend.tracks = arrOfTracks;
@@ -158,8 +166,23 @@ const getAnotherUser = async (req, res) => {
             followers: userToFind.followers,
             isPremium: userToFind.isPremium,
             isPrivate: userToFind.isPrivate,
-            // TODO : tracks ??
+            NumberOffollowers: userToFind.followers.length,
+            tracks: [],
         };
+        // seach in Track all the tracks that have the user id as uploaded by
+        const tracks = await models_1.Track.find({ uploaded_by: userToFind.id });
+        let arrOfTracks = [];
+        tracks.forEach((track) => {
+            arrOfTracks.push({
+                _id: track._id.toString(),
+                path: track.path,
+                title: track.title,
+                size: track.size,
+                date: track.date,
+                likes: track.likes,
+            });
+        });
+        userToSend.tracks = arrOfTracks;
         // if user asked is private, go on checking auth token.
         if (userToFind.isPrivate) {
             const decoded = (0, general_util_2.getIdOfUserFromJWT)(req);
@@ -181,7 +204,17 @@ const getAnotherUser = async (req, res) => {
 exports.getAnotherUser = getAnotherUser;
 const deleteUser = async (req, res) => {
     try {
+        const pwd = req.body.password;
         const decoded = (0, general_util_2.getIdOfUserFromJWT)(req);
+        // check if the password is correct before deleting the user
+        const foundUser = await models_1.User.findOne({ _id: decoded.id });
+        if (!foundUser) {
+            return res.status(404).send('User not found');
+        }
+        const isMatch = bcrypt_1.default.compareSync(pwd, foundUser.password);
+        if (!isMatch) {
+            return res.status(401).send('unauthorized');
+        }
         let deleted;
         if (decoded) {
             deleted = await models_1.User.deleteOne({ _id: decoded.id });
@@ -245,7 +278,11 @@ const followUser = async (req, res) => {
         const decoded = (0, general_util_2.getIdOfUserFromJWT)(req);
         if (decoded) {
             if (decoded.id === req.body.id) {
-                return res.status(400).send({ error: 'What a fool. You cannot follow yourself. Nice try.' });
+                return res
+                    .status(400)
+                    .send({
+                    error: 'What a fool. You cannot follow yourself. Nice try.',
+                });
             }
             const { id } = req.body;
             const userToFollow = await models_1.User.findOne({ _id: id });

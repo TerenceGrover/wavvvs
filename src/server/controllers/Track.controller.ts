@@ -142,4 +142,36 @@ const likeTrack = async (req: Request, res: Response) => {
   }
 };
 
-export { getAllTracks, deleteTrack, saveTrackUrl, likeTrack };
+const TESTsaveTrackUrl = async (req: Request, res: Response) => {
+  try {
+    const decoded = getIdOfUserFromJWT(req);
+    if (decoded) {
+      const id = decoded.id;
+      const { url } = req.body;
+      const { title } = req.body;
+      const twoDaysAgo = new Date(Date.now());
+      twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+      const newTimestamp = twoDaysAgo.getTime();
+      const track: ITrack = {
+        likes: 0,
+        liked_by: [],
+        uploaded_by: id,
+        path: url,
+        date: newTimestamp,
+        title: title,
+      };
+      await Track.create(track);
+      res.sendStatus(204);
+    } else {
+      // getIdOfUserFromJWT returns null if the token is invalid so we send 401
+      res.status(401).send('Unauthorized');
+    }
+  } catch (error) {
+    // TODO : notify user of the error (means send back the error)
+    // TODO : notify the developer of the error (maybe email the error)
+    console.log({ error });
+    res.status(500).send({ error });
+  }
+}
+
+export { getAllTracks, deleteTrack, saveTrackUrl, likeTrack, TESTsaveTrackUrl };

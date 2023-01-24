@@ -37,7 +37,7 @@ describe('login & register functionalities', () => {
   it('should respond 200 if try to register an user', async () => {
     const res = await request(app).post('/register').send({
       email: 'ale@gmail.com',
-      password: '12345689',
+      password: '123456789',
       username: 'ale',
     });
     expect(res.status).toBe(200);
@@ -54,7 +54,7 @@ describe('login & register functionalities', () => {
   it('should respond 200 if try to login an user registered and give a token back', async () => {
     const res = await request(app).post('/login').send({
       email: 'ale@gmail.com',
-      password: '12345689',
+      password: '123456789',
     });
     token = res.body.token;
     expect(token).toBeTruthy();
@@ -64,16 +64,19 @@ describe('login & register functionalities', () => {
   it('should respond 409 if try to register an user already registered', async () => {
     const res = await request(app).post('/register').send({
       email: 'ale@gmail.com',
-      password: '12345689',
+      password: '123456789',
       username: 'ale',
     });
     expect(res.status).toBe(409);
   });
 
-  it('should delete an user', async () => {
+  it('should delete a user', async () => {
     const res = await request(app)
       .delete('/user')
-      .set('Authorization', `Bearer ${token}`);
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        password: '123456789',
+      });
     expect(res.status).toBe(204);
   });
 });
@@ -97,7 +100,12 @@ describe('interact with user functionalities', () => {
 
   afterAll(async () => {
     // delete user created in beforeEach
-    await request(app).delete('/user').set('Authorization', `Bearer ${token}`);
+    await request(app)
+      .delete('/user')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        password: '12345689',
+      });
     await stopServer();
   });
 
@@ -156,7 +164,7 @@ describe('interact with user functionalities', () => {
     const res = await request(app)
       .delete('/track')
       .send({
-        id: arrOfTracks[0]._id
+        id: arrOfTracks[0]._id,
       })
       .set('Authorization', `Bearer ${token}`);
     expect(res.status).toBe(204);
@@ -165,4 +173,41 @@ describe('interact with user functionalities', () => {
   it('should automatically delete a track if its user is deleted', async () => {
     // TODO : implement this test
   });
+
+  it('should delete a track after 24 hours', async () => {
+    // first post a track
+    const filePath = mypath.join(
+      __dirname,
+      '..',
+      'tests',
+      'mocks',
+      'rickroll.m4a'
+    );
+    cloudinary.v2.config({
+      cloud_name: CLOUD_NAME,
+      api_key: API_KEY,
+      api_secret: API_SECRET,
+    });
+    const upload = await cloudinary.v2.uploader.upload(filePath, {
+      resource_type: 'video',
+    });
+    const path = upload.secure_url;
+    console.log(path);
+    // we can't wait 24 hours in a test so we will just post to a test route that injects a date in the past
+    const res = await request(app)
+      .post('/test/user/tracks')
+      .send({ url: path })
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(204);
+
+    // we wait 2 second to be sure that the track is deleted
+    await new Promise((resolve) => {
+      setTimeout(resolve, 10000);
+    });
+    const res2 = await request(app)
+      .get('/user')
+      .set('Authorization', `Bearer ${token}`);
+    expect(res2.status).toBe(200);
+    expect(res2.body.tracks.length).toBe(0);
+  }, 20000);
 });
