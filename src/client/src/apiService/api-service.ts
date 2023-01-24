@@ -148,7 +148,7 @@ const getAllUsers = async () => {
   }
 };
 
-const deleteAccount  = async () => {
+const deleteAccount  = async (password : string) => {
   try {
     return fetch(baseURL + `/user`, {
       method: 'DELETE',
@@ -156,7 +156,11 @@ const deleteAccount  = async () => {
         'Content-type': 'Application/json',
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       },
-    }).then((res) => res.text());
+      body: JSON.stringify({ password: password }),
+    }).then(
+      (res) => 
+      res.status
+      );
   } catch (error) {
     console.log({ error });
     return error;
