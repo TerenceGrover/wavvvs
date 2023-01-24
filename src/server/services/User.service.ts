@@ -34,7 +34,7 @@ export async function login(user:any) {
   try {
     const foundUser = await User.findOne({ email: user.email });
     if (!foundUser) {
-      throw new Error('Email of user is not correct');
+      throw new Error('credentials are not correct');
     }
     const isMatch = bcrypt.compareSync(user.password!, foundUser.password!);
     if (isMatch) {
@@ -64,7 +64,7 @@ export async function login(user:any) {
       }
       return returnUser;
     } else {
-      throw new Error('Password is not correct');
+      throw new Error('credentials are not correct');
     }
   } catch (error) {
     throw error;

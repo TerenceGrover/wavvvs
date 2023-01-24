@@ -53,7 +53,9 @@ const loginOne = async (req: Request, res: Response) => {
     const foundUser = await userServices.login(userToLog);
     res.status(200).send(foundUser);
   } catch (error) {
-    return res.status(500).send({ error: getErrorMessage(error) });
+    let strError = getErrorMessage(error);
+    if (strError === 'credentials are not correct') return res.sendStatus(404);
+    return res.status(500).send({ error: strError });
   }
 };
 
@@ -72,7 +74,7 @@ const registerOne = async (req: Request, res: Response) => {
   } catch (error) {
     let strError = getErrorMessage(error);
     if (strError === 'User already exists') return res.sendStatus(409);
-    return res.status(500).send({ error: getErrorMessage(error) });
+    return res.status(500).send({ error: strError });
   }
 };
 

@@ -33,7 +33,7 @@ const User = __importStar(require("./controllers/User.controller"));
 const auth_1 = require("./middle-ware/auth");
 const fs_1 = __importDefault(require("fs"));
 const storage = multer_1.default.diskStorage({
-    destination: (req, file, cb) => {
+    destination: (req, _, cb) => {
         const { username } = req.body;
         const path = `./public/tracks/${username}`;
         if (!fs_1.default.existsSync(path)) {
@@ -41,7 +41,7 @@ const storage = multer_1.default.diskStorage({
         }
         cb(null, path);
     },
-    filename: (req, file, cb) => {
+    filename: (_, file, cb) => {
         cb(null, `${file.originalname}`);
     },
 });
