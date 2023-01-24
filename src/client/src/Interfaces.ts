@@ -26,10 +26,11 @@ export interface TrackType {
 export interface TrackListItemType {
   [x: string]: any;
   waveformRef:  any;
-  isPlaying: boolean;
+  isPlaying?: boolean;
   isLastActive?: boolean;
   isActive?: boolean;
-  isFinished: boolean;
+  isFinished?: boolean;
+  _id ?: string;
 }
 
 export interface InfoObject {

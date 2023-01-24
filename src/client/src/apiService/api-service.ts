@@ -110,7 +110,7 @@ const postTrack = async (trackURL: string, name: string) => {
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       },
       body: JSON.stringify({ url: trackURL, title: name }),
-    }).then((res) => res.text());
+    }).then((res) => res.json());
   } catch (error) {
     console.log({ error });
     return Promise.reject(error);
@@ -133,6 +133,40 @@ const deleteTrack = async (id: string) => {
   }
 };
 
+const getAllUsers = async () => {
+  try {
+    return fetch(baseURL + `/users`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'Application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+    }).then((res) => res.json());
+  } catch (error) {
+    console.log({ error });
+    return error;
+  }
+};
+
+const deleteAccount  = async (password : string) => {
+  try {
+    return fetch(baseURL + `/user`, {
+      method: 'DELETE',
+      headers: {
+        'Content-type': 'Application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+      body: JSON.stringify({ password: password }),
+    }).then(
+      (res) => 
+      res.status
+      );
+  } catch (error) {
+    console.log({ error });
+    return error;
+  }
+};
+
 export {
   postTrack,
   getUser,
@@ -141,4 +175,6 @@ export {
   register,
   updateUser,
   checkUser,
+  getAllUsers,
+  deleteAccount
 };

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import React from 'react';
 import Logo from './Logo.component';
 import { Context } from '../Utils/Context';
+import DeleteAccount from './DeleteAccount.component';
 
 export default function Profile() {
 
@@ -13,6 +14,8 @@ export default function Profile() {
 
   const [tracksto3, setTracksto3] = useState([1, 2, 3]);
   const [isLoading, setIsLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+
 
   useEffect(() => {
     if (currentUser) {
@@ -30,8 +33,13 @@ export default function Profile() {
     }
   }, [currentUser]);
 
+  const handleAccountDelete = () => {
+    
+  }
+
   return (
-    <div className="h-screen w-screen">
+    <div className="h-[110vh] w-screen">
+      <DeleteAccount setOpen={setOpen} open={open}/>
       {!isLoading ? (
         <div className="flex flex-col justify-start mt-14 items-center content-start p-6">
           <div className="">
@@ -68,6 +76,27 @@ export default function Profile() {
                 );
               })}
             </section>
+          </div>
+          <div id='dangerous-button-containers' className='flex gap-5'>
+            <button
+              id='logout-button'
+              className="bg-neutral-800 text-red-500 rounded-xl px-4 py-2 mt-4"
+              onClick={() => {
+                localStorage.removeItem('token');
+                window.location.href = '/';
+              }}
+            >
+              Logout
+            </button>
+            <button
+              id='delete-account-button'
+              className="bg-red-500 text-white rounded-xl px-4 py-2 mt-4"
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              Delete Account
+            </button>
           </div>
         </div>
       ) : (

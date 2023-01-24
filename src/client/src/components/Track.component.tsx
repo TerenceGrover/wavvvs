@@ -97,7 +97,7 @@ export default function Track(props: {
       }}
       className="h-12 mb-10"
     >
-      <DeleteWarningModal setOpen={setOpen} open={open} trackPath={path} />
+      <DeleteWarningModal setOpen={setOpen} open={open} track={props.track!} />
       <div className="relative flex justify-between w-full">
         {isHovering && uploaded_by === currentUser._id ? (
           <MdClose

@@ -22,6 +22,7 @@ export default function UploadTrack() {
         uploadTrack(selectedFile).then((res) => {
           postTrack(res.url, name);
           checkUser().then((res) => {
+            console.log(res)
             setCurrentUser(res);
           });
         });
