@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 import * as userServices from '../services/User.service';
 import { getErrorMessage } from '../utils/general.util';
 import { getIdOfUserFromJWT } from '../utils/general.util';
+import bcrypt from 'bcrypt';
 
 const getUser = async (req: Request, res: Response) => {
   try {
@@ -128,8 +129,23 @@ const getAnotherUser = async (req: Request, res: Response) => {
       followers: userToFind.followers,
       isPremium: userToFind.isPremium,
       isPrivate: userToFind.isPrivate,
-      // TODO : tracks ??
+      NumberOffollowers: userToFind.followers.length,
+      tracks: [],
     };
+    // seach in Track all the tracks that have the user id as uploaded by
+    const tracks = await Track.find({ uploaded_by: userToFind.id });
+    let arrOfTracks: any = [];
+    tracks.forEach((track) => {
+      arrOfTracks.push({
+        _id: track._id.toString(),
+        path: track.path,
+        title: track.title,
+        size: track.size,
+        date: track.date,
+        likes: track.likes,
+      });
+    });
+    userToSend.tracks = arrOfTracks;
     // if user asked is private, go on checking auth token.
     if (userToFind.isPrivate) {
       const decoded = getIdOfUserFromJWT(req);
@@ -147,7 +163,17 @@ const getAnotherUser = async (req: Request, res: Response) => {
 
 const deleteUser = async (req: Request, res: Response) => {
   try {
+    const pwd = req.body.password;
     const decoded = getIdOfUserFromJWT(req);
+    // check if the password is correct before deleting the user
+    const foundUser = await User.findOne({ _id: decoded.id });
+    if (!foundUser) {
+      return res.status(404).send('User not found');
+    }
+    const isMatch = bcrypt.compareSync(pwd, foundUser.password!);
+    if (!isMatch) {
+      return res.status(401).send('unauthorized');
+    }
     let deleted;
     if (decoded) {
       deleted = await User.deleteOne({ _id: decoded.id });
@@ -206,7 +232,11 @@ const followUser = async (req: Request, res: Response) => {
     const decoded = getIdOfUserFromJWT(req);
     if (decoded) {
       if (decoded.id === req.body.id) {
-        return res.status(400).send({ error: 'What a fool. You cannot follow yourself. Nice try.' });
+        return res
+          .status(400)
+          .send({
+            error: 'What a fool. You cannot follow yourself. Nice try.',
+          });
       }
       const { id } = req.body;
       const userToFollow = await User.findOne({ _id: id });
@@ -224,7 +254,6 @@ const followUser = async (req: Request, res: Response) => {
     return res.status(500).send({ error: getErrorMessage(error) });
   }
 };
-
 
 export {
   getUser,
