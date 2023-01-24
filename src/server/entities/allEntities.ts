@@ -4,6 +4,8 @@ export interface ITrack {
   title?: string;
   size?: number;
   date: number;
+  likes: number;
+  liked_by: string[];
 }
 
 export interface IUser {

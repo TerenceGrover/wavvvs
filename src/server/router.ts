@@ -2,7 +2,6 @@ import express from 'express';
 import multer from 'multer'
 import * as Track from './controllers/Track.controller';
 import * as User from './controllers/User.controller';
-import checkFileSize from './middle-ware/checkFileSize';
 import { auth } from './middle-ware/auth';
 import fs from 'fs'
 
@@ -65,10 +64,11 @@ router.post('/user/tracks', auth, Track.saveTrackUrl);
 // DELETE TRACK
 router.delete('/track', auth, Track.deleteTrack);
 
-// THIS NEVER GETS CALLED. DELETE ?
-router.get('/alltracks', auth, Track.getAllTracks);
+// GET ALL TRACKS
+router.get('/tracks/all', auth, Track.getAllTracks);
 
-
+// LIKE A TRACK 
+router.put('/track/like', auth, Track.likeTrack);
 
 
 export default router;

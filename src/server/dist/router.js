@@ -59,8 +59,6 @@ router.get('/user/:username', User.getAnotherUser);
 router.put('/me', auth_1.auth, User.updateOne);
 // DELETE USER
 router.delete('/user', auth_1.auth, User.deleteUser);
-// GET TRACKS OF USER 
-router.get('/user/tracks', auth_1.auth, Track.getUserTracks);
 // GET USER INFO
 router.get('/user', auth_1.auth, User.getUser);
 // GET PROFILE INFO FROM SONG ID
@@ -72,6 +70,8 @@ router.put('/user/follow', auth_1.auth, User.followUser);
 router.post('/user/tracks', auth_1.auth, Track.saveTrackUrl);
 // DELETE TRACK
 router.delete('/track', auth_1.auth, Track.deleteTrack);
-// THIS NEVER GETS CALLED. DELETE ?
-router.get('/alltracks', auth_1.auth, Track.getAllTracks);
+// GET ALL TRACKS
+router.get('/tracks/all', auth_1.auth, Track.getAllTracks);
+// LIKE A TRACK 
+router.put('/track/like', auth_1.auth, Track.likeTrack);
 exports.default = router;

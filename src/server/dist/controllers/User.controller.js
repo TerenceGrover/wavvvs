@@ -60,7 +60,6 @@ const getUser = async (req, res) => {
                     });
                 });
                 userToSend.tracks = arrOfTracks;
-                console.log(userToSend);
                 return res.status(200).send(userToSend);
             }
             else

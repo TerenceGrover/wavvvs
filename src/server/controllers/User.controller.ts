@@ -34,6 +34,10 @@ const getUser = async (req: Request, res: Response) => {
           arrOfTracks.push({
             _id: track._id.toString(),
             path: track.path,
+            title: track.title,
+            size: track.size,
+            date: track.date,
+            likes: track.likes,
           });
         });
         userToSend.tracks = arrOfTracks;
