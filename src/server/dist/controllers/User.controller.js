@@ -40,6 +40,7 @@ const getUser = async (req, res) => {
                 userToSend = {
                     username: user.username,
                     email: user.email,
+                    name: user.name,
                     isPrivate: user.isPrivate,
                     isNewUser: user.isNewUser,
                     profile_pic_path: user.profile_pic_path,

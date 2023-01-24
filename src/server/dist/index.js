@@ -32,6 +32,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const router_1 = __importDefault(require("./router"));
 const index_1 = __importDefault(require("./models/index"));
+const cronJob_1 = __importDefault(require("./cronJob"));
 const { PORT, HOST_NAME } = process.env;
 const app = (0, express_1.default)();
 (async function () {
@@ -55,7 +56,8 @@ app.get('*', (req, res) => {
 });
 // UNCOMMENT THIS if u want to wipe the DB
 // deleteEverythingFromDB();
-// const intervalID = removeExpiredTracksCronJob();
+const ONE_MINUTE = 60000;
+setInterval(cronJob_1.default, ONE_MINUTE);
 app.listen(PORT, () => {
     console.log(`Web server running: ${HOST_NAME}:${PORT}`);
 });
