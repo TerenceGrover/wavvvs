@@ -56,6 +56,9 @@ router.get('/user', auth, User.getUser);
 // GET PROFILE INFO FROM SONG ID
 router.get('/user/tracks/:id', auth, User.getUserFromSongId);
 
+// FOLLOWS USER PASSED IN BODY 
+router.put('/user/follow', auth, User.followUser);
+
 /* -- TRACKS RELATED ROUTES --*/
 
 

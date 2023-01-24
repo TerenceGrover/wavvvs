@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserFromSongId = exports.deleteUser = exports.getAnotherUser = exports.updateOne = exports.registerOne = exports.loginOne = exports.getUser = void 0;
+exports.followUser = exports.getUserFromSongId = exports.deleteUser = exports.getAnotherUser = exports.updateOne = exports.registerOne = exports.loginOne = exports.getUser = void 0;
 const models_1 = require("../models/models");
 const userServices = __importStar(require("../services/User.service"));
 const general_util_1 = require("../utils/general.util");
@@ -201,13 +201,10 @@ const deleteUser = async (req, res) => {
 exports.deleteUser = deleteUser;
 const getUserFromSongId = async (req, res) => {
     try {
-        console.log('inizio');
         const songId = req.params.id;
         console.log(songId);
         const song = await models_1.Track.findOne({ _id: songId });
-        console.log(song);
         const ownerId = song === null || song === void 0 ? void 0 : song.uploaded_by;
-        console.log(ownerId);
         const owner = await models_1.User.findOne({ _id: ownerId === null || ownerId === void 0 ? void 0 : ownerId.toString() });
         if (owner) {
             const userToSend = {
@@ -241,3 +238,27 @@ const getUserFromSongId = async (req, res) => {
     }
 };
 exports.getUserFromSongId = getUserFromSongId;
+const followUser = async (req, res) => {
+    try {
+        const decoded = (0, general_util_2.getIdOfUserFromJWT)(req);
+        if (decoded) {
+            const { id } = req.body;
+            const userToFollow = await models_1.User.findOne({ _id: id });
+            if (userToFollow) {
+                userToFollow.followers.push(decoded.id);
+                await userToFollow.save();
+                return res.sendStatus(204);
+            }
+            else {
+                return res.status(404).send({ error: 'User not found' });
+            }
+        }
+        else {
+            return res.status(401).send({ error: 'Unauthorized' });
+        }
+    }
+    catch (error) {
+        return res.status(500).send({ error: (0, general_util_1.getErrorMessage)(error) });
+    }
+};
+exports.followUser = followUser;

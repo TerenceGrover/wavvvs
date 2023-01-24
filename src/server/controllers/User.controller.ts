@@ -195,6 +195,31 @@ const getUserFromSongId = async (req: Request, res: Response) => {
   }
 };
 
+const followUser = async (req: Request, res: Response) => {
+  try {
+    const decoded = getIdOfUserFromJWT(req);
+    if (decoded) {
+      if (decoded.id === req.body.id) {
+        return res.status(400).send({ error: 'What a fool. You cannot follow yourself. Nice try.' });
+      }
+      const { id } = req.body;
+      const userToFollow = await User.findOne({ _id: id });
+      if (userToFollow) {
+        userToFollow.followers.push(decoded.id);
+        await userToFollow.save();
+        return res.sendStatus(204);
+      } else {
+        return res.status(404).send({ error: 'User not found' });
+      }
+    } else {
+      return res.status(401).send({ error: 'Unauthorized' });
+    }
+  } catch (error) {
+    return res.status(500).send({ error: getErrorMessage(error) });
+  }
+};
+
+
 export {
   getUser,
   loginOne,
@@ -203,4 +228,5 @@ export {
   getAnotherUser,
   deleteUser,
   getUserFromSongId,
+  followUser,
 };
