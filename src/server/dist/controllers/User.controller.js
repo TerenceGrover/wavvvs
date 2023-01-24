@@ -242,6 +242,9 @@ const followUser = async (req, res) => {
     try {
         const decoded = (0, general_util_2.getIdOfUserFromJWT)(req);
         if (decoded) {
+            if (decoded.id === req.body.id) {
+                return res.status(400).send({ error: 'What a fool. You cannot follow yourself. Nice try.' });
+            }
             const { id } = req.body;
             const userToFollow = await models_1.User.findOne({ _id: id });
             if (userToFollow) {
