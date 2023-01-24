@@ -6,7 +6,7 @@
   "scripts": {
     "compile": "tsc",
     "dev": "tsc && nodemon ./dist/index.js",
-    "test": "jest -c ./jest.unit.json"
+    "test": "jest /tests/global.test.ts --forceExit"
   },
   "keywords": [],
   "author": "",

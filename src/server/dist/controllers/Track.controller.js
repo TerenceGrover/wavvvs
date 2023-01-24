@@ -1,31 +1,14 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.saveTrackUrl = exports.getUserTracks = exports.deleteTrack = exports.getAllTracks = exports.uploadTrack = void 0;
 const cloudinary_1 = require("cloudinary");
 const models_1 = require("../models/models");
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const { SECRET_KEY, CLOUD_NAME, API_KEY, API_SECRET } = process.env;
-const getIdOfUserFromJWT = (req) => {
-    if (req.headers && req.headers.authorization) {
-        let authorization = req.headers.authorization.split(' ')[1];
-        let decoded = null;
-        try {
-            decoded = jsonwebtoken_1.default.verify(authorization, SECRET_KEY);
-        }
-        catch (e) {
-            console.log(e);
-        }
-        return decoded;
-    }
-    return null;
-};
+const general_util_1 = require("../utils/general.util");
+const { CLOUD_NAME, API_KEY, API_SECRET } = process.env;
 const uploadTrack = async (req, res) => {
     try {
         // get the id from the token
-        const decoded = getIdOfUserFromJWT(req);
+        const decoded = (0, general_util_1.getIdOfUserFromJWT)(req);
         if (decoded) {
             const newTrack = {
                 uploaded_by: decoded.id,
@@ -107,6 +90,8 @@ const deleteTrack = async (req, res) => {
         res.sendStatus(204);
     }
     catch (error) {
+        // TODO : notify user of the error (means send back the error)
+        // TODO : notify the developer of the error (maybe email the error)
         console.log({ error });
         res.status(500).send({ error });
     }
@@ -114,7 +99,7 @@ const deleteTrack = async (req, res) => {
 exports.deleteTrack = deleteTrack;
 const saveTrackUrl = async (req, res) => {
     try {
-        const decoded = getIdOfUserFromJWT(req);
+        const decoded = (0, general_util_1.getIdOfUserFromJWT)(req);
         if (decoded) {
             const id = decoded.id;
             const { url } = req.body;
@@ -131,8 +116,8 @@ const saveTrackUrl = async (req, res) => {
         }
     }
     catch (error) {
-        // notify user of the error (means send back the error)
-        // notify the developer of the error (means log the error)
+        // TODO : notify user of the error (means send back the error)
+        // TODO : notify the developer of the error (maybe email the error)
         console.log({ error });
         res.status(500).send({ error });
     }
