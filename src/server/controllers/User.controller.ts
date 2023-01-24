@@ -22,7 +22,8 @@ const getUser = async (req: Request, res: Response) => {
           isNewUser: user.isNewUser,
           profile_pic_path: user.profile_pic_path,
           bio: user.bio,
-          followers: user.followers.length,
+          NumberOffollowers: user.followers.length,
+          followers: user.followers,
           isPremium: user.isPremium,
           tracks: [],
         };
@@ -170,7 +171,8 @@ const getUserFromSongId = async (req: Request, res: Response) => {
         bio: owner.bio,
         username: owner.username,
         profile_pic_path: owner.profile_pic_path,
-        followers: owner.followers.length,
+        NumberOffollowers: owner.followers.length,
+        followers: owner.followers,
         isPremium: owner.isPremium,
       };
       if (owner.isPrivate) {
