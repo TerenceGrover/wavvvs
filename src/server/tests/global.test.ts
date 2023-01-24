@@ -149,6 +149,7 @@ describe('interact with user functionalities', () => {
     expect(res.status).toBe(204);
   });
 
+  let id = '';
   let arrOfTracks: any[];
   it('should get the user profile', async () => {
     const res = await request(app)
@@ -157,6 +158,7 @@ describe('interact with user functionalities', () => {
     expect(res.status).toBe(200);
     expect(res.body.name).toBe('ale');
 
+    id = res.body._id;
     arrOfTracks = res.body.tracks;
   });
 
@@ -210,4 +212,57 @@ describe('interact with user functionalities', () => {
     expect(res2.status).toBe(200);
     expect(res2.body.tracks.length).toBe(0);
   }, 20000);
+
+  it('should throw an error if user tries to follow himself', async () => {
+    // get user calling the /me endpoint
+    const res = await request(app)
+      .put('/user/follow')
+      .send({
+        id: id,
+      })
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(400);
+  });
+
+  it('should follow a new user', async () => {
+    // register a new user
+    await request(app).post('/register').send({
+      email: 'terence@gmail.com',
+      password: '123456789',
+      username: 'terence',
+    });
+    // login the new user
+    const res = await request(app).post('/login').send({
+      email: 'terence@gmail.com',
+      password: '123456789',
+    });
+    const token2 = res.body.token;
+    // get the id of the new user
+    const res2 = await request(app)
+      .get('/user')
+      .set('Authorization', `Bearer ${token2}`);
+    const id2 = res2.body._id;
+    // follow the new user with the other user
+    const res3 = await request(app)
+      .put('/user/follow')
+      .send({
+        id: id2,
+      })
+      .set('Authorization', `Bearer ${token}`);
+    expect(res3.status).toBe(204);
+    // delete the new user
+    await request(app)
+      .delete('/user')
+      .set('Authorization', `Bearer ${token2}`)
+      .send({
+        password: '123456789',
+      });
+    // get new user profile to see if the other user is in the followers array
+    const res4 = await request(app)
+      .get('/user')
+      .set('Authorization', `Bearer ${token2}`);
+    expect(res4.status).toBe(200);
+    expect(res4.body.followers.length).toBe(1);
+    expect(res4.body.followers[0].username).toBe('ale');
+  }, 10000);
 });
