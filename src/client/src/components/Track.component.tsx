@@ -103,7 +103,7 @@ export default function Track(props: {
       onMouseOut={() => {
         setIsHovering(false);
       }}
-      className={"px-2 rounded-md h-12 mb-10" + (soonDeleted ? " bg-red-600 bg-opacity-50" : "")}
+      className={"min-w-[40%] px-2 rounded-md h-12 mb-10" + (soonDeleted ? " bg-red-600 bg-opacity-50" : "")}
     >
       <DeleteWarningModal setOpen={setOpen} open={open} track={props.track!} />
       <div className=" relative flex justify-between w-full">
@@ -117,7 +117,7 @@ export default function Track(props: {
         ) : (
           <div className="w-4"></div>
         )}
-        <h4 className=" absolute left-4 text-neutral-300 text-xs mb-2 ml-5">
+        <h4 className=" absolute left-4 text-neutral-300 text-xs mb-2 ml-5 mr-12">
           {title.slice(0,43) + '...'}
         </h4>
         <h4 className={`${soonDeleted ? 'text-neutral-300 ' : 'text-neutral-600' } text-xs pl-9 mb-2`}>
