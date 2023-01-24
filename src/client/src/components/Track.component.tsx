@@ -7,6 +7,7 @@ import { MdClose } from 'react-icons/md';
 import DeleteWarningModal from './DeleteWarningModal.component';
 import React from 'react';
 import { Context } from '../Utils/Context';
+import {BsFillSuitHeartFill, BsSuitHeart } from 'react-icons/bs';
 
 export default function Track(props: {
   trackMetaData: TrackType;
@@ -15,6 +16,8 @@ export default function Track(props: {
   const [open, setOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [soonDeleted, setSoonDeleted] = useState(false);
+
+  console.log(props.track, props.trackMetaData)
 
   const { currentUser, setTrackList, playOrPauseTrackByID } = React.useContext(Context);
 
@@ -103,7 +106,7 @@ export default function Track(props: {
       onMouseOut={() => {
         setIsHovering(false);
       }}
-      className={"min-w-[40%] px-2 rounded-md h-12 mb-10" + (soonDeleted ? " bg-red-600 bg-opacity-50" : "")}
+      className={"min-w-[40%] px-2 rounded-md h-16 mb-10" + (soonDeleted ? " bg-red-600 bg-opacity-50" : "")}
     >
       <DeleteWarningModal setOpen={setOpen} open={open} track={props.track!} />
       <div className=" relative flex justify-between w-full">
@@ -124,7 +127,7 @@ export default function Track(props: {
           {hoursUntilDeletion ? hoursUntilDeletion + 'h Left' : 'Out Soon'}
         </h4>
       </div>
-      <div className="flex align-center items-center overflow-hidden">
+      <div className="flex align-center items-center overflow-hidden mt-2">
         <div className="mr-2">
           {props.track?.isPlaying ? (
             <IoStop
@@ -138,7 +141,8 @@ export default function Track(props: {
             />
           )}
         </div>
-        <div className="w-full overflow-hidden ml-2" ref={waveformRef}></div>
+        <div className="w-[100%] overflow-hidden mx-3" ref={waveformRef}></div>
+        <BsSuitHeart className='text-white text-lg hover:cursor-pointer' />
       </div>
     </div>
   );

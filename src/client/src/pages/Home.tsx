@@ -28,6 +28,8 @@ function Home() {
     }, 1000);
   }, [currentUser.name, setCurrentUser]);
 
+  //TODO : Conditional rendering based on user's device size with mobile context provider
+
   return (
     <div id="home-wrapper">
       <Header />
