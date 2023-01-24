@@ -37,20 +37,6 @@ const getAllTracks = async (req: Request, res: Response) => {
   }
 };
 
-const getUserTracks = async (req: Request, res: Response) => {
-  try {
-    const { username } = req.body;
-    const tracks: ITrack[] | undefined = await Track.find({
-      uploaded_by: username,
-    });
-    // if user has tracks, send them. If not, 404
-    tracks ? res.status(200).send(tracks) : res.sendStatus(404);
-  } catch (error) {
-    console.log({ error });
-    res.status(500).send({ error });
-  }
-};
-
 const deleteTrack = async (req: Request, res: Response) => {
   try {
     // get the id of the track to delete
@@ -83,11 +69,12 @@ const saveTrackUrl = async (req: Request, res: Response) => {
     if (decoded) {
       const id = decoded.id;
       const { url } = req.body;
+      const { title } = req.body;
       const track: ITrack = {
         uploaded_by: id,
         path: url,
         date: Date.now(),
-        title: 'Untitled',
+        title: title,
       };
       await Track.create(track);
       res.sendStatus(204);
@@ -102,4 +89,4 @@ const saveTrackUrl = async (req: Request, res: Response) => {
     res.status(500).send({ error });
   }
 };
-export { uploadTrack, getAllTracks, deleteTrack, getUserTracks, saveTrackUrl };
+export { uploadTrack, getAllTracks, deleteTrack, saveTrackUrl };

@@ -46,6 +46,8 @@ const getUserTracks = async (req, res) => {
         const tracks = await models_1.Track.find({
             uploaded_by: username,
         });
+        console.log(123456789);
+        console.log(tracks);
         // if user has tracks, send them. If not, 404
         tracks ? res.status(200).send(tracks) : res.sendStatus(404);
     }
@@ -89,11 +91,12 @@ const saveTrackUrl = async (req, res) => {
         if (decoded) {
             const id = decoded.id;
             const { url } = req.body;
+            const { title } = req.body;
             const track = {
                 uploaded_by: id,
                 path: url,
                 date: Date.now(),
-                title: 'Untitled',
+                title: title,
             };
             await models_1.Track.create(track);
             res.sendStatus(204);
