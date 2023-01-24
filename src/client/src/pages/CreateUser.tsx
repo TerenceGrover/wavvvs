@@ -54,9 +54,9 @@ export default function CreateUser() {
 
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center">
-      <div className=" flex flex-row justify-center max-w-screen-xl w-[80vw] h-[75vh] md:h-[55vh] md:w-[60vw] bg-neutral-800 rounded-2xl drop-shadow-xl">
+      <div className=" flex flex-row justify-center max-w-screen-xl w-[80vw] h-[75vh] md:h-[55vh] md:w-[65vw] bg-neutral-800 rounded-2xl drop-shadow-xl">
         <form
-          className="flex flex-col justify-center"
+          className="flex flex-col justify-center content-center items-center"
           onSubmit={(e) => handleSubmit(e)}
         >
           <div
@@ -114,7 +114,7 @@ export default function CreateUser() {
 
           <button
             type="submit"
-            className="bg-neutral-800 text-neutral-100 hover:bg-neutral-700 hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-neutral-600 focus:ring-opacity-50 rounded-md shadow-sm px-4 py-2 text-sm font-medium transition ease-in-out duration-150 inline-flex items-center justify-center border border-transparent mt-8"
+            className=" w-[60%] bg-neutral-800 text-neutral-100 hover:bg-neutral-700 hover:cursor-pointer focus:ring-2 focus:ring-neutral-600 focus:ring-opacity-50 rounded-md shadow-md shadow-neutral-900 py-2 text-sm font-medium transition ease-in-out duration-150 justify-center mt-8"
           >
             ADD INFO
           </button>
