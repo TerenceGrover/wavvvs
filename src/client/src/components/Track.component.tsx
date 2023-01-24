@@ -14,13 +14,14 @@ export default function Track(props: {
 }) {
   const [open, setOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+  const [soonDeleted, setSoonDeleted] = useState(false);
 
   const { currentUser, setTrackList, playOrPauseTrackByID } = React.useContext(Context);
 
   const waveformRef: any = useRef('waveform');
 
   const { path, title, date, uploaded_by } = props.trackMetaData;
-  const hoursSinceUploaded = millisecondsToHours(Number(Date.now() - date));
+  const hoursUntilDeletion = millisecondsToHours(Number(Date.now() - date)) + 24;
 
   useEffect(() => {
     const options = {
@@ -29,8 +30,9 @@ export default function Track(props: {
       barWidth: 2,
       height: 18,
       normalize: true,
-      waveColor: '#383838',
-      progressColor: '#999',
+      waveColor: `${soonDeleted ? '#9C9C9C' :'#383838'}`,
+      progressColor: '#CCC',
+      cursorColor: 'transparent',
     };
 
     const wavesurfer = WaveSurfer.create(options);
@@ -75,6 +77,12 @@ export default function Track(props: {
     };
   }, [path, setTrackList]);
 
+  useEffect(() => {
+    if (hoursUntilDeletion <= 1) {
+      setSoonDeleted(true);
+  }
+}, [hoursUntilDeletion]);
+
   if (props.track) {
     if (props.track.isPlaying) {
       props.track.waveformRef?.wavesurfer.play();
@@ -95,10 +103,10 @@ export default function Track(props: {
       onMouseOut={() => {
         setIsHovering(false);
       }}
-      className="h-12 mb-10"
+      className={"px-2 rounded-md h-12 mb-10" + (soonDeleted ? " bg-red-600 bg-opacity-50" : "")}
     >
       <DeleteWarningModal setOpen={setOpen} open={open} track={props.track!} />
-      <div className="relative flex justify-between w-full">
+      <div className=" relative flex justify-between w-full">
         {isHovering && uploaded_by === currentUser._id ? (
           <MdClose
             className="text-neutral-300 p-0 m-0 cursor-pointer hover:text-red-500 ease-in transition duration-100"
@@ -110,10 +118,10 @@ export default function Track(props: {
           <div className="w-4"></div>
         )}
         <h4 className=" absolute left-4 text-neutral-300 text-xs mb-2 ml-5">
-          {title}
+          {title.slice(0,43) + '...'}
         </h4>
-        <h4 className="text-neutral-600 text-xs pl-9 mb-2">
-          {hoursSinceUploaded ? hoursSinceUploaded + 'h' : 'now'}
+        <h4 className={`${soonDeleted ? 'text-neutral-300 ' : 'text-neutral-600' } text-xs pl-9 mb-2`}>
+          {hoursUntilDeletion ? hoursUntilDeletion + 'h Left' : 'Out Soon'}
         </h4>
       </div>
       <div className="flex align-center items-center overflow-hidden">
