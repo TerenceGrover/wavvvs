@@ -1,43 +1,30 @@
-import { Fragment, useRef, useState } from 'react';
-import { CurrentUser, TrackListItemType } from '../Interfaces';
+import React, { Fragment } from 'react';
+import { Context } from '../Utils/Context';
 import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
-import { deleteTrack } from '../apiService/api-service';
-import React from 'react';
-import { Context } from '../Utils/Context';
+import { deleteAccount } from '../apiService/api-service';
 
-export default function DeleteWarningModal(props: {
+
+export default function DeleteAccount(props: {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  track: TrackListItemType;
 }) {
-  const cancelButtonRef = useRef(null);
-  const [thereIsAnError, setError] = useState(false);
+  const { currentUser, setCurrentUser } = React.useContext(Context);
+  const cancelButtonRef = React.useRef(null);
 
-  const { setCurrentUser, currentUser } = React.useContext(Context);
-
-  
-  const handleDeleteInModal = async () => {
-    console.log('delete',props.track)
-    const selectedtrack = currentUser.tracks.find(
-      (track) => track.path === props.track.waveformRef.id
-    );
-    try {
-      const resultOfDeleting = await deleteTrack(selectedtrack._id);
-      if (resultOfDeleting instanceof Error) {
-        throw new Error(`${{ cause: resultOfDeleting }}`);
-      }
-      props.setOpen(false);
-      setCurrentUser((currentUser: CurrentUser) => ({
-        ...currentUser,
-        tracks: currentUser.tracks.filter(
-          (track) => track._id !== selectedtrack._id
-        ),
-      }));
-    } catch (error) {
-      console.log({ error });
-      setError(true);
-    }
+  const checkIfPasswordIsCorrect = async (password: string) => {
+    const result = await fetch('/api/users/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: currentUser.email,
+        password: password,
+      }),
+    });
+    const data = await result.json();
+    return data;
   };
 
   return (
@@ -102,6 +89,7 @@ export default function DeleteWarningModal(props: {
                     type="button"
                     className="transition ease-in duration-200 w-20 rounded bg-red-800 py-2 px-1 mt-2 text-xs text-white hover:bg-red-700 ml-3"
                     onClick={handleDeleteInModal}
+                    disabled={true}
                   >
                     Delete
                   </button>
