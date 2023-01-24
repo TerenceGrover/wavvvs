@@ -1,33 +1,37 @@
 import React from 'react';
 import Profile from '../components/Profile.component';
 import { newdummyUser } from '../../cypress/fixtures/dummyUser';
-import { CurrentUserContext } from './TestContext';
+import { CurrentUserContext, playContext } from './TestContext';
 
 describe('<Profile />', () => {
   it('renders', () => {
     // see: https://on.cypress.io/mounting-react
     cy.mount(
+      <playContext.Provider value={{ playOrPauseTrackByID: () => {} }}>
       <CurrentUserContext.Provider
         value={{
           currentUser: newdummyUser,
           setCurrentUser: () => {},
         }}
       >
-        <Profile playOrPauseTrackByID={() => {}} />
+        <Profile />
       </CurrentUserContext.Provider>
+      </playContext.Provider>
     );
   });
 
   beforeEach(() => {
     cy.mount(
+      <playContext.Provider value={{ playOrPauseTrackByID: () => {} }}>
       <CurrentUserContext.Provider
         value={{
           currentUser: newdummyUser,
           setCurrentUser: () => {},
         }}
       >
-        <Profile playOrPauseTrackByID={() => {}} />
+        <Profile />
       </CurrentUserContext.Provider>
+      </playContext.Provider>
     );
   });
 

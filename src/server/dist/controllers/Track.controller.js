@@ -1,10 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.saveTrackUrl = exports.getUserTracks = exports.deleteTrack = exports.getAllTracks = exports.uploadTrack = void 0;
-const cloudinary_1 = require("cloudinary");
 const models_1 = require("../models/models");
 const general_util_1 = require("../utils/general.util");
-const { CLOUD_NAME, API_KEY, API_SECRET } = process.env;
 const uploadTrack = async (req, res) => {
     try {
         // get the id from the token
@@ -69,25 +67,13 @@ const deleteTrack = async (req, res) => {
         }
         // store the url of the track to delete
         const { path } = track;
-        // using api key and secret
-        cloudinary_1.v2.config({
-            cloud_name: CLOUD_NAME,
-            api_key: API_KEY,
-            api_secret: API_SECRET,
-        });
-        // delete the track from cloudinary
-        // get last part of the url
-        const lastPartOfUrl = path.split('/').pop();
-        const lastPartOfUrlWithoutExtension = lastPartOfUrl === null || lastPartOfUrl === void 0 ? void 0 : lastPartOfUrl.split('.').shift();
-        console.log(lastPartOfUrlWithoutExtension);
-        const buff = await cloudinary_1.v2.uploader.destroy(lastPartOfUrlWithoutExtension, { type: 'upload', resource_type: 'video' });
-        // if its deleted, delete it from the database
-        if (buff.result === 'ok') {
-            // delete the track from the database
-            await models_1.Track.deleteOne({ _id: id });
-            console.log('deleted from cloudinary AND database');
+        const del = await (0, general_util_1.deleteTrackFromCloudinaryAndDb)(id, path);
+        if (del) {
+            res.sendStatus(204);
         }
-        res.sendStatus(204);
+        else {
+            res.sendStatus(404);
+        }
     }
     catch (error) {
         // TODO : notify user of the error (means send back the error)
@@ -106,6 +92,8 @@ const saveTrackUrl = async (req, res) => {
             const track = {
                 uploaded_by: id,
                 path: url,
+                date: Date.now(),
+                title: 'Untitled',
             };
             await models_1.Track.create(track);
             res.sendStatus(204);

@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
-import { v2 as cloudinary } from 'cloudinary';
 import { Track } from '../models/models';
 import { ITrack } from '../entities/allEntities';
-import { getIdOfUserFromJWT } from '../utils/general.util';
-const { CLOUD_NAME, API_KEY, API_SECRET } = process.env;
+import { getIdOfUserFromJWT, deleteTrackFromCloudinaryAndDb } from '../utils/general.util';
 
 const uploadTrack = async (req: Request, res: Response) => {
   try {
@@ -65,28 +63,12 @@ const deleteTrack = async (req: Request, res: Response) => {
     }
     // store the url of the track to delete
     const { path } = track;
-    // using api key and secret
-    cloudinary.config({
-      cloud_name: CLOUD_NAME,
-      api_key: API_KEY,
-      api_secret: API_SECRET,
-    });
-    // delete the track from cloudinary
-    // get last part of the url
-    const lastPartOfUrl = path.split('/').pop();
-    const lastPartOfUrlWithoutExtension = lastPartOfUrl?.split('.').shift();
-    console.log(lastPartOfUrlWithoutExtension);
-    const buff = await cloudinary.uploader.destroy(
-      lastPartOfUrlWithoutExtension!,
-      { type: 'upload', resource_type: 'video' }
-    );
-    // if its deleted, delete it from the database
-    if (buff.result === 'ok') {
-      // delete the track from the database
-      await Track.deleteOne({ _id: id });
-      console.log('deleted from cloudinary AND database');
-    }
+    const del = await deleteTrackFromCloudinaryAndDb(id, path);
+    if (del) {
     res.sendStatus(204);
+    } else {
+      res.sendStatus(404);
+    }
   } catch (error) {
     // TODO : notify user of the error (means send back the error)
     // TODO : notify the developer of the error (maybe email the error)
@@ -104,6 +86,8 @@ const saveTrackUrl = async (req: Request, res: Response) => {
       const track: ITrack = {
         uploaded_by: id,
         path: url,
+        date: Date.now(),
+        title: 'Untitled',
       };
       await Track.create(track);
       res.sendStatus(204);

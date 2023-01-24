@@ -17,10 +17,13 @@ const getUser = async (req: Request, res: Response) => {
         userToSend = {
           username: user.username,
           email: user.email,
+          name: user.name,
           isPrivate: user.isPrivate,
           isNewUser: user.isNewUser,
           profile_pic_path: user.profile_pic_path,
           bio: user.bio,
+          followers: user.followers.length,
+          isPremium: user.isPremium,
           tracks: [],
         };
         // seach in Track all the tracks that have the user id as uploaded by
@@ -68,6 +71,8 @@ const registerOne = async (req: Request, res: Response) => {
       username,
       email,
       password,
+      followers: [],
+      isPremium: false,
     };
     const user = await userServices.register(userToRegister);
     res.status(200).send(user);
@@ -115,6 +120,8 @@ const getAnotherUser = async (req: Request, res: Response) => {
       username: userToFind.username,
       email: userToFind.email,
       profile_pic_path: userToFind.profile_pic_path,
+      followers: userToFind.followers,
+      isPremium: userToFind.isPremium,
       isPrivate: userToFind.isPrivate,
       // TODO : tracks ??
     };
@@ -150,6 +157,69 @@ const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
+const getUserFromSongId = async (req: Request, res: Response) => {
+  try {
+    const songId = req.params.id;
+    console.log(songId);
+    const song = await Track.findOne({ _id: songId });
+    const ownerId = song?.uploaded_by;
+    const owner = await User.findOne({ _id: ownerId?.toString() });
+    if (owner) {
+      const userToSend = {
+        name: owner.name,
+        bio: owner.bio,
+        username: owner.username,
+        profile_pic_path: owner.profile_pic_path,
+        followers: owner.followers.length,
+        isPremium: owner.isPremium,
+      };
+      if (owner.isPrivate) {
+        // check if the user who made the request follows the owner of the song.
+        const decoded = getIdOfUserFromJWT(req);
+        if (decoded) {
+          const user = await User.findOne({ _id: decoded.id });
+          if (user) {
+            if (owner.followers.includes(user._id.toString())) {
+              return res.status(200).send(userToSend);
+            }
+          }
+        }
+        return res.status(401).send({ error: 'Private' });
+      }
+      return res.status(200).send(userToSend);
+    }
+    return res.status(404).send({ error: 'User not found' });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({ error: getErrorMessage(error) });
+  }
+};
+
+const followUser = async (req: Request, res: Response) => {
+  try {
+    const decoded = getIdOfUserFromJWT(req);
+    if (decoded) {
+      if (decoded.id === req.body.id) {
+        return res.status(400).send({ error: 'What a fool. You cannot follow yourself. Nice try.' });
+      }
+      const { id } = req.body;
+      const userToFollow = await User.findOne({ _id: id });
+      if (userToFollow) {
+        userToFollow.followers.push(decoded.id);
+        await userToFollow.save();
+        return res.sendStatus(204);
+      } else {
+        return res.status(404).send({ error: 'User not found' });
+      }
+    } else {
+      return res.status(401).send({ error: 'Unauthorized' });
+    }
+  } catch (error) {
+    return res.status(500).send({ error: getErrorMessage(error) });
+  }
+};
+
+
 export {
   getUser,
   loginOne,
@@ -157,4 +227,6 @@ export {
   updateOne,
   getAnotherUser,
   deleteUser,
+  getUserFromSongId,
+  followUser,
 };

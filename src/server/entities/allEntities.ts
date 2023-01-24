@@ -3,7 +3,7 @@ export interface ITrack {
   path: string;
   title?: string;
   size?: number;
-  date?: number;
+  date: number;
 }
 
 export interface IUser {
@@ -16,4 +16,6 @@ export interface IUser {
   bio?: string;
   profile_pic_path?: string;
   tracks?: ITrack[],
+  followers: string[];
+  isPremium: boolean;
 }

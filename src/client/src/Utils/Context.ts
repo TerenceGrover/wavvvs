@@ -19,4 +19,5 @@ export const Context = React.createContext({
   setIsAudioMuted: (isAudioMuted: boolean) => {},
   repeat: false,
   setRepeat: (repeat: boolean) => {},
+  playOrPauseTrackByID: (id: string) => {},
 });

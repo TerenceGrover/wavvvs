@@ -32,6 +32,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const router_1 = __importDefault(require("./router"));
 const index_1 = __importDefault(require("./models/index"));
+const cronJob_1 = __importDefault(require("./cronJob"));
 const { PORT, HOST_NAME } = process.env;
 const app = (0, express_1.default)();
 (async function () {
@@ -45,9 +46,6 @@ const app = (0, express_1.default)();
 })();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
-// dangerous, here you have all the songs from all the users.
-// TODO: to play a song u should call an endpoint that serves songs for users
-// app.use(express.static('./public'));
 app.use(router_1.default);
 app.get('*', (req, res) => {
     res.status(404);
@@ -55,7 +53,8 @@ app.get('*', (req, res) => {
 });
 // UNCOMMENT THIS if u want to wipe the DB
 // deleteEverythingFromDB();
-// const intervalID = removeExpiredTracksCronJob();
+const ONE_MINUTE = 60000;
+setInterval(cronJob_1.default, ONE_MINUTE);
 app.listen(PORT, () => {
     console.log(`Web server running: ${HOST_NAME}:${PORT}`);
 });

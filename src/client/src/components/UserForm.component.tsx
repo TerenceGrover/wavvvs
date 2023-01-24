@@ -34,20 +34,21 @@ const UserForm = () => {
     }
 
     if (clicked === 'login') {
-      login(info).then((res) => {
-        if (res.token) {
-          setCurrentUser(res);
-          if (res.user.isNewUser === true) {
-            setIsNewUser(true);
-          } else {
-            setIsNewUser(false);
+        login(info).then((res) => {
+          console.log(res)
+          if (res.token) {
+            setCurrentUser(res);
+            if (res.user.isNewUser === true) {
+              setIsNewUser(true);
+            } else {
+              setIsNewUser(false);
+            }
+            setIsAuth(true);
           }
-          setIsAuth(true);
-        }
-        else {
-          alert('Invalid username or password');
-        }
-      })
+          else {
+            alert('Invalid username or password');
+          }
+        })
     }
     
     if (clicked === 'register') {
