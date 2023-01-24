@@ -22,10 +22,6 @@ const app: Express = express();
 
 app.use(express.json());
 app.use(cors());
-
-// dangerous, here you have all the songs from all the users.
-// TODO: to play a song u should call an endpoint that serves songs for users
-// app.use(express.static('./public'));
 app.use(router);
 
 app.get('*', (req: Request, res: Response) => {
