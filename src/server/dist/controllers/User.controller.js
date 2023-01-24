@@ -45,7 +45,8 @@ const getUser = async (req, res) => {
                     isNewUser: user.isNewUser,
                     profile_pic_path: user.profile_pic_path,
                     bio: user.bio,
-                    followers: user.followers.length,
+                    NumberOffollowers: user.followers.length,
+                    followers: user.followers,
                     isPremium: user.isPremium,
                     tracks: [],
                 };
@@ -54,11 +55,12 @@ const getUser = async (req, res) => {
                 let arrOfTracks = [];
                 tracks.forEach((track) => {
                     arrOfTracks.push({
-                        _id: track._id,
+                        _id: track._id.toString(),
                         path: track.path,
                     });
                 });
                 userToSend.tracks = arrOfTracks;
+                console.log(userToSend);
                 return res.status(200).send(userToSend);
             }
             else
@@ -212,7 +214,8 @@ const getUserFromSongId = async (req, res) => {
                 bio: owner.bio,
                 username: owner.username,
                 profile_pic_path: owner.profile_pic_path,
-                followers: owner.followers.length,
+                NumberOffollowers: owner.followers.length,
+                followers: owner.followers,
                 isPremium: owner.isPremium,
             };
             if (owner.isPrivate) {

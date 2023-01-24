@@ -47,9 +47,6 @@ router.put('/me', auth, User.updateOne);
 // DELETE USER
 router.delete('/user', auth, User.deleteUser);
 
-// GET TRACKS OF USER 
-router.get('/user/tracks', auth, Track.getUserTracks);
-
 // GET USER INFO
 router.get('/user', auth, User.getUser);
 

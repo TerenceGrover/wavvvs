@@ -32,7 +32,7 @@ const getUser = async (req: Request, res: Response) => {
         let arrOfTracks: any = [];
         tracks.forEach((track) => {
           arrOfTracks.push({
-            _id: track._id,
+            _id: track._id.toString(),
             path: track.path,
           });
         });
