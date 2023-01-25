@@ -73,7 +73,7 @@ router.post('/test/user/tracks', auth_1.auth, Track.TESTsaveTrackUrl);
 // DELETE TRACK
 router.delete('/track', auth_1.auth, Track.deleteTrack);
 // GET ALL TRACKS
-router.get('/tracks/all', auth_1.auth, Track.getAllTracks);
+router.post('/tracks/all', auth_1.auth, Track.getAllTracks);
 // LIKE A TRACK 
 router.put('/track/like', auth_1.auth, Track.likeTrack);
 exports.default = router;

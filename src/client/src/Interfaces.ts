@@ -4,6 +4,7 @@ export interface ErrorType {
 }
 
 export interface CurrentUser {
+  id?: string;
   username: string;
   _v: number;
   _id : string;
@@ -13,6 +14,10 @@ export interface CurrentUser {
   profile_pic_path: string;
   tracks: Array<any>;
   isNewUser: boolean;
+  isPremium: boolean;
+  isPrivate: boolean;
+  followers: Array<string>;
+  NumberOffollowers: number;
 }
 
 export interface TrackType {
@@ -21,6 +26,7 @@ export interface TrackType {
   title: string;
   size: number;
   date: number;
+  _id: string;
 }
 
 export interface TrackListItemType {

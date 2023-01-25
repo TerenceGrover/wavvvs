@@ -19,6 +19,23 @@ import { Context } from './Utils/Context';
 
 export default function App() {
 
+  const emptyUser: CurrentUser = {
+    username: '',
+    _v: 0,
+    _id: '',
+    id: '',
+    bio: '',
+    email: '',
+    name: '',
+    profile_pic_path: '',
+    tracks: [],
+    isNewUser: true,
+    isPremium: false,
+    isPrivate: false,
+    followers: [],
+    NumberOffollowers: 0,
+  }
+
   const [mobile, setMobile] = React.useState(false);
   const [valid, setValid] = React.useState(false);
   const [isAuth, setIsAuth] = React.useState(false);
@@ -27,17 +44,8 @@ export default function App() {
   const [trackList, setTrackList] = React.useState<TrackListItemType[]>([]);
   const [isAudioMuted, setIsAudioMuted] = React.useState(false);
   const [repeat, setRepeat] = React.useState(false);
-  const [currentUser, setCurrentUser] = React.useState<CurrentUser>({
-    username: '',
-    _v: 0,
-    _id: '',
-    bio: '',
-    email: '',
-    name: '',
-    profile_pic_path: '',
-    tracks: [],
-    isNewUser: true,
-  });
+  const [selectedUser, setSelectedUser] = React.useState<CurrentUser>(emptyUser);
+  const [currentUser, setCurrentUser] = React.useState<CurrentUser>(emptyUser);
 
   React.useEffect(() => {
     const checkIfMobile = () => {
@@ -121,6 +129,7 @@ export default function App() {
     checkUser().then((res: CurrentUser) => {
       if (res) {
         setCurrentUser(res);
+        setSelectedUser(res);
         if (res.isNewUser === true || !res.hasOwnProperty('isNewUser')) {
           setIsNewUser(true);
         } else {
@@ -133,7 +142,6 @@ export default function App() {
   }, [valid]);
 
   React.useEffect(() => {
-    console.log(localStorage.getItem('token'))
     if (localStorage.getItem('token') === null || localStorage.getItem('token') === undefined) {
       console.log('no token');
       setIsAuth(false);
@@ -142,7 +150,6 @@ export default function App() {
     } else {
       const token = localStorage.getItem('token')!;
       const decodedJwt = parseJWT(token);
-      console.log(decodedJwt);
 
       if (decodedJwt.exp * 1000 < Date.now()) {
         console.log('token expired');
@@ -175,6 +182,9 @@ export default function App() {
         repeat,
         setRepeat,
         playOrPauseTrackByID,
+        mobile,
+        selectedUser,
+        setSelectedUser,
       }}
     >
       <div id="app-wrapper">
