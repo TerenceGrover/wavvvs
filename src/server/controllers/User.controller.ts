@@ -2,8 +2,7 @@ import { User, Track } from '../models/models';
 import { IUser } from '../entities/allEntities';
 import { Request, Response } from 'express';
 import * as userServices from '../services/User.service';
-import { getErrorMessage } from '../utils/general.util';
-import { getIdOfUserFromJWT } from '../utils/general.util';
+import { getErrorMessage, deleteUserBelongings, getIdOfUserFromJWT } from '../utils/general.util';
 import bcrypt from 'bcrypt';
 
 const getUser = async (req: Request, res: Response) => {
@@ -39,15 +38,14 @@ const getUser = async (req: Request, res: Response) => {
             title: track.title,
             size: track.size,
             date: track.date,
-            likes: track.likes,
+            likes: track.liked_by.length,
             liked_by: track.liked_by,
           });
         });
         userToSend.tracks = arrOfTracks;
         return res.status(200).send(userToSend);
       } else return res.sendStatus(404);
-    }
-    // return res.send(500);
+    } else return res.sendStatus(404);
   } catch (error) {
     console.log({ error });
     return res.status(500).send({ error: getErrorMessage(error) });
@@ -144,7 +142,7 @@ const getAnotherUser = async (req: Request, res: Response) => {
         title: track.title,
         size: track.size,
         date: track.date,
-        likes: track.likes,
+        likes: track.liked_by.length,
         liked_by: track.liked_by,
       });
     });
@@ -184,6 +182,8 @@ const deleteUser = async (req: Request, res: Response) => {
       return res.status(401).send('unauthorized');
     }
     if (deleted) {
+      // dont await this. its gonna take a while.
+      deleteUserBelongings(decoded.id);
       return res.sendStatus(204);
     } else return res.sendStatus(500);
   } catch (error) {
