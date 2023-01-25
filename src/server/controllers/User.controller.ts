@@ -301,29 +301,28 @@ const getAllUsers = async (req: Request, res: Response) => {
         totalLikes: totalLikes,
         tracks: user.tracks,
       });
-
-      if (sort) {
-        switch (sort) {
-          case 'followers':
-            arrOfUsers.sort(
-              (a: any, b: any) => b.numberOfFollowers - a.numberOfFollowers
-            );
-            break;
-          case 'totalLikes':
-            arrOfUsers.sort((a: any, b: any) => b.totalLikes - a.totalLikes);
-            break;
-          default:
-            arrOfUsers.sort(
-              (a: any, b: any) => b.numberOfFollowers - a.numberOfFollowers
-            );
-            break;
-        }
+    }
+    if (sort) {
+      switch (sort) {
+        case 'followers':
+          arrOfUsers.sort(
+            (a: any, b: any) => b.numberOfFollowers - a.numberOfFollowers
+          );
+          break;
+        case 'totalLikes':
+          arrOfUsers.sort((a: any, b: any) => b.totalLikes - a.totalLikes);
+          break;
+        default:
+          arrOfUsers.sort(
+            (a: any, b: any) => b.numberOfFollowers - a.numberOfFollowers
+          );
+          break;
       }
-      if (arrOfUsers.length > LIMIT) {
-        return res.status(200).send(arrOfUsers.slice(0, LIMIT));
-      } else {
-        return res.status(200).send(arrOfUsers);
-      }
+    }
+    if (arrOfUsers.length > LIMIT) {
+      return res.status(200).send(arrOfUsers.slice(0, LIMIT));
+    } else {
+      return res.status(200).send(arrOfUsers);
     }
   } catch (error) {
     console.log({ error });
