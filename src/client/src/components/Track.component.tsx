@@ -19,7 +19,7 @@ export default function Track(props: {
   const [soonDeleted, setSoonDeleted] = useState(false);
   const [liked, setLiked] = useState(false);
 
-  const { currentUser, setTrackList, playOrPauseTrackByID, setSelectedUser } = React.useContext(Context);
+  const { currentUser, setTrackList, playOrPauseTrackByID, setSelectedUser, mobile } = React.useContext(Context);
 
   const waveformRef: any = useRef('waveform');
 
@@ -119,7 +119,7 @@ export default function Track(props: {
           setSelectedUser(res);
         })};
       }}
-      className={"min-w-[40%] px-2 rounded-md h-16 mb-10" + (soonDeleted ? " bg-red-600 bg-opacity-50" : "")}
+      className={`${mobile ? "min-w-full" : "min-w-[40%]"} max-w-full px-2 rounded-md h-16 mb-10` + (soonDeleted ? " bg-red-600 bg-opacity-50" : "")}
     >
       <DeleteWarningModal setOpen={setOpen} open={open} track={props.track!} />
       <div className=" relative flex justify-between w-full">
@@ -134,7 +134,7 @@ export default function Track(props: {
           <div className="w-4"></div>
         )}
         <h4 className=" absolute left-4 text-neutral-300 text-xs mb-2 ml-5 mr-12">
-          {title.slice(0,43) + '...'}
+          {title.length >= 43 ? title.slice(0,43) + '...' : title}
         </h4>
         <h4 className={`${soonDeleted ? 'text-neutral-300 ' : 'text-neutral-600' } text-xs pl-9 mb-2`}>
           {hoursUntilDeletion ? hoursUntilDeletion + 'h Left' : 'Out Soon'}

@@ -6,7 +6,7 @@ import EmptyTrack from './EmptyTrack.component';
 export default function TrackCollection(props : {sort:string, homeTracks: any[]}) {
 
   const [tracksto3, setTracksto3] = React.useState([1, 2, 3, 4, 5]);
-  const { currentUser, trackList } = React.useContext(Context);
+  const { currentUser, trackList, mobile } = React.useContext(Context);
 
   React.useEffect(() => {
     if (props.homeTracks && props.homeTracks.length > 0) {

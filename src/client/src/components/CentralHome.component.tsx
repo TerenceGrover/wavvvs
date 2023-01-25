@@ -2,7 +2,7 @@
 //
 import React from 'react';
 import TrackCollection from './TrackCollection';
-import { HomeContext, Context } from '../Utils/Context';
+import { HomeContext } from '../Utils/Context';
 import UserCollection from './UserCollection.component';
 import { getAllTracks } from '../apiService/api-service';
 
@@ -12,7 +12,7 @@ export default function CentralHome() {
   const [homeTracks, setHomeTracks] = React.useState([]);
 
   React.useEffect(() => {
-    const sort = centralHome === 'Home' ? '' : centralHome === 'Soon' ? 'date' : centralHome === 'Top' ? 'likes' : '';
+    let sort = centralHome === 'Home' ? '' : centralHome === 'Soon' ? 'date' : centralHome === 'Top' ? 'likes' : '';
     getAllTracks(sort).then((res) => {
       console.log(res)
       if (res !== homeTracks && res.length > 0){
