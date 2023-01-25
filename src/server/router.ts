@@ -5,8 +5,10 @@ import * as User from './controllers/User.controller';
 import { auth } from './middle-ware/auth';
 import fs from 'fs';
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2022-08-01',
+const { STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY } = process.env;
+import Stripe from 'stripe';
+const stripe = new Stripe(STRIPE_SECRET_KEY!, {
+  apiVersion: '2022-11-15',
 });
 
 const storage = multer.diskStorage({
@@ -42,7 +44,7 @@ router.get('/user/:id', User.getAnotherUser);
 
 router.get('/checkout', auth, (req, res) => {
   res.send({
-    publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+    publishableKey: STRIPE_PUBLISHABLE_KEY,
   });
 });
 
