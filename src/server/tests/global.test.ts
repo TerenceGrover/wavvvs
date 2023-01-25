@@ -259,20 +259,23 @@ describe('interact with user functionalities', () => {
     expect(res4.status).toBe(200);
     expect(res4.body.followers.length).toBe(1);
     expect(res4.body.followers[0]).toBe(id);
-    // delete the new user
-    await request(app)
-      .delete('/user')
-      .set('Authorization', `Bearer ${token2}`)
-      .send({
-        password: '123456789',
-      });
+    // // delete the new user
+    // await request(app)
+    //   .delete('/user')
+    //   .set('Authorization', `Bearer ${token2}`)
+    //   .send({
+    //     password: '123456789',
+    //   });
   }, 10000);
 
   it('should like an user track', async () => {
-    // register another user
-    // login the user
-    // make the user follow ale
-    // make the user like ale song
+    // make the user terence like ale song
+    const res = await request(app)
+      .put('/track/like')
+      .send({
+        trackId: arrOfTracks[0]._id
+      })
+      .set('Authorization', `Bearer ${tokenOfUser2}`);
   });
 
   it('should delete likes and following of user when user gets deleted', async () => {

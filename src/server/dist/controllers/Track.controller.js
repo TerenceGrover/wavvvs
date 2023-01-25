@@ -19,7 +19,8 @@ const getAllTracks = async (req, res) => {
                 title: track.title,
                 size: track.size,
                 date: track.date,
-                likes: track.likes,
+                likes: track.liked_by.length,
+                uploaded_by: track.uploaded_by,
             });
         });
         if (sort) {
@@ -86,7 +87,6 @@ const saveTrackUrl = async (req, res) => {
             const { url } = req.body;
             const { title } = req.body;
             const track = {
-                likes: 0,
                 liked_by: [],
                 uploaded_by: id,
                 path: url,
@@ -120,15 +120,13 @@ const likeTrack = async (req, res) => {
                 // if the user already liked the track, we remove the like
                 if (track.liked_by.includes(id)) {
                     await models_1.Track.updateOne({ _id: trackId }, { $pull: { liked_by: id } });
-                    await models_1.Track.updateOne({ _id: trackId }, { $inc: { likes: -1 } });
-                    console.log('removed like, likes of the track is now: ' + track.likes);
+                    console.log('removed like, likes of the track is now: ' + track.liked_by.length);
                     return res.sendStatus(204);
                 }
                 else {
                     // if the user didn't like the track, we add the like
                     await models_1.Track.updateOne({ _id: trackId }, { $push: { liked_by: id } });
-                    await models_1.Track.updateOne({ _id: trackId }, { $inc: { likes: 1 } });
-                    console.log('added like, likes of the track is now: ' + track.likes);
+                    console.log('added like, likes of the track is now: ' + track.liked_by.length);
                     return res.sendStatus(204);
                 }
             }
@@ -150,6 +148,7 @@ const likeTrack = async (req, res) => {
 };
 exports.likeTrack = likeTrack;
 const TESTsaveTrackUrl = async (req, res) => {
+    // THIS FUNCTIONS IS BEING USED FOR TESTING PURPOSES ONLY.
     try {
         const decoded = (0, general_util_1.getIdOfUserFromJWT)(req);
         if (decoded) {
@@ -160,7 +159,6 @@ const TESTsaveTrackUrl = async (req, res) => {
             twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
             const newTimestamp = twoDaysAgo.getTime();
             const track = {
-                likes: 0,
                 liked_by: [],
                 uploaded_by: id,
                 path: url,
