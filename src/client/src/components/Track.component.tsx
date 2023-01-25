@@ -114,9 +114,11 @@ export default function Track(props: {
         setIsHovering(false);
       }}
       onClick={() => {
+        //if i am in '/' only
+        if (window.location.pathname === '/') {
         getIndividualUser(uploaded_by).then((res) => {
           setSelectedUser(res);
-        });
+        })};
       }}
       className={"min-w-[40%] px-2 rounded-md h-16 mb-10" + (soonDeleted ? " bg-red-600 bg-opacity-50" : "")}
     >
