@@ -70,7 +70,7 @@ router.post('/test/user/tracks', auth, Track.TESTsaveTrackUrl);
 router.delete('/track', auth, Track.deleteTrack);
 
 // GET ALL TRACKS
-router.get('/tracks/all', auth, Track.getAllTracks);
+router.post('/tracks/all', auth, Track.getAllTracks);
 
 // LIKE A TRACK 
 router.put('/track/like', auth, Track.likeTrack);

@@ -276,38 +276,63 @@ describe('interact with user functionalities', () => {
     expect(res4.body.followers.length).toBe(0);
   });
 
-  // it('should like a user track', async () => {
-  //   // make the user terence like ale song
-  //   const res = await request(app)
-  //     .put('/track/like')
-  //     .send({
-  //       trackId: arrOfTracks[0]._id,
-  //     })
-  //     .set('Authorization', `Bearer ${tokenOfUser2}`);
-  //   expect(res.status).toBe(204);
+  it('should like a user track', async () => {
+    // make the user terence like ale song
+    const res = await request(app)
+      .put('/track/like')
+      .send({
+        trackId: arrOfTracks[0]._id,
+      })
+      .set('Authorization', `Bearer ${tokenOfUser2}`);
+    expect(res.status).toBe(204);
 
-  //   const res2 = await request(app)
-  //     .get('/user')
-  //     .set('Authorization', `Bearer ${tokenOfUser1}`);
-  //   expect(res2.status).toBe(200);
-  //   expect(res2.body.name).toBe('ale');
-  //   expect(res2.body.tracks[0].likes).toBe(1);
-  // });
+    const res2 = await request(app)
+      .get('/user')
+      .set('Authorization', `Bearer ${tokenOfUser1}`);
+    expect(res2.status).toBe(200);
+    expect(res2.body.name).toBe('ale');
+    expect(res2.body.tracks[0].likes).toBe(1);
+  });
+  
+  it('should remove like if user already likes the track', async () => {
+    // make the user terence like ale song
+    const res = await request(app)
+      .put('/track/like')
+      .send({
+        trackId: arrOfTracks[0]._id,
+      })
+      .set('Authorization', `Bearer ${tokenOfUser2}`);
+    expect(res.status).toBe(204);
 
-  // it('should delete likes and following of user when user gets deleted', async () => {
-  //   // delete the user
-  //   // expect ale followers to be 0
-  //   // expect ale's song lieks to be 0
-  // });
+    const res2 = await request(app)
+      .get('/user')
+      .set('Authorization', `Bearer ${tokenOfUser1}`);
+    expect(res2.status).toBe(200);
+    expect(res2.body.name).toBe('ale');
+    expect(res2.body.tracks[0].likes).toBe(0);
+  });
 
-  // // delete ale's track
-  // it('should delete a track for the user', async () => {
-  //   const res = await request(app)
-  //     .delete('/track')
-  //     .send({
-  //       id: arrOfTracks[0]._id,
-  //     })
-  //     .set('Authorization', `Bearer ${tokenOfUser1}`);
-  //   expect(res.status).toBe(204);
-  // });
+  it('should delete likes and following of user when user gets deleted', async () => {
+    // delete the user
+    // expect ale followers to be 0
+    // expect ale's song lieks to be 0
+  });
+
+  // delete ale's track
+  it('should delete a track for the user', async () => {
+    const res = await request(app)
+      .delete('/track')
+      .send({
+        id: arrOfTracks[0]._id,
+      })
+      .set('Authorization', `Bearer ${tokenOfUser1}`);
+    expect(res.status).toBe(204);
+    
+    const res2 = await request(app)
+      .get('/user')
+      .set('Authorization', `Bearer ${tokenOfUser1}`);
+    expect(res2.status).toBe(200);
+    expect(res2.body.name).toBe('ale');
+    expect(res2.body.tracks.length).toBe(0);
+  });
 });
