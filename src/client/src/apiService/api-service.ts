@@ -1,19 +1,6 @@
 import { CurrentUser, InfoObject, AdditionalInfoObject } from '../Interfaces';
 const baseURL = 'http://localhost:3001';
 
-const getUser = (user: string): any => {
-  try {
-    return fetch(baseURL + `/users`, {
-      method: 'GET',
-      body: JSON.stringify({ username: user }),
-    }).then((res) => {
-      res.json();
-    });
-  } catch (error) {
-    console.log({ error });
-    return error;
-  }
-};
 
 const login = async (infoObject: InfoObject): Promise<any> => {
   const { email, password } = infoObject;
@@ -167,14 +154,29 @@ const deleteAccount  = async (password : string) => {
   }
 };
 
+const getAllTracks = async () => {
+  try {
+    return fetch(baseURL + `/tracks/all`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'Application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+    }).then((res) => res.json());
+  } catch (error) {
+    console.log({ error });
+    return error;
+  }
+};
+
 export {
   postTrack,
-  getUser,
   deleteTrack,
   login,
   register,
   updateUser,
   checkUser,
   getAllUsers,
-  deleteAccount
+  deleteAccount,
+  getAllTracks
 };

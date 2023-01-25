@@ -2,23 +2,38 @@
 //
 import React from 'react';
 import TrackCollection from './TrackCollection';
-import { HomeContext } from '../Utils/Context';
+import { HomeContext, Context } from '../Utils/Context';
 import UserCollection from './UserCollection.component';
+import { getAllTracks } from '../apiService/api-service';
 
 export default function CentralHome() {
 
   const { centralHome } = React.useContext(HomeContext);
+  const [homeTracks, setHomeTracks] = React.useState([]);
+
+  React.useEffect(() => {
+    getAllTracks().then((res) => {
+      console.log(res)
+      if (res !== homeTracks && res.length > 0){
+        console.log('res', res)
+        console.log('homeTracks', homeTracks)
+        setHomeTracks(res);
+      }
+    }
+    );
+  }, []);
+
 
   return (
     <div className="flex flex-col justify-center items-center">
       {centralHome ==='Home'
       &&
-      <TrackCollection />
+      <TrackCollection homeTracks={homeTracks} />
       }
       {
       centralHome ==='Soon'
       &&
-      <TrackCollection />
+      <TrackCollection homeTracks={homeTracks} />
       }
       {
       centralHome ==='Stars'
@@ -28,7 +43,7 @@ export default function CentralHome() {
       {
       centralHome ==='Top'
       &&
-      <TrackCollection />
+      <TrackCollection homeTracks={homeTracks} />
       }
     </div>
   );

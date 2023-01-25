@@ -16,8 +16,7 @@ export default function Track(props: {
   const [open, setOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [soonDeleted, setSoonDeleted] = useState(false);
-
-  console.log(props.track, props.trackMetaData)
+  const [liked, setLiked] = useState(false);
 
   const { currentUser, setTrackList, playOrPauseTrackByID } = React.useContext(Context);
 
@@ -25,6 +24,8 @@ export default function Track(props: {
 
   const { path, title, date, uploaded_by } = props.trackMetaData;
   const hoursUntilDeletion = millisecondsToHours(Number(Date.now() - date)) + 24;
+
+  console.log(props.trackMetaData)
 
   useEffect(() => {
     const options = {
@@ -110,7 +111,7 @@ export default function Track(props: {
     >
       <DeleteWarningModal setOpen={setOpen} open={open} track={props.track!} />
       <div className=" relative flex justify-between w-full">
-        {isHovering && uploaded_by === currentUser._id ? (
+        {isHovering && currentUser.tracks.find(mytrack => mytrack.path === props.trackMetaData.path) ? (
           <MdClose
             className="text-neutral-300 p-0 m-0 cursor-pointer hover:text-red-500 ease-in transition duration-100"
             onClick={() => {
@@ -141,8 +142,22 @@ export default function Track(props: {
             />
           )}
         </div>
-        <div className="w-[100%] overflow-hidden mx-3" ref={waveformRef}></div>
-        <BsSuitHeart className='text-white text-lg hover:cursor-pointer' />
+        <div id='waveForm-container' className="w-[100%] overflow-hidden mx-3" ref={waveformRef}></div>
+        <button
+        onClick={() => {setLiked(!liked);}}
+        >
+          {liked 
+          ?
+          <BsFillSuitHeartFill 
+          className='text-pink-800 text-lg hover:cursor-pointer'
+          />
+          :
+          <BsSuitHeart 
+          id='like-button' 
+          className='text-white text-lg hover:cursor-pointer'
+          />
+        }
+        </button>
       </div>
     </div>
   );
