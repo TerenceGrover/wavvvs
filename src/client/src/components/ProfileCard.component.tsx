@@ -18,7 +18,7 @@ export default function ProfileCard() {
         <span className='text-neutral-200 text-xl'>Songs</span>
       </div>
       <div className='flex flex-col items-center'>
-        <span className='text-neutral-200 text-xl'>{selectedUser.NumberOffollowers}</span>
+        <span className='text-neutral-200 text-xl'>{selectedUser.numberOfFollowers}</span>
         <span className='text-neutral-200 text-xl'>Followers</span>
       </div>
       <FollowButton />

@@ -6,19 +6,37 @@ import UserIcon from './UserIcon.component';
 
 export default function UserCollection() {
 
-  const [users, setUsers] = React.useState([]);
+  const [FollowUsers, setFollowUsers] = React.useState([]);
+  const [Likesusers, setLikesUsers] = React.useState([]);
   
-  getAllUsers().then((res) => {
-    setUsers(res);
-    console.log(res);
-  });
+
+  React.useEffect(() => {
+    getAllUsers('followers').then((res) => {
+      setFollowUsers(res);
+      console.log('Follow', res);
+    });
+
+    getAllUsers('totalLikes').then((res) => {
+      setLikesUsers(res);
+      console.log('Likes' , res);
+    });
+  }, []);
 
 
   return (
-    <div className="flex items-center">
-      {users.map((user) => (
-        <UserIcon user={user} />
+    <div className="flex flex-col items-center">
+      <span className='text-white mb-8'>By Follow</span>
+      <div id="follow-container" className='flex flex-row gap-x-2'>
+        {FollowUsers.map((user) => (
+          <UserIcon key={'follow' + user} user={user} />
+          ))}
+      </div>
+        <span className='text-white mt-8 mb-8'>By Likes</span>
+        <div id="likes-container" className='flex flex-row gap-x-2'>
+      {Likesusers.map((user) => (
+        <UserIcon key={'likes' + user} user={user} />
       ))}
+      </div>
     </div>
   );
 }

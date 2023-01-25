@@ -343,25 +343,25 @@ const getAllUsers = async (req, res) => {
                 totalLikes: totalLikes,
                 tracks: user.tracks,
             });
-            if (sort) {
-                switch (sort) {
-                    case 'followers':
-                        arrOfUsers.sort((a, b) => b.numberOfFollowers - a.numberOfFollowers);
-                        break;
-                    case 'totalLikes':
-                        arrOfUsers.sort((a, b) => b.totalLikes - a.totalLikes);
-                        break;
-                    default:
-                        arrOfUsers.sort((a, b) => b.numberOfFollowers - a.numberOfFollowers);
-                        break;
-                }
+        }
+        if (sort) {
+            switch (sort) {
+                case 'followers':
+                    arrOfUsers.sort((a, b) => b.numberOfFollowers - a.numberOfFollowers);
+                    break;
+                case 'totalLikes':
+                    arrOfUsers.sort((a, b) => b.totalLikes - a.totalLikes);
+                    break;
+                default:
+                    arrOfUsers.sort((a, b) => b.numberOfFollowers - a.numberOfFollowers);
+                    break;
             }
-            if (arrOfUsers.length > LIMIT) {
-                return res.status(200).send(arrOfUsers.slice(0, LIMIT));
-            }
-            else {
-                return res.status(200).send(arrOfUsers);
-            }
+        }
+        if (arrOfUsers.length > LIMIT) {
+            return res.status(200).send(arrOfUsers.slice(0, LIMIT));
+        }
+        else {
+            return res.status(200).send(arrOfUsers);
         }
     }
     catch (error) {

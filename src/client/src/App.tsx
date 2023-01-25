@@ -33,7 +33,7 @@ export default function App() {
     isPremium: false,
     isPrivate: false,
     followers: [],
-    NumberOffollowers: 0,
+    numberOfFollowers: 0,
   }
 
   const [mobile, setMobile] = React.useState(false);

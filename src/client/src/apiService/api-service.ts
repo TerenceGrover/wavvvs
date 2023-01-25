@@ -119,14 +119,15 @@ const deleteTrack = async (id: string) => {
   }
 };
 
-const getAllUsers = async () => {
+const getAllUsers = async (sort : string) => {
   try {
-    return fetch(baseURL + `/users`, {
-      method: 'GET',
+    return fetch(baseURL + `/users/all`, {
+      method: 'POST',
       headers: {
         'Content-type': 'Application/json',
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       },
+      body : JSON.stringify({sort})
     }).then((res) => res.json());
   } catch (error) {
     console.log({ error });
