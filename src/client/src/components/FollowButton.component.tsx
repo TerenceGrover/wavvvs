@@ -9,17 +9,16 @@ export default function FollowButton() {
   const [followed, setFollowed] = React.useState(
     selectedUser.followers.includes(currentUser._id)
   );
-  const [self, setSelf] = React.useState(selectedUser.id === currentUser._id);
+  const [self, setSelf] = React.useState(true);
 
   React.useEffect(() => {
-    setSelf(selectedUser.id === currentUser._id);
-    console.log(selectedUser.followers);
+    setSelf(selectedUser.id === currentUser._id || selectedUser.id === undefined);
     if (selectedUser.followers.includes(currentUser._id)) {
       setFollowed(true);
     } else {
       setFollowed(false);
     }
-  }, [selectedUser]);
+  }, [currentUser,selectedUser]);
 
   const handleFollow = () => {
     followUser(selectedUser.id!);
