@@ -4,6 +4,7 @@ export interface ErrorType {
 }
 
 export interface CurrentUser {
+  id?: string;
   username: string;
   _v: number;
   _id : string;
@@ -16,6 +17,7 @@ export interface CurrentUser {
   isPremium: boolean;
   isPrivate: boolean;
   followers: Array<string>;
+  NumberOffollowers: number;
 }
 
 export interface TrackType {

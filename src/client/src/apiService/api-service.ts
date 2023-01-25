@@ -193,7 +193,7 @@ const followUser = async (id: string) => {
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       },
       body: JSON.stringify({ id: id }),
-    }).then((res) => res.json());
+    }).then((res) => res.status);
   } catch (error) {
     console.log({ error });
     return error;
