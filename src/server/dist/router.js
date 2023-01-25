@@ -52,7 +52,7 @@ const router = express_1.default.Router();
 router.post('/login', User.loginOne);
 router.post('/register', User.registerOne);
 // GET ANOTHER USER INFO (protected only if user has set isPrivate to true so im gonna check it inside.)
-router.get('/user/:username', User.getAnotherUser);
+router.get('/user/:id', User.getAnotherUser);
 /** ------------ PROTECTED ROUTES ------------ **/
 /* -- USER RELATED ROUTES --*/
 // UPDATE PROFILE INFO
