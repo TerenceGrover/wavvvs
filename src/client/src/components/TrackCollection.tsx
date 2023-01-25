@@ -11,7 +11,7 @@ export default function TrackCollection(props : {sort:string, homeTracks: any[]}
   React.useEffect(() => {
     if (props.homeTracks && props.homeTracks.length > 0) {
       const buff: any[] = [...props.homeTracks];
-      setTracksto3(buff.concat([1, 2, 3, 4, 5]).slice(0, 3));
+      setTracksto3(buff.concat([1, 2, 3, 4, 5]).slice(0, 5));
     } else {
       setTracksto3([1, 2, 3, 4, 5]);
     }
