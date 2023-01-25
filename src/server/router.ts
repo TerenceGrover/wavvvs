@@ -62,6 +62,10 @@ router.put('/user/follow', auth, User.followUser);
 // POST TRACK 
 router.post('/user/tracks', auth, Track.saveTrackUrl);
 
+// TESTING PORPUSES ONLY - POST TRACK BUT INJECTING YESTERDAY AS DATE
+router.post('/test/user/tracks', auth, Track.TESTsaveTrackUrl);
+
+
 // DELETE TRACK
 router.delete('/track', auth, Track.deleteTrack);
 

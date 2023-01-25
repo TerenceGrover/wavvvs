@@ -68,6 +68,8 @@ router.put('/user/follow', auth_1.auth, User.followUser);
 /* -- TRACKS RELATED ROUTES --*/
 // POST TRACK 
 router.post('/user/tracks', auth_1.auth, Track.saveTrackUrl);
+// TESTING PORPUSES ONLY - POST TRACK BUT INJECTING YESTERDAY AS DATE
+router.post('/test/user/tracks', auth_1.auth, Track.TESTsaveTrackUrl);
 // DELETE TRACK
 router.delete('/track', auth_1.auth, Track.deleteTrack);
 // GET ALL TRACKS

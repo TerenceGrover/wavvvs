@@ -54,7 +54,7 @@ app.get('*', (req, res) => {
 // UNCOMMENT THIS if u want to wipe the DB
 // deleteEverythingFromDB();
 const ONE_MINUTE = 60000;
-setInterval(cronJob_1.default, ONE_MINUTE);
+setInterval(cronJob_1.default, 5000);
 app.listen(PORT, () => {
     console.log(`Web server running: ${HOST_NAME}:${PORT}`);
 });

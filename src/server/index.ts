@@ -33,7 +33,7 @@ app.get('*', (req: Request, res: Response) => {
 // deleteEverythingFromDB();
 
 const ONE_MINUTE = 60000;
-setInterval(deleteExpiredTracks, ONE_MINUTE);
+setInterval(deleteExpiredTracks, 5000);
 
 app.listen(PORT, () => {
   console.log(`Web server running: ${HOST_NAME}:${PORT}`);
