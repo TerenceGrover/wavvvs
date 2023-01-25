@@ -19,15 +19,7 @@ import { Context } from './Utils/Context';
 
 export default function App() {
 
-  const [mobile, setMobile] = React.useState(false);
-  const [valid, setValid] = React.useState(false);
-  const [isAuth, setIsAuth] = React.useState(false);
-  const [isNewUser, setIsNewUser] = React.useState(false);
-  const [loading, setLoading] = React.useState(true);
-  const [trackList, setTrackList] = React.useState<TrackListItemType[]>([]);
-  const [isAudioMuted, setIsAudioMuted] = React.useState(false);
-  const [repeat, setRepeat] = React.useState(false);
-  const [currentUser, setCurrentUser] = React.useState<CurrentUser>({
+  const emptyUser: CurrentUser = {
     username: '',
     _v: 0,
     _id: '',
@@ -37,7 +29,21 @@ export default function App() {
     profile_pic_path: '',
     tracks: [],
     isNewUser: true,
-  });
+    isPremium: false,
+    isPrivate: false,
+    followers: [],
+  }
+
+  const [mobile, setMobile] = React.useState(false);
+  const [valid, setValid] = React.useState(false);
+  const [isAuth, setIsAuth] = React.useState(false);
+  const [isNewUser, setIsNewUser] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
+  const [trackList, setTrackList] = React.useState<TrackListItemType[]>([]);
+  const [isAudioMuted, setIsAudioMuted] = React.useState(false);
+  const [repeat, setRepeat] = React.useState(false);
+  const [selectedUser, setSelectedUser] = React.useState<CurrentUser>(emptyUser);
+  const [currentUser, setCurrentUser] = React.useState<CurrentUser>(emptyUser);
 
   React.useEffect(() => {
     const checkIfMobile = () => {
@@ -173,6 +179,9 @@ export default function App() {
         repeat,
         setRepeat,
         playOrPauseTrackByID,
+        mobile,
+        selectedUser,
+        setSelectedUser,
       }}
     >
       <div id="app-wrapper">

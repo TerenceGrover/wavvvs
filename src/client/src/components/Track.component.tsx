@@ -18,14 +18,15 @@ export default function Track(props: {
   const [soonDeleted, setSoonDeleted] = useState(false);
   const [liked, setLiked] = useState(false);
 
-  const { currentUser, setTrackList, playOrPauseTrackByID } = React.useContext(Context);
+  console.log('track', props.track);
+  console.log('trackMeta', props.trackMetaData);
+
+  const { currentUser, setTrackList, playOrPauseTrackByID, setSelectedUser } = React.useContext(Context);
 
   const waveformRef: any = useRef('waveform');
 
   const { path, title, date, uploaded_by } = props.trackMetaData;
   const hoursUntilDeletion = millisecondsToHours(Number(Date.now() - date)) + 24;
-
-  console.log(props.trackMetaData)
 
   useEffect(() => {
     const options = {
@@ -111,7 +112,7 @@ export default function Track(props: {
     >
       <DeleteWarningModal setOpen={setOpen} open={open} track={props.track!} />
       <div className=" relative flex justify-between w-full">
-        {isHovering && currentUser.tracks.find(mytrack => mytrack.path === props.trackMetaData.path) ? (
+        {isHovering && currentUser._id === uploaded_by ? (
           <MdClose
             className="text-neutral-300 p-0 m-0 cursor-pointer hover:text-red-500 ease-in transition duration-100"
             onClick={() => {

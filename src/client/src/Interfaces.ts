@@ -13,6 +13,9 @@ export interface CurrentUser {
   profile_pic_path: string;
   tracks: Array<any>;
   isNewUser: boolean;
+  isPremium: boolean;
+  isPrivate: boolean;
+  followers: Array<string>;
 }
 
 export interface TrackType {

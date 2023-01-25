@@ -20,6 +20,9 @@ export const Context = React.createContext({
   repeat: false,
   setRepeat: (repeat: boolean) => {},
   playOrPauseTrackByID: (id: string) => {},
+  selectedUser: {} as CurrentUser,
+  setSelectedUser: (selectedUser: CurrentUser) => {},
+  mobile: false,
 });
 
 export const HomeContext = React.createContext({
