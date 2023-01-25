@@ -5,13 +5,13 @@ import Logo from './Logo.component';
 import { Context } from '../Utils/Context';
 
 export default function Header() {
-  const { currentUser } = React.useContext(Context);
+  const { currentUser, mobile } = React.useContext(Context);
 
   const [search, setSearch] = React.useState(false);
 
   return (
     <div className="fixed top-0 left-0 right-0 z-10 max-w-92">
-      <header className="flex justify-center h-14 text-white bg-neutral-800">
+      <header className={`${mobile && 'px-4'} flex justify-center h-14 text-white bg-neutral-800`}>
         <div className="w-96 py-3.5 flex justify-between lg:max-w-xl lg:w-full">
           <div className="flex w-26 h-full justify-between items-center content-center">
             <AiOutlineMenu
