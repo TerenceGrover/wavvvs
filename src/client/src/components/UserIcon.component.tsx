@@ -5,6 +5,8 @@ export default function UserIcon(props: { user: CurrentUser }) {
   const { user } = props;
   const { username, profile_pic_path } = user;
 
+  console.log(username)
+
   return (
     <div className="flex items-center">
       <img

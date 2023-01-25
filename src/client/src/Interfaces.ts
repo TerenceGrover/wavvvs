@@ -26,6 +26,7 @@ export interface TrackType {
   title: string;
   size: number;
   date: number;
+  likes: number;
   _id: string;
 }
 
