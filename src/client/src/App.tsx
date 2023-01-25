@@ -23,6 +23,7 @@ export default function App() {
     username: '',
     _v: 0,
     _id: '',
+    id: '',
     bio: '',
     email: '',
     name: '',
@@ -128,6 +129,7 @@ export default function App() {
     checkUser().then((res: CurrentUser) => {
       if (res) {
         setCurrentUser(res);
+        setSelectedUser(res);
         if (res.isNewUser === true || !res.hasOwnProperty('isNewUser')) {
           setIsNewUser(true);
         } else {

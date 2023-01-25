@@ -6,10 +6,6 @@ export default function ProfileCard() {
 
   const { selectedUser } = React.useContext(Context);
 
-
-  console.log(selectedUser);
-  
-
   return (
     <div className='flex flex-col max-w-[275px] min-w-[175px] w-[70%] h-[70%] bg-neutral-800 shadow-sm shadow-black self-center justify-around items-center py-[2.5%] rounded-xl'>
       <div className='flex flex-col items-center'>
