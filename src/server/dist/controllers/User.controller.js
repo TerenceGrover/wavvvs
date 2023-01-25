@@ -160,6 +160,7 @@ const getAnotherUser = async (req, res) => {
         if (!userToFind)
             throw new Error('User not found');
         const userToSend = {
+            id: userToFind._id,
             name: userToFind.name,
             bio: userToFind.bio,
             username: userToFind.username,

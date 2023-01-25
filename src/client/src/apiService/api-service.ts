@@ -1,19 +1,6 @@
-import { CurrentUser, InfoObject, AdditionalInfoObject } from '../Interfaces';
+import type { InfoObject, AdditionalInfoObject } from '../Interfaces';
 const baseURL = 'http://localhost:3001';
 
-const getUser = (user: string): any => {
-  try {
-    return fetch(baseURL + `/users`, {
-      method: 'GET',
-      body: JSON.stringify({ username: user }),
-    }).then((res) => {
-      res.json();
-    });
-  } catch (error) {
-    console.log({ error });
-    return error;
-  }
-};
 
 const login = async (infoObject: InfoObject): Promise<any> => {
   const { email, password } = infoObject;
@@ -95,7 +82,6 @@ const checkUser = async () => {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
         return data;
       });
   }
@@ -167,14 +153,63 @@ const deleteAccount  = async (password : string) => {
   }
 };
 
+const getAllTracks = async () => {
+  try {
+    return fetch(baseURL + `/tracks/all`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'Application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+    }).then((res) => res.json());
+  } catch (error) {
+    console.log({ error });
+    return error;
+  }
+};
+
+const getIndividualUser = async (id: string) => {
+  try {
+    return fetch(baseURL + `/user/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'Application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+    }).then((res) => res.json());
+  } catch (error) {
+    console.log({ error });
+    return error;
+  }
+};
+
+const followUser = async (id: string) => {
+  try {
+    console.log(id)
+    return fetch(baseURL + `/user/follow`, {
+      method: 'PUT',
+      headers: {
+        'Content-type': 'Application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+      body: JSON.stringify({ id: id }),
+    }).then((res) => res.status);
+  } catch (error) {
+    console.log({ error });
+    return error;
+  }
+};
+
 export {
   postTrack,
-  getUser,
   deleteTrack,
   login,
   register,
   updateUser,
   checkUser,
   getAllUsers,
-  deleteAccount
+  deleteAccount,
+  getAllTracks,
+  getIndividualUser,
+  followUser
 };

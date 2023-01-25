@@ -7,6 +7,8 @@ import { MdClose } from 'react-icons/md';
 import DeleteWarningModal from './DeleteWarningModal.component';
 import React from 'react';
 import { Context } from '../Utils/Context';
+import {BsFillSuitHeartFill, BsSuitHeart } from 'react-icons/bs';
+import { getIndividualUser } from '../apiService/api-service';
 
 export default function Track(props: {
   trackMetaData: TrackType;
@@ -14,13 +16,15 @@ export default function Track(props: {
 }) {
   const [open, setOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+  const [soonDeleted, setSoonDeleted] = useState(false);
+  const [liked, setLiked] = useState(false);
 
-  const { currentUser, setTrackList, playOrPauseTrackByID } = React.useContext(Context);
+  const { currentUser, setTrackList, playOrPauseTrackByID, setSelectedUser } = React.useContext(Context);
 
   const waveformRef: any = useRef('waveform');
 
   const { path, title, date, uploaded_by } = props.trackMetaData;
-  const hoursSinceUploaded = millisecondsToHours(Number(Date.now() - date));
+  const hoursUntilDeletion = millisecondsToHours(Number(Date.now() - date)) + 24;
 
   useEffect(() => {
     const options = {
@@ -29,8 +33,9 @@ export default function Track(props: {
       barWidth: 2,
       height: 18,
       normalize: true,
-      waveColor: '#383838',
-      progressColor: '#999',
+      waveColor: `${soonDeleted ? '#9C9C9C' :'#383838'}`,
+      progressColor: '#CCC',
+      cursorColor: 'transparent',
     };
 
     const wavesurfer = WaveSurfer.create(options);
@@ -75,6 +80,12 @@ export default function Track(props: {
     };
   }, [path, setTrackList]);
 
+  useEffect(() => {
+    if (hoursUntilDeletion <= 1) {
+      setSoonDeleted(true);
+  }
+}, [hoursUntilDeletion]);
+
   if (props.track) {
     if (props.track.isPlaying) {
       props.track.waveformRef?.wavesurfer.play();
@@ -95,11 +106,16 @@ export default function Track(props: {
       onMouseOut={() => {
         setIsHovering(false);
       }}
-      className="h-12 mb-10"
+      onClick={() => {
+        getIndividualUser(uploaded_by).then((res) => {
+          setSelectedUser(res);
+        });
+      }}
+      className={"min-w-[40%] px-2 rounded-md h-16 mb-10" + (soonDeleted ? " bg-red-600 bg-opacity-50" : "")}
     >
       <DeleteWarningModal setOpen={setOpen} open={open} track={props.track!} />
-      <div className="relative flex justify-between w-full">
-        {isHovering && uploaded_by === currentUser._id ? (
+      <div className=" relative flex justify-between w-full">
+        {isHovering && currentUser._id === uploaded_by ? (
           <MdClose
             className="text-neutral-300 p-0 m-0 cursor-pointer hover:text-red-500 ease-in transition duration-100"
             onClick={() => {
@@ -109,14 +125,14 @@ export default function Track(props: {
         ) : (
           <div className="w-4"></div>
         )}
-        <h4 className=" absolute left-4 text-neutral-300 text-xs mb-2 ml-5">
-          {title}
+        <h4 className=" absolute left-4 text-neutral-300 text-xs mb-2 ml-5 mr-12">
+          {title.slice(0,43) + '...'}
         </h4>
-        <h4 className="text-neutral-600 text-xs pl-9 mb-2">
-          {hoursSinceUploaded ? hoursSinceUploaded + 'h' : 'now'}
+        <h4 className={`${soonDeleted ? 'text-neutral-300 ' : 'text-neutral-600' } text-xs pl-9 mb-2`}>
+          {hoursUntilDeletion ? hoursUntilDeletion + 'h Left' : 'Out Soon'}
         </h4>
       </div>
-      <div className="flex align-center items-center overflow-hidden">
+      <div className="flex align-center items-center overflow-hidden mt-2">
         <div className="mr-2">
           {props.track?.isPlaying ? (
             <IoStop
@@ -130,7 +146,22 @@ export default function Track(props: {
             />
           )}
         </div>
-        <div className="w-full overflow-hidden ml-2" ref={waveformRef}></div>
+        <div id='waveForm-container' className="w-[100%] overflow-hidden mx-3" ref={waveformRef}></div>
+        <button
+        onClick={() => {setLiked(!liked);}}
+        >
+          {liked 
+          ?
+          <BsFillSuitHeartFill 
+          className='text-pink-800 text-lg hover:cursor-pointer'
+          />
+          :
+          <BsSuitHeart 
+          id='like-button' 
+          className='text-white text-lg hover:cursor-pointer'
+          />
+        }
+        </button>
       </div>
     </div>
   );

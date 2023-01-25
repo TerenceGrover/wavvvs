@@ -8,11 +8,13 @@ import CentralHome from '../components/CentralHome.component';
 import SideBar from '../components/SideBar.component';
 import ProfileCard from '../components/ProfileCard.component';
 import { Context } from '../Utils/Context';
+import { HomeContext } from '../Utils/Context';
 
 function Home() {
   const { currentUser, setCurrentUser } = React.useContext(Context);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [centralHome, setCentralHome] = useState(('Home'));
 
   React.useEffect(() => {
     if (currentUser.name) return setIsLoading(false);
@@ -26,6 +28,8 @@ function Home() {
     }, 1000);
   }, [currentUser.name, setCurrentUser]);
 
+  //TODO : Conditional rendering based on user's device size with mobile context provider
+
   return (
     <div id="home-wrapper">
       <Header />
@@ -35,9 +39,11 @@ function Home() {
         </main>
       ) : (
         <div className="grid grid-cols-3 w-screen h-screen justify-items-center">
+          <HomeContext.Provider value={{ centralHome, setCentralHome }}>
           <SideBar />
           <CentralHome />
           <ProfileCard />
+          </HomeContext.Provider>
         </div>
       )}
     </div>

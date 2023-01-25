@@ -3,19 +3,19 @@ import { Context } from '../Utils/Context';
 import Track from './Track.component';
 import EmptyTrack from './EmptyTrack.component';
 
-export default function TrackCollection() {
+export default function TrackCollection(props : {homeTracks: any[]}) {
 
   const [tracksto3, setTracksto3] = React.useState([1, 2, 3, 4, 5]);
-  const { currentUser, trackList, playOrPauseTrackByID } = React.useContext(Context);
+  const { currentUser, trackList } = React.useContext(Context);
 
   React.useEffect(() => {
-    if (currentUser.tracks && currentUser.tracks.length > 0) {
-      const buff: any[] = [...currentUser.tracks];
+    if (props.homeTracks && props.homeTracks.length > 0) {
+      const buff: any[] = [...props.homeTracks];
       setTracksto3(buff.concat([1, 2, 3, 4, 5]).slice(0, 3));
     } else {
       setTracksto3([1, 2, 3, 4, 5]);
     }
-  }, [currentUser]);
+  }, [props.homeTracks, currentUser]);
 
   return (
     <div className="h-auto w-screen">
