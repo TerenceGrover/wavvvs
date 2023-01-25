@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 const { SECRET_KEY } = process.env;
 import { v2 as cloudinary } from 'cloudinary';
 const { CLOUD_NAME, API_KEY, API_SECRET } = process.env;
-import { Track } from '../models/models';
+import { Track, User } from '../models/models';
 
 export const getErrorMessage = (error: unknown) => {
   if (error instanceof Error) return error.message;
@@ -51,4 +51,33 @@ export const deleteTrackFromCloudinaryAndDb = async (id: any, path: string) => {
     console.log({ error });
     return false;
   }
+};
+
+export const deleteUserBelongings = async (id: any) => {
+  // get all tracks of the user
+  const tracks = await Track.find({ uploaded_by: id });
+  // delete all tracks from cloudinary and database
+  for (const track of tracks) {
+    await deleteTrackFromCloudinaryAndDb(track._id, track.path);
+  }
+  // delete all likes of the user
+  const allTracks = await Track.find({});
+  for (const track of allTracks) {
+    let idx = track.liked_by.indexOf(id);
+    if (idx !== -1) {
+      track.liked_by.splice(idx, 1);
+      await track.save();
+    }
+  }
+  // delete the user from all other users followers
+  const allUsers = await User.find({});
+  for (const user of allUsers) {
+    let idx = user.followers.indexOf(id);
+    if (idx !== -1) {
+      user.followers.splice(idx, 1);
+      await user.save();
+    }
+  }
+  // should be done. 
+  return
 };

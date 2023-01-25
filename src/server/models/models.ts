@@ -20,7 +20,6 @@ const trackSchema = new Schema<ITrack>({
   title: String,
   size: Number,
   date: Number,
-  likes: Number,
   liked_by: [String],
 });
 

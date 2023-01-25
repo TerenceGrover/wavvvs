@@ -224,6 +224,7 @@ describe('interact with user functionalities', () => {
     expect(res.status).toBe(400);
   });
 
+  let tokenOfUser2 = ''
   it('should follow a new user', async () => {
     // register a new user
     await request(app).post('/register').send({
@@ -242,6 +243,7 @@ describe('interact with user functionalities', () => {
       .get('/user')
       .set('Authorization', `Bearer ${token2}`);
     const id2 = res2.body._id;
+    tokenOfUser2=id2;
     // follow the new user with the other user
     const res3 = await request(app)
       .put('/user/follow')
@@ -250,6 +252,13 @@ describe('interact with user functionalities', () => {
       })
       .set('Authorization', `Bearer ${token}`);
     expect(res3.status).toBe(204);
+    // get new user profile to see if the other user is in the followers array
+    const res4 = await request(app)
+      .get('/user')
+      .set('Authorization', `Bearer ${token2}`);
+    expect(res4.status).toBe(200);
+    expect(res4.body.followers.length).toBe(1);
+    expect(res4.body.followers[0]).toBe(id);
     // delete the new user
     await request(app)
       .delete('/user')
@@ -257,12 +266,18 @@ describe('interact with user functionalities', () => {
       .send({
         password: '123456789',
       });
-    // get new user profile to see if the other user is in the followers array
-    const res4 = await request(app)
-      .get('/user')
-      .set('Authorization', `Bearer ${token2}`);
-    expect(res4.status).toBe(200);
-    expect(res4.body.followers.length).toBe(1);
-    expect(res4.body.followers[0].username).toBe('ale');
   }, 10000);
+
+  it('should like an user track', async () => {
+    // register another user
+    // login the user
+    // make the user follow ale
+    // make the user like ale song
+  });
+
+  it('should delete likes and following of user when user gets deleted', async () => {
+    // delete the user
+    // expect ale followers to be 0
+    // expect ale's song lieks to be 0
+  });
 });
