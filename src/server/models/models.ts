@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { ITrack, IUser } from '../entities/allEntities.js';
+import { ITrack, IUser, IPremium } from '../entities/allEntities.js';
 
 const userSchema = new Schema<IUser>({
   isPrivate: Boolean,
@@ -23,7 +23,14 @@ const trackSchema = new Schema<ITrack>({
   liked_by: [String],
 });
 
+const premiumSchema = new Schema<IPremium>({
+  email: String,
+  start_date: Number,
+  end_date: Number,
+});
+
 const User = model<IUser>('User', userSchema);
 const Track = model<ITrack>('Track', trackSchema);
+const Premium = model<IPremium>('Premium', premiumSchema);
 
-export { User, Track };
+export { User, Track, Premium };

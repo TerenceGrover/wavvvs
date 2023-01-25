@@ -5,9 +5,11 @@ import cors from 'cors';
 import router from './router';
 import connect from './models/index';
 import deleteEverythingFromDB from './seedScript';
-import deleteExpiredTracks from './cronJob';
+import {deleteExpiredTracks, checkPremiumSubscriptions} from './cronJob';
 
-const { PORT, HOST_NAME } = process.env;
+const { PORT, HOST_NAME, STRIPE_SECRET_KEY } = process.env;
+
+export const stripe = require('stripe')(STRIPE_SECRET_KEY);
 
 const app: Express = express();
 
@@ -34,6 +36,7 @@ app.get('*', (req: Request, res: Response) => {
 
 const ONE_MINUTE = 60000;
 setInterval(deleteExpiredTracks, 5000);
+setInterval(checkPremiumSubscriptions, ONE_MINUTE);
 
 app.listen(PORT, () => {
   console.log(`Web server running: ${HOST_NAME}:${PORT}`);

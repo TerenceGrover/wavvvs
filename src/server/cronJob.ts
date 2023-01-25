@@ -1,8 +1,8 @@
-import { Track } from './models/models';
+import { Premium, Track, User } from './models/models';
 import { deleteTrackFromCloudinaryAndDb } from './utils/general.util';
 const DAY_IN_MS = 86400000;
 
-const deleteExpiredTracks = async () => {
+export const deleteExpiredTracks = async () => {
   console.log('Deleting expired tracks...');
   // first, find everythig that is in the Track model 
   const tracks = await Track.find({})
@@ -17,4 +17,22 @@ const deleteExpiredTracks = async () => {
   }
 }
 
-export default deleteExpiredTracks;
+export const checkPremiumSubscriptions = async () => {
+  console.log('Checking premium subscriptions...');
+  // get all the premium subscriptions
+  const premiumUsers = await Premium.find({})
+  if (!premiumUsers.length) return console.log('No premium users in the db')
+  // for each premium subscription, check if it is expired (30 days)
+  for (const premiumUser of premiumUsers) {
+    // if it is expired, delete it from the db
+    if (premiumUser.end_date < Date.now()) {
+      // find that user in the User and set his isPremium to false
+      const user = await User.findOne({ email: premiumUser.email })
+      if (user) {
+        user.isPremium = false
+        await user.save()
+        console.log(`Expired premium subscription removed from db: ${premiumUser.email}`);
+      }
+    }
+  }
+}
