@@ -153,7 +153,7 @@ const deleteAccount  = async (password : string) => {
   }
 };
 
-const getAllTracks = async () => {
+const getAllTracks = async (sort : string) => {
   try {
     return fetch(baseURL + `/tracks/all`, {
       method: 'GET',
@@ -161,6 +161,7 @@ const getAllTracks = async () => {
         'Content-type': 'Application/json',
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       },
+      body : JSON.stringify({sort : sort, limit : 10})
     }).then((res) => res.json());
   } catch (error) {
     console.log({ error });

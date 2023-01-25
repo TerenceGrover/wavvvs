@@ -3,7 +3,7 @@ import { Context } from '../Utils/Context';
 import Track from './Track.component';
 import EmptyTrack from './EmptyTrack.component';
 
-export default function TrackCollection(props : {homeTracks: any[]}) {
+export default function TrackCollection(props : {sort:string, homeTracks: any[]}) {
 
   const [tracksto3, setTracksto3] = React.useState([1, 2, 3, 4, 5]);
   const { currentUser, trackList } = React.useContext(Context);

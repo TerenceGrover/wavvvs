@@ -12,7 +12,8 @@ export default function CentralHome() {
   const [homeTracks, setHomeTracks] = React.useState([]);
 
   React.useEffect(() => {
-    getAllTracks().then((res) => {
+    const sort = centralHome === 'Home' ? '' : centralHome === 'Soon' ? 'date' : centralHome === 'Top' ? 'likes' : '';
+    getAllTracks(sort).then((res) => {
       console.log(res)
       if (res !== homeTracks && res.length > 0){
         setHomeTracks(res);
@@ -26,12 +27,12 @@ export default function CentralHome() {
     <div className="flex flex-col justify-center items-center">
       {centralHome ==='Home'
       &&
-      <TrackCollection homeTracks={homeTracks} />
+      <TrackCollection sort={'home'} homeTracks={homeTracks} />
       }
       {
       centralHome ==='Soon'
       &&
-      <TrackCollection homeTracks={homeTracks} />
+      <TrackCollection sort={'soon'} homeTracks={homeTracks} />
       }
       {
       centralHome ==='Stars'
@@ -41,7 +42,7 @@ export default function CentralHome() {
       {
       centralHome ==='Top'
       &&
-      <TrackCollection homeTracks={homeTracks} />
+      <TrackCollection sort={'top'} homeTracks={homeTracks} />
       }
     </div>
   );

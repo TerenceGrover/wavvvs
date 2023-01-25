@@ -58,7 +58,7 @@ const ProfilePic = (props: { path: string }) => {
       <img
         className={`${
           !props.path && 'bg-neutral-400'
-        } relative right-5 w-60 h-60 rounded-full object-cover`}
+        } relative right-5 w-60 h-60 rounded-2xl object-cover`}
         src={props.path}
         alt=""
       />

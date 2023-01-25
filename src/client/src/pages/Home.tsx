@@ -14,7 +14,7 @@ function Home() {
   const { currentUser, setCurrentUser } = React.useContext(Context);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [centralHome, setCentralHome] = useState(('Home'));
+  const [centralHome, setCentralHome] = useState('Home');
 
   React.useEffect(() => {
     if (currentUser.name) return setIsLoading(false);
@@ -40,9 +40,9 @@ function Home() {
       ) : (
         <div className="grid grid-cols-3 w-screen h-screen justify-items-center">
           <HomeContext.Provider value={{ centralHome, setCentralHome }}>
-          <SideBar />
-          <CentralHome />
-          <ProfileCard />
+            <SideBar />
+            <CentralHome />
+            <ProfileCard />
           </HomeContext.Provider>
         </div>
       )}
