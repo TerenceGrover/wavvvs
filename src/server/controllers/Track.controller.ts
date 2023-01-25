@@ -12,7 +12,8 @@ const getAllTracks = async (req: Request, res: Response) => {
     if (!limit) limit = 20;
     let { sort } = req.body;
     // if sort is not passed in the body, i dont want to sort
-    const tracks = await Track.find({}, null, { limit: limit });
+
+    const tracks = await Track.find({});
 
     let arrOfTracks: any = [];
     tracks.forEach((track) => {
@@ -40,7 +41,8 @@ const getAllTracks = async (req: Request, res: Response) => {
           break;
       }
     }
-    res.status(200).send(arrOfTracks);
+    let toSend = arrOfTracks.slice(0, limit)
+    res.status(200).send(toSend);
   } catch (error) {
     console.log({ error });
     res.status(500).send({ error });

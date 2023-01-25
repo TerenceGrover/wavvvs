@@ -2,7 +2,11 @@ import { User, Track } from '../models/models';
 import { IUser } from '../entities/allEntities';
 import { Request, Response } from 'express';
 import * as userServices from '../services/User.service';
-import { getErrorMessage, deleteUserBelongings, getIdOfUserFromJWT } from '../utils/general.util';
+import {
+  getErrorMessage,
+  deleteUserBelongings,
+  getIdOfUserFromJWT,
+} from '../utils/general.util';
 import bcrypt from 'bcrypt';
 
 const getUser = async (req: Request, res: Response) => {
@@ -23,7 +27,7 @@ const getUser = async (req: Request, res: Response) => {
           isNewUser: user.isNewUser,
           profile_pic_path: user.profile_pic_path,
           bio: user.bio,
-          NumberOffollowers: user.followers.length,
+          numberOfFollowers: user.followers.length,
           followers: user.followers,
           isPremium: user.isPremium,
           tracks: [],
@@ -130,7 +134,7 @@ const getAnotherUser = async (req: Request, res: Response) => {
       followers: userToFind.followers,
       isPremium: userToFind.isPremium,
       isPrivate: userToFind.isPrivate,
-      NumberOffollowers: userToFind.followers.length,
+      numberOfFollowers: userToFind.followers.length,
       tracks: [],
     };
     // seach in Track all the tracks that have the user id as uploaded by
@@ -205,7 +209,7 @@ const getUserFromSongId = async (req: Request, res: Response) => {
         bio: owner.bio,
         username: owner.username,
         profile_pic_path: owner.profile_pic_path,
-        NumberOffollowers: owner.followers.length,
+        numberOfFollowers: owner.followers.length,
         followers: owner.followers,
         isPremium: owner.isPremium,
       };
@@ -236,22 +240,20 @@ const followUser = async (req: Request, res: Response) => {
     const decoded = getIdOfUserFromJWT(req);
     if (decoded) {
       if (decoded.id === req.body.id) {
-        return res
-          .status(400)
-          .send({
-            error: 'What a fool. You cannot follow yourself. Nice try.',
-          });
+        return res.status(400).send({
+          error: 'What a fool. You cannot follow yourself. Nice try.',
+        });
       }
       const idOfUserToFollow = req.body.id;
       const userToFollow = await User.findOne({ _id: idOfUserToFollow });
       if (userToFollow) {
-        const idx = userToFollow.followers.indexOf(decoded.id)
-        if ( idx === -1 ) {
-          // we dont follow the user 
+        const idx = userToFollow.followers.indexOf(decoded.id);
+        if (idx === -1) {
+          // we dont follow the user
           userToFollow.followers.push(decoded.id);
         } else {
-          // we already follow the user so we splice 
-          userToFollow.followers.splice(idx, 1)
+          // we already follow the user so we splice
+          userToFollow.followers.splice(idx, 1);
         }
         await userToFollow.save();
         return res.sendStatus(204);
@@ -266,6 +268,66 @@ const followUser = async (req: Request, res: Response) => {
   }
 };
 
+const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const LIMIT = 10;
+    let { sort } = req.body;
+    // if sort is not passed in the body, i dont want to sort
+
+    const USERS = await User.find({});
+    let arrOfUsers: any = [];
+
+    for (let user of USERS) {
+      let totalLikes : number = 0;
+      const tracksOfUser = await Track.find({ uploaded_by: user._id.toString() })
+      totalLikes = tracksOfUser.reduce(
+        (acc, track) => acc + track.liked_by.length,
+        0
+      );
+      arrOfUsers.push({
+        _id: user._id.toString(),
+        name: user.name,
+        bio: user.bio,
+        username: user.username,
+        email: user.email,
+        profile_pic_path: user.profile_pic_path,
+        followers: user.followers,
+        isPremium: user.isPremium,
+        isPrivate: user.isPrivate,
+        numberOfFollowers: user.followers.length,
+        totalLikes: totalLikes,
+        tracks: user.tracks,
+      });
+
+      if (sort) {
+        switch (sort) {
+          case 'followers':
+            arrOfUsers.sort(
+              (a: any, b: any) => b.numberOfFollowers - a.numberOfFollowers
+            );
+            break;
+          case 'totalLikes':
+            arrOfUsers.sort((a: any, b: any) => b.totalLikes - a.totalLikes);
+            break;
+          default:
+            arrOfUsers.sort(
+              (a: any, b: any) => b.numberOfFollowers - a.numberOfFollowers
+            );
+            break;
+        }
+      }
+      if (arrOfUsers.length > LIMIT) {
+        return res.status(200).send(arrOfUsers.slice(0, LIMIT));
+      } else {
+        return res.status(200).send(arrOfUsers)
+      }
+    }
+  } catch (error) {
+    console.log({ error });
+    res.status(500).send({ error });
+  }
+};
+
 export {
   getUser,
   loginOne,
@@ -275,4 +337,5 @@ export {
   deleteUser,
   getUserFromSongId,
   followUser,
+  getAllUsers,
 };
