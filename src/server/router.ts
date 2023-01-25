@@ -55,6 +55,9 @@ router.get('/user/tracks/:id', auth, User.getUserFromSongId);
 // FOLLOWS USER PASSED IN BODY 
 router.put('/user/follow', auth, User.followUser);
 
+// GET TOP 10 USERS BASED ON PARAM PASSED IN THE REQUEST 
+router.post('/users/all', auth, User.getAllUsers)
+
 
 /* -- TRACKS RELATED ROUTES --*/
 
@@ -65,11 +68,10 @@ router.post('/user/tracks', auth, Track.saveTrackUrl);
 // TESTING PORPUSES ONLY - POST TRACK BUT INJECTING YESTERDAY AS DATE
 router.post('/test/user/tracks', auth, Track.TESTsaveTrackUrl);
 
-
 // DELETE TRACK
 router.delete('/track', auth, Track.deleteTrack);
 
-// GET ALL TRACKS
+// GET ALL TRACKS (WITH LIMIT AND BASED ON A PARAMETER)
 router.post('/tracks/all', auth, Track.getAllTracks);
 
 // LIKE A TRACK 

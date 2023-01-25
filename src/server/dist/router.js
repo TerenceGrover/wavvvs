@@ -65,6 +65,8 @@ router.get('/user', auth_1.auth, User.getUser);
 router.get('/user/tracks/:id', auth_1.auth, User.getUserFromSongId);
 // FOLLOWS USER PASSED IN BODY 
 router.put('/user/follow', auth_1.auth, User.followUser);
+// GET TOP 10 USERS BASED ON PARAM PASSED IN THE REQUEST 
+router.post('/users/all', auth_1.auth, User.getAllUsers);
 /* -- TRACKS RELATED ROUTES --*/
 // POST TRACK 
 router.post('/user/tracks', auth_1.auth, Track.saveTrackUrl);
@@ -72,7 +74,7 @@ router.post('/user/tracks', auth_1.auth, Track.saveTrackUrl);
 router.post('/test/user/tracks', auth_1.auth, Track.TESTsaveTrackUrl);
 // DELETE TRACK
 router.delete('/track', auth_1.auth, Track.deleteTrack);
-// GET ALL TRACKS
+// GET ALL TRACKS (WITH LIMIT AND BASED ON A PARAMETER)
 router.post('/tracks/all', auth_1.auth, Track.getAllTracks);
 // LIKE A TRACK 
 router.put('/track/like', auth_1.auth, Track.likeTrack);

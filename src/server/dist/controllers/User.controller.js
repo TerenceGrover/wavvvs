@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.followUser = exports.getUserFromSongId = exports.deleteUser = exports.getAnotherUser = exports.updateOne = exports.registerOne = exports.loginOne = exports.getUser = void 0;
+exports.getAllUsers = exports.followUser = exports.getUserFromSongId = exports.deleteUser = exports.getAnotherUser = exports.updateOne = exports.registerOne = exports.loginOne = exports.getUser = void 0;
 const models_1 = require("../models/models");
 const userServices = __importStar(require("../services/User.service"));
 const general_util_1 = require("../utils/general.util");
@@ -49,7 +49,7 @@ const getUser = async (req, res) => {
                     isNewUser: user.isNewUser,
                     profile_pic_path: user.profile_pic_path,
                     bio: user.bio,
-                    NumberOffollowers: user.followers.length,
+                    numberOfFollowers: user.followers.length,
                     followers: user.followers,
                     isPremium: user.isPremium,
                     tracks: [],
@@ -169,7 +169,7 @@ const getAnotherUser = async (req, res) => {
             followers: userToFind.followers,
             isPremium: userToFind.isPremium,
             isPrivate: userToFind.isPrivate,
-            NumberOffollowers: userToFind.followers.length,
+            numberOfFollowers: userToFind.followers.length,
             tracks: [],
         };
         // seach in Track all the tracks that have the user id as uploaded by
@@ -252,7 +252,7 @@ const getUserFromSongId = async (req, res) => {
                 bio: owner.bio,
                 username: owner.username,
                 profile_pic_path: owner.profile_pic_path,
-                NumberOffollowers: owner.followers.length,
+                numberOfFollowers: owner.followers.length,
                 followers: owner.followers,
                 isPremium: owner.isPremium,
             };
@@ -284,9 +284,7 @@ const followUser = async (req, res) => {
         const decoded = (0, general_util_1.getIdOfUserFromJWT)(req);
         if (decoded) {
             if (decoded.id === req.body.id) {
-                return res
-                    .status(400)
-                    .send({
+                return res.status(400).send({
                     error: 'What a fool. You cannot follow yourself. Nice try.',
                 });
             }
@@ -295,11 +293,11 @@ const followUser = async (req, res) => {
             if (userToFollow) {
                 const idx = userToFollow.followers.indexOf(decoded.id);
                 if (idx === -1) {
-                    // we dont follow the user 
+                    // we dont follow the user
                     userToFollow.followers.push(decoded.id);
                 }
                 else {
-                    // we already follow the user so we splice 
+                    // we already follow the user so we splice
                     userToFollow.followers.splice(idx, 1);
                 }
                 await userToFollow.save();
@@ -318,3 +316,55 @@ const followUser = async (req, res) => {
     }
 };
 exports.followUser = followUser;
+const getAllUsers = async (req, res) => {
+    try {
+        const LIMIT = 10;
+        let { sort } = req.body;
+        // if sort is not passed in the body, i dont want to sort
+        const USERS = await models_1.User.find({});
+        let arrOfUsers = [];
+        for (let user of USERS) {
+            let totalLikes = 0;
+            const tracksOfUser = await models_1.Track.find({ uploaded_by: user._id.toString() });
+            totalLikes = tracksOfUser.reduce((acc, track) => acc + track.liked_by.length, 0);
+            arrOfUsers.push({
+                _id: user._id.toString(),
+                name: user.name,
+                bio: user.bio,
+                username: user.username,
+                email: user.email,
+                profile_pic_path: user.profile_pic_path,
+                followers: user.followers,
+                isPremium: user.isPremium,
+                isPrivate: user.isPrivate,
+                numberOfFollowers: user.followers.length,
+                totalLikes: totalLikes,
+                tracks: user.tracks,
+            });
+            if (sort) {
+                switch (sort) {
+                    case 'followers':
+                        arrOfUsers.sort((a, b) => b.numberOfFollowers - a.numberOfFollowers);
+                        break;
+                    case 'totalLikes':
+                        arrOfUsers.sort((a, b) => b.totalLikes - a.totalLikes);
+                        break;
+                    default:
+                        arrOfUsers.sort((a, b) => b.numberOfFollowers - a.numberOfFollowers);
+                        break;
+                }
+            }
+            if (arrOfUsers.length > LIMIT) {
+                return res.status(200).send(arrOfUsers.slice(0, LIMIT));
+            }
+            else {
+                return res.status(200).send(arrOfUsers);
+            }
+        }
+    }
+    catch (error) {
+        console.log({ error });
+        res.status(500).send({ error });
+    }
+};
+exports.getAllUsers = getAllUsers;
