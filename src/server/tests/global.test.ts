@@ -174,43 +174,6 @@ describe('interact with user functionalities', () => {
     // TODO : implement this test
   });
 
-  // it('should delete a track after 24 hours', async () => {
-  //   // first post a track
-  //   const filePath = mypath.join(
-  //     __dirname,
-  //     '..',
-  //     'tests',
-  //     'mocks',
-  //     'rickroll.m4a'
-  //   );
-  //   cloudinary.v2.config({
-  //     cloud_name: CLOUD_NAME,
-  //     api_key: API_KEY,
-  //     api_secret: API_SECRET,
-  //   });
-  //   const upload = await cloudinary.v2.uploader.upload(filePath, {
-  //     resource_type: 'video',
-  //   });
-  //   const path = upload.secure_url;
-  //   console.log(path);
-  //   // we can't wait 24 hours in a test so we will just post to a test route that injects a date in the past
-  //   const res = await request(app)
-  //     .post('/test/user/tracks')
-  //     .send({ url: path })
-  //     .set('Authorization', `Bearer ${tokenOfUser1}`);
-  //   expect(res.status).toBe(204);
-
-  //   // we wait 10 second to be sure that the track is deleted
-  //   await new Promise((resolve) => {
-  //     setTimeout(resolve, 10000);
-  //   });
-  //   const res2 = await request(app)
-  //     .get('/user')
-  //     .set('Authorization', `Bearer ${tokenOfUser1}`);
-  //   expect(res2.status).toBe(200);
-  //   expect(res2.body.tracks.length).toBe(0);
-  // }, 20000);
-
   it('should throw an error if user tries to follow himself', async () => {
     // get user calling the /me endpoint
     const res = await request(app)
@@ -293,7 +256,7 @@ describe('interact with user functionalities', () => {
     expect(res2.body.name).toBe('ale');
     expect(res2.body.tracks[0].likes).toBe(1);
   });
-  
+
   it('should remove like if user already likes the track', async () => {
     // make the user terence like ale song
     const res = await request(app)
@@ -313,9 +276,52 @@ describe('interact with user functionalities', () => {
   });
 
   it('should delete likes and following of user when user gets deleted', async () => {
-    // delete the user
-    // expect ale followers to be 0
+    // make terence follow ale again
+    const res = await request(app)
+      .put('/user/follow')
+      .send({
+        id: idOfUser1,
+      })
+      .set('Authorization', `Bearer ${tokenOfUser2}`);
+    expect(res.status).toBe(204);
+
+    // make terence like ale's song again
+    const res2 = await request(app)
+      .put('/track/like')
+      .send({
+        trackId: arrOfTracks[0]._id,
+      })
+      .set('Authorization', `Bearer ${tokenOfUser2}`);
+    expect(res2.status).toBe(204);
+
+    const buff = await request(app)
+      .get('/user')
+      .set('Authorization', `Bearer ${tokenOfUser1}`);
+    expect(buff.status).toBe(200);
+    expect(buff.body.name).toBe('ale');
+    expect(buff.body.followers.length).toBe(1)
     // expect ale's song lieks to be 0
+    expect(buff.body.tracks[0].likes).toBe(1);
+
+    // delete terence
+    const res3 = await request(app)
+      .delete('/user')
+      .set('Authorization', `Bearer ${tokenOfUser2}`)
+      .send({
+        password: '123456789',
+      });
+    expect(res3.status).toBe(204);
+
+    // expect ale followers to be 0
+    const res4 = await request(app)
+      .get('/user')
+      .set('Authorization', `Bearer ${tokenOfUser1}`);
+    expect(res4.status).toBe(200);
+    expect(res4.body.name).toBe('ale');
+    expect(res4.body.followers.length).toBe(0)
+    // expect ale's song lieks to be 0
+    expect(res4.body.tracks[0].likes).toBe(0);
+
   });
 
   // delete ale's track
@@ -327,7 +333,7 @@ describe('interact with user functionalities', () => {
       })
       .set('Authorization', `Bearer ${tokenOfUser1}`);
     expect(res.status).toBe(204);
-    
+
     const res2 = await request(app)
       .get('/user')
       .set('Authorization', `Bearer ${tokenOfUser1}`);
@@ -336,3 +342,69 @@ describe('interact with user functionalities', () => {
     expect(res2.body.tracks.length).toBe(0);
   });
 });
+
+describe('Server cronJob functionalities', () => { 
+  let tokenOfUser1: string;
+  beforeAll(async () => {
+    await startServer();
+
+    await request(app).post('/register').send({
+      email: 'ale@gmail.com',
+      password: '12345689',
+      username: 'ale',
+    });
+    const res = await request(app).post('/login').send({
+      email: 'ale@gmail.com',
+      password: '12345689',
+    });
+    tokenOfUser1 = res.body.token;
+  });
+
+  afterAll(async () => {
+    // delete ale
+    await request(app)
+      .delete('/user')
+      .set('Authorization', `Bearer ${tokenOfUser1}`)
+      .send({
+        password: '12345689',
+      });
+    await stopServer();
+  });
+
+  it('should delete a track after 24 hours', async () => {
+    // first post a track
+    const filePath = mypath.join(
+      __dirname,
+      '..',
+      'tests',
+      'mocks',
+      'rickroll.m4a'
+    );
+    cloudinary.v2.config({
+      cloud_name: CLOUD_NAME,
+      api_key: API_KEY,
+      api_secret: API_SECRET,
+    });
+    const upload = await cloudinary.v2.uploader.upload(filePath, {
+      resource_type: 'video',
+    });
+    const path = upload.secure_url;
+    console.log(path);
+    // we can't wait 24 hours in a test so we will just post to a test route that injects a date in the past
+    const res = await request(app)
+      .post('/test/user/tracks')
+      .send({ url: path })
+      .set('Authorization', `Bearer ${tokenOfUser1}`);
+    expect(res.status).toBe(204);
+
+    // we wait 10 second to be sure that the track is deleted
+    await new Promise((resolve) => {
+      setTimeout(resolve, 15000);
+    });
+    const res2 = await request(app)
+      .get('/user')
+      .set('Authorization', `Bearer ${tokenOfUser1}`);
+    expect(res2.status).toBe(200);
+    expect(res2.body.tracks.length).toBe(0);
+  }, 20000);
+})
