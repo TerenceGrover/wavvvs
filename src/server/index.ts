@@ -9,10 +9,6 @@ import {deleteExpiredTracks, checkPremiumSubscriptions} from './cronJob';
 
 const { PORT, HOST_NAME, STRIPE_SECRET_KEY } = process.env;
 
-export const stripe = require('stripe')(STRIPE_SECRET_KEY, {
-  apiVersion: '2022-08-01',
-});
-
 const app: Express = express();
 
 (async function () {

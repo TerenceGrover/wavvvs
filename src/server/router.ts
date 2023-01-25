@@ -4,7 +4,10 @@ import * as Track from './controllers/Track.controller';
 import * as User from './controllers/User.controller';
 import { auth } from './middle-ware/auth';
 import fs from 'fs';
-import { stripe } from './index';
+
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: '2022-08-01',
+});
 
 const storage = multer.diskStorage({
   destination: (req, _, cb) => {
