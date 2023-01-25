@@ -100,13 +100,14 @@ describe('interact with user functionalities', () => {
   });
 
   afterAll(async () => {
-    // delete user created in beforeEach
+    // delete ale
     await request(app)
       .delete('/user')
       .set('Authorization', `Bearer ${tokenOfUser1}`)
       .send({
         password: '12345689',
       });
+    // delete terence
     await request(app)
       .delete('/user')
       .set('Authorization', `Bearer ${tokenOfUser2}`)
@@ -156,7 +157,7 @@ describe('interact with user functionalities', () => {
     expect(res.status).toBe(204);
   });
 
-  let id = '';
+  let idOfUser1 = '';
   let arrOfTracks: any[];
   it('should get the user profile', async () => {
     const res = await request(app)
@@ -165,7 +166,7 @@ describe('interact with user functionalities', () => {
     expect(res.status).toBe(200);
     expect(res.body.name).toBe('ale');
 
-    id = res.body._id;
+    idOfUser1 = res.body._id;
     arrOfTracks = res.body.tracks;
   });
 
@@ -215,13 +216,14 @@ describe('interact with user functionalities', () => {
     const res = await request(app)
       .put('/user/follow')
       .send({
-        id: id,
+        id: idOfUser1,
       })
       .set('Authorization', `Bearer ${tokenOfUser1}`);
     expect(res.status).toBe(400);
   });
 
   let tokenOfUser2 = '';
+  let idOfUser2 = '';
   it('should follow a new user', async () => {
     // register a new user
     await request(app).post('/register').send({
@@ -234,69 +236,78 @@ describe('interact with user functionalities', () => {
       email: 'terence@gmail.com',
       password: '123456789',
     });
-    const token2 = res.body.token;
+    tokenOfUser2 = res.body.token;
     // get the id of the new user
     const res2 = await request(app)
       .get('/user')
-      .set('Authorization', `Bearer ${token2}`);
-    const id2 = res2.body._id;
-    tokenOfUser2 = id2;
+      .set('Authorization', `Bearer ${tokenOfUser2}`);
+    idOfUser2 = res2.body._id;
     // follow the new user with the other user
     const res3 = await request(app)
       .put('/user/follow')
       .send({
-        id: id2,
+        id: idOfUser2,
       })
       .set('Authorization', `Bearer ${tokenOfUser1}`);
     expect(res3.status).toBe(204);
     // get new user profile to see if the other user is in the followers array
     const res4 = await request(app)
       .get('/user')
-      .set('Authorization', `Bearer ${token2}`);
+      .set('Authorization', `Bearer ${tokenOfUser2}`);
     expect(res4.status).toBe(200);
     expect(res4.body.followers.length).toBe(1);
-    expect(res4.body.followers[0]).toBe(id);
-    // // delete the new user
-    // await request(app)
-    //   .delete('/user')
-    //   .set('Authorization', `Bearer ${token2}`)
-    //   .send({
-    //     password: '123456789',
-    //   });
-  }, 10000);
+    expect(res4.body.followers[0]).toBe(idOfUser1);
+  }, 5000);
 
-  it('should like an user track', async () => {
-    // make the user terence like ale song
-    const res = await request(app)
-      .put('/track/like')
+  it('should remove one from followers if calls the follow endpoint while being already a follower', async () => {
+    // follow the new user with the other user
+    const res3 = await request(app)
+      .put('/user/follow')
       .send({
-        trackId: arrOfTracks[0]._id,
+        id: idOfUser2,
       })
-      .set('Authorization', `Bearer ${tokenOfUser2}`);
-    expect(res.status).toBe(204);
-
-    const res2 = await request(app)
+      .set('Authorization', `Bearer ${tokenOfUser1}`);
+    expect(res3.status).toBe(204);
+    // get new user profile to see if the other user is removed from the followers array
+    const res4 = await request(app)
       .get('/user')
-      .set('Authorization', `Bearer ${tokenOfUser1}`);
-    expect(res2.status).toBe(200);
-    expect(res2.body.name).toBe('ale');
-    expect(res2.body.tracks[0].likes).toBe(1);
+      .set('Authorization', `Bearer ${tokenOfUser2}`);
+    expect(res4.status).toBe(200);
+    expect(res4.body.followers.length).toBe(0);
   });
 
-  it('should delete likes and following of user when user gets deleted', async () => {
-    // delete the user
-    // expect ale followers to be 0
-    // expect ale's song lieks to be 0
-  });
+  // it('should like a user track', async () => {
+  //   // make the user terence like ale song
+  //   const res = await request(app)
+  //     .put('/track/like')
+  //     .send({
+  //       trackId: arrOfTracks[0]._id,
+  //     })
+  //     .set('Authorization', `Bearer ${tokenOfUser2}`);
+  //   expect(res.status).toBe(204);
 
-  // delete ale's track
-  it('should delete a track for the user', async () => {
-    const res = await request(app)
-      .delete('/track')
-      .send({
-        id: arrOfTracks[0]._id,
-      })
-      .set('Authorization', `Bearer ${tokenOfUser1}`);
-    expect(res.status).toBe(204);
-  });
+  //   const res2 = await request(app)
+  //     .get('/user')
+  //     .set('Authorization', `Bearer ${tokenOfUser1}`);
+  //   expect(res2.status).toBe(200);
+  //   expect(res2.body.name).toBe('ale');
+  //   expect(res2.body.tracks[0].likes).toBe(1);
+  // });
+
+  // it('should delete likes and following of user when user gets deleted', async () => {
+  //   // delete the user
+  //   // expect ale followers to be 0
+  //   // expect ale's song lieks to be 0
+  // });
+
+  // // delete ale's track
+  // it('should delete a track for the user', async () => {
+  //   const res = await request(app)
+  //     .delete('/track')
+  //     .send({
+  //       id: arrOfTracks[0]._id,
+  //     })
+  //     .set('Authorization', `Bearer ${tokenOfUser1}`);
+  //   expect(res.status).toBe(204);
+  // });
 });

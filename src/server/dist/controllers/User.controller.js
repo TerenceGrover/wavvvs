@@ -290,10 +290,18 @@ const followUser = async (req, res) => {
                     error: 'What a fool. You cannot follow yourself. Nice try.',
                 });
             }
-            const { id } = req.body;
-            const userToFollow = await models_1.User.findOne({ _id: id });
+            const idOfUserToFollow = req.body.id;
+            const userToFollow = await models_1.User.findOne({ _id: idOfUserToFollow });
             if (userToFollow) {
-                userToFollow.followers.push(decoded.id);
+                const idx = userToFollow.followers.indexOf(decoded.id);
+                if (idx === -1) {
+                    // we dont follow the user 
+                    userToFollow.followers.push(decoded.id);
+                }
+                else {
+                    // we already follow the user so we splice 
+                    userToFollow.followers.splice(idx, 1);
+                }
                 await userToFollow.save();
                 return res.sendStatus(204);
             }
