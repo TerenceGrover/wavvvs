@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllUsers = exports.followUser = exports.getUserFromSongId = exports.deleteUser = exports.getAnotherUser = exports.updateOne = exports.registerOne = exports.loginOne = exports.getUser = void 0;
+exports.search = exports.getAllUsers = exports.followUser = exports.getUserFromSongId = exports.deleteUser = exports.getAnotherUser = exports.updateOne = exports.registerOne = exports.loginOne = exports.getUser = void 0;
 const models_1 = require("../models/models");
 const userServices = __importStar(require("../services/User.service"));
 const general_util_1 = require("../utils/general.util");
@@ -325,7 +325,9 @@ const getAllUsers = async (req, res) => {
         let arrOfUsers = [];
         for (let user of USERS) {
             let totalLikes = 0;
-            const tracksOfUser = await models_1.Track.find({ uploaded_by: user._id.toString() });
+            const tracksOfUser = await models_1.Track.find({
+                uploaded_by: user._id.toString(),
+            });
             totalLikes = tracksOfUser.reduce((acc, track) => acc + track.liked_by.length, 0);
             arrOfUsers.push({
                 _id: user._id.toString(),
@@ -368,3 +370,35 @@ const getAllUsers = async (req, res) => {
     }
 };
 exports.getAllUsers = getAllUsers;
+const search = async (req, res) => {
+    try {
+        const { query } = req.params;
+        console.log(query);
+        const users = await models_1.User.find({
+            $or: [
+                { username: { $regex: new RegExp(query, 'i') } },
+                { name: { $regex: new RegExp(query, 'i') } },
+            ],
+        });
+        console.log(users);
+        let usersToSend = [];
+        if (users) {
+            users.forEach((user) => {
+                usersToSend.push({
+                    name: user.name,
+                    username: user.username,
+                    id: user._id,
+                    profile_pic_path: user.profile_pic_path,
+                });
+            });
+            return res.status(200).send(usersToSend);
+        }
+        // if no users send 404
+        return res.sendStatus(404);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).send({ error });
+    }
+};
+exports.search = search;

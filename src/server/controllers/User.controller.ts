@@ -8,6 +8,7 @@ import {
   getIdOfUserFromJWT,
 } from '../utils/general.util';
 import bcrypt from 'bcrypt';
+import { resolveAny } from 'dns';
 
 const getUser = async (req: Request, res: Response) => {
   try {
@@ -278,8 +279,10 @@ const getAllUsers = async (req: Request, res: Response) => {
     let arrOfUsers: any = [];
 
     for (let user of USERS) {
-      let totalLikes : number = 0;
-      const tracksOfUser = await Track.find({ uploaded_by: user._id.toString() })
+      let totalLikes: number = 0;
+      const tracksOfUser = await Track.find({
+        uploaded_by: user._id.toString(),
+      });
       totalLikes = tracksOfUser.reduce(
         (acc, track) => acc + track.liked_by.length,
         0
@@ -319,11 +322,42 @@ const getAllUsers = async (req: Request, res: Response) => {
       if (arrOfUsers.length > LIMIT) {
         return res.status(200).send(arrOfUsers.slice(0, LIMIT));
       } else {
-        return res.status(200).send(arrOfUsers)
+        return res.status(200).send(arrOfUsers);
       }
     }
   } catch (error) {
     console.log({ error });
+    res.status(500).send({ error });
+  }
+};
+
+const search = async (req: Request, res: Response) => {
+  try {
+    const { query } = req.params;
+    console.log(query);
+    const users = await User.find({
+      $or: [
+        { username: { $regex: new RegExp(query, 'i') } },
+        { name: { $regex: new RegExp(query, 'i') } },
+      ],
+    });
+    console.log(users);
+    let usersToSend: any = [];
+    if (users) {
+      users.forEach((user) => {
+        usersToSend.push({
+          name: user.name,
+          username: user.username,
+          id: user._id,
+          profile_pic_path: user.profile_pic_path,
+        });
+      });
+      return res.status(200).send(usersToSend);
+    }
+    // if no users send 404
+    return res.sendStatus(404);
+  } catch (error) {
+    console.log(error);
     res.status(500).send({ error });
   }
 };
@@ -338,4 +372,5 @@ export {
   getUserFromSongId,
   followUser,
   getAllUsers,
+  search,
 };
