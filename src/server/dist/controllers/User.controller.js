@@ -30,11 +30,10 @@ exports.followUser = exports.getUserFromSongId = exports.deleteUser = exports.ge
 const models_1 = require("../models/models");
 const userServices = __importStar(require("../services/User.service"));
 const general_util_1 = require("../utils/general.util");
-const general_util_2 = require("../utils/general.util");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const getUser = async (req, res) => {
     try {
-        const decoded = (0, general_util_2.getIdOfUserFromJWT)(req);
+        const decoded = (0, general_util_1.getIdOfUserFromJWT)(req);
         if (decoded) {
             const id = decoded.id;
             // Fetch the user by id
@@ -42,6 +41,7 @@ const getUser = async (req, res) => {
             let userToSend = {};
             if (user) {
                 userToSend = {
+                    _id: user._id.toString(),
                     username: user.username,
                     email: user.email,
                     name: user.name,
@@ -64,7 +64,8 @@ const getUser = async (req, res) => {
                         title: track.title,
                         size: track.size,
                         date: track.date,
-                        likes: track.likes,
+                        likes: track.liked_by.length,
+                        liked_by: track.liked_by,
                     });
                 });
                 userToSend.tracks = arrOfTracks;
@@ -73,7 +74,8 @@ const getUser = async (req, res) => {
             else
                 return res.sendStatus(404);
         }
-        // return res.send(500);
+        else
+            return res.sendStatus(404);
     }
     catch (error) {
         console.log({ error });
@@ -124,7 +126,7 @@ const registerOne = async (req, res) => {
 exports.registerOne = registerOne;
 const updateOne = async (req, res) => {
     try {
-        const decoded = (0, general_util_2.getIdOfUserFromJWT)(req);
+        const decoded = (0, general_util_1.getIdOfUserFromJWT)(req);
         if (decoded) {
             const id = decoded.id;
             const { name, bio, profile_pic_path, isPrivate } = req.body;
@@ -153,8 +155,8 @@ exports.updateOne = updateOne;
 // if the user we want the info bout is private, im gonna check if you sent auth token.
 const getAnotherUser = async (req, res) => {
     try {
-        const username = req.params.username;
-        const userToFind = await models_1.User.findOne({ username: username });
+        const id = req.params.id;
+        const userToFind = await models_1.User.findOne({ _id: id });
         if (!userToFind)
             throw new Error('User not found');
         const userToSend = {
@@ -170,7 +172,7 @@ const getAnotherUser = async (req, res) => {
             tracks: [],
         };
         // seach in Track all the tracks that have the user id as uploaded by
-        const tracks = await models_1.Track.find({ uploaded_by: userToFind.id });
+        const tracks = await models_1.Track.find({ uploaded_by: id });
         let arrOfTracks = [];
         tracks.forEach((track) => {
             arrOfTracks.push({
@@ -179,13 +181,14 @@ const getAnotherUser = async (req, res) => {
                 title: track.title,
                 size: track.size,
                 date: track.date,
-                likes: track.likes,
+                likes: track.liked_by.length,
+                liked_by: track.liked_by,
             });
         });
         userToSend.tracks = arrOfTracks;
         // if user asked is private, go on checking auth token.
         if (userToFind.isPrivate) {
-            const decoded = (0, general_util_2.getIdOfUserFromJWT)(req);
+            const decoded = (0, general_util_1.getIdOfUserFromJWT)(req);
             if (decoded) {
                 return res.status(200).send(userToSend);
             }
@@ -205,7 +208,7 @@ exports.getAnotherUser = getAnotherUser;
 const deleteUser = async (req, res) => {
     try {
         const pwd = req.body.password;
-        const decoded = (0, general_util_2.getIdOfUserFromJWT)(req);
+        const decoded = (0, general_util_1.getIdOfUserFromJWT)(req);
         // check if the password is correct before deleting the user
         const foundUser = await models_1.User.findOne({ _id: decoded.id });
         if (!foundUser) {
@@ -223,6 +226,8 @@ const deleteUser = async (req, res) => {
             return res.status(401).send('unauthorized');
         }
         if (deleted) {
+            // dont await this. its gonna take a while.
+            (0, general_util_1.deleteUserBelongings)(decoded.id);
             return res.sendStatus(204);
         }
         else
@@ -252,7 +257,7 @@ const getUserFromSongId = async (req, res) => {
             };
             if (owner.isPrivate) {
                 // check if the user who made the request follows the owner of the song.
-                const decoded = (0, general_util_2.getIdOfUserFromJWT)(req);
+                const decoded = (0, general_util_1.getIdOfUserFromJWT)(req);
                 if (decoded) {
                     const user = await models_1.User.findOne({ _id: decoded.id });
                     if (user) {
@@ -275,7 +280,7 @@ const getUserFromSongId = async (req, res) => {
 exports.getUserFromSongId = getUserFromSongId;
 const followUser = async (req, res) => {
     try {
-        const decoded = (0, general_util_2.getIdOfUserFromJWT)(req);
+        const decoded = (0, general_util_1.getIdOfUserFromJWT)(req);
         if (decoded) {
             if (decoded.id === req.body.id) {
                 return res

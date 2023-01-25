@@ -20,7 +20,6 @@ const trackSchema = new mongoose_1.Schema({
     title: String,
     size: Number,
     date: Number,
-    likes: Number,
     liked_by: [String],
 });
 const User = (0, mongoose_1.model)('User', userSchema);

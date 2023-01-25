@@ -117,8 +117,8 @@ const updateOne = async (req: Request, res: Response) => {
 // if the user we want the info bout is private, im gonna check if you sent auth token.
 const getAnotherUser = async (req: Request, res: Response) => {
   try {
-    const username = req.params.username;
-    const userToFind = await User.findOne({ username: username });
+    const id = req.params.id;
+    const userToFind = await User.findOne({ _id: id });
     if (!userToFind) throw new Error('User not found');
     const userToSend = {
       name: userToFind.name,
@@ -133,7 +133,7 @@ const getAnotherUser = async (req: Request, res: Response) => {
       tracks: [],
     };
     // seach in Track all the tracks that have the user id as uploaded by
-    const tracks = await Track.find({ uploaded_by: userToFind.id });
+    const tracks = await Track.find({ uploaded_by: id });
     let arrOfTracks: any = [];
     tracks.forEach((track) => {
       arrOfTracks.push({
