@@ -7,7 +7,7 @@ export default function ProfileCard() {
   const { selectedUser } = React.useContext(Context);
 
   return (
-    <div className="place-self-start flex flex-col max-w-[275px] min-w-[175px] w-[70%] h-[60%] bg-neutral-800 shadow-sm shadow-black self-center justify-around items-center py-[2.5%] rounded-xl">
+    <div className="place-self-start flex flex-col max-w-[275px] min-w-[175px] w-[80%] h-[60%] bg-neutral-800 shadow-sm shadow-black self-center justify-around items-center py-[10%] rounded-xl">
       <div className="flex flex-col items-center">
         <img
           className="w-24 h-24 rounded-2xl"
@@ -17,7 +17,7 @@ export default function ProfileCard() {
         <span className="text-neutral-200 text-xl">
           {'@' + selectedUser.username}
         </span>
-        <h1 className="text-white text-2xl mt-7 mb-1 font-bold inline-flex items-center content-center text-center gap-x-2 pr-3">
+        <h1 className="text-white text-2xl mt-7 mb-1 font-bold inline-flex items-center content-center text-center gap-x-2">
           {selectedUser.isPremium && (
             <AiFillStar className={`text-2xl text-amber-400`} />
           )}

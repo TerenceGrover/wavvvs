@@ -3,6 +3,7 @@ import { AiOutlineMenu, AiOutlineSearch } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import Logo from './Logo.component';
 import Menu from './Menu.component';
+import SearchBar from './SearchBar.component';
 import { Context } from '../Utils/Context';
 
 export default function Header() {
@@ -49,13 +50,9 @@ export default function Header() {
             </div>
           </div>
           {search && (
-            <input
-              autoFocus
-              className=" focus:outline-neutral-200 pr-3 pl-3 self-center justify-self-center w-[60%] rounded-xl h-[100%] bg-neutral-600"
-              onBlur={() => {
-                setSearch(false);
-              }}
-            ></input>
+            <SearchBar
+            setSearch={setSearch}
+            />
           )}
           <div className="flex w-26 justify-between items-center">
             {!search && (

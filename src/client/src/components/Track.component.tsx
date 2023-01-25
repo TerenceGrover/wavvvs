@@ -24,6 +24,7 @@ export default function Track(props: {
   const waveformRef: any = useRef('waveform');
 
   const { path, title, date, uploaded_by } = props.trackMetaData;
+  console.log(props.trackMetaData)
   const hoursUntilDeletion = (-millisecondsToHours(Number(Date.now() - date)) + 24);
 
   useEffect(() => {
