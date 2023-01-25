@@ -13,6 +13,7 @@ const getAllTracks = async (req: Request, res: Response) => {
     let { sort } = req.body;
     // if sort is not passed in the body, i dont want to sort
     const tracks = await Track.find({}, null, { limit: limit });
+
     let arrOfTracks: any = [];
     tracks.forEach((track) => {
       arrOfTracks.push({
@@ -29,19 +30,13 @@ const getAllTracks = async (req: Request, res: Response) => {
       const now = Date.now();
       switch (sort) {
         case 'date':
-          arrOfTracks.sort((a: any, b: any) => {
-            now - b.date - (now - a.date);
-          });
+          arrOfTracks.sort((a: any, b: any) => (now - b.date) - (now - a.date));
           break;
         case 'likes':
-          arrOfTracks.sort((a: any, b: any) => {
-            b.likes - a.likes;
-          });
+          arrOfTracks.sort((a: any, b: any) => b.likes - a.likes);
           break;
         default:
-          arrOfTracks.sort((a: any, b: any) => {
-            b.likes - a.likes;
-          });
+          arrOfTracks.sort((a: any, b: any) => b.likes - a.likes);
           break;
       }
     }
