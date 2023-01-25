@@ -37,9 +37,9 @@ describe('login & register functionalities', () => {
 
   it('should respond 200 if try to register an user', async () => {
     const res = await request(app).post('/register').send({
-      email: 'ale@gmail.com',
+      email: 'test@gmail.com',
       password: '123456789',
-      username: 'ale',
+      username: 'testale',
     });
     expect(res.status).toBe(200);
   });
@@ -54,7 +54,7 @@ describe('login & register functionalities', () => {
 
   it('should respond 200 if try to login an user registered and give a token back', async () => {
     const res = await request(app).post('/login').send({
-      email: 'ale@gmail.com',
+      email: 'test@gmail.com',
       password: '123456789',
     });
     token = res.body.token;
@@ -64,9 +64,9 @@ describe('login & register functionalities', () => {
 
   it('should respond 409 if try to register an user already registered', async () => {
     const res = await request(app).post('/register').send({
-      email: 'ale@gmail.com',
+      email: 'test@gmail.com',
       password: '123456789',
-      username: 'ale',
+      username: 'testale',
     });
     expect(res.status).toBe(409);
   });
@@ -88,12 +88,12 @@ describe('interact with user functionalities', () => {
     await startServer();
 
     await request(app).post('/register').send({
-      email: 'ale@gmail.com',
+      email: 'test@gmail.com',
       password: '12345689',
-      username: 'ale',
+      username: 'testale',
     });
     const res = await request(app).post('/login').send({
-      email: 'ale@gmail.com',
+      email: 'test@gmail.com',
       password: '12345689',
     });
     tokenOfUser1 = res.body.token;
@@ -121,7 +121,7 @@ describe('interact with user functionalities', () => {
     const res = await request(app)
       .put('/me')
       .send({
-        name: 'ale',
+        name: 'test',
         bio: 'bio',
         profile_pic_path: 'path',
         isPrivate: false,
@@ -164,7 +164,7 @@ describe('interact with user functionalities', () => {
       .get('/user')
       .set('Authorization', `Bearer ${tokenOfUser1}`);
     expect(res.status).toBe(200);
-    expect(res.body.name).toBe('ale');
+    expect(res.body.name).toBe('test');
 
     idOfUser1 = res.body._id;
     arrOfTracks = res.body.tracks;
@@ -190,13 +190,13 @@ describe('interact with user functionalities', () => {
   it('should follow a new user', async () => {
     // register a new user
     await request(app).post('/register').send({
-      email: 'terence@gmail.com',
+      email: 'test2@gmail.com',
       password: '123456789',
-      username: 'terence',
+      username: 'testterence',
     });
     // login the new user
     const res = await request(app).post('/login').send({
-      email: 'terence@gmail.com',
+      email: 'test2@gmail.com',
       password: '123456789',
     });
     tokenOfUser2 = res.body.token;
@@ -253,12 +253,12 @@ describe('interact with user functionalities', () => {
       .get('/user')
       .set('Authorization', `Bearer ${tokenOfUser1}`);
     expect(res2.status).toBe(200);
-    expect(res2.body.name).toBe('ale');
+    expect(res2.body.name).toBe('test');
     expect(res2.body.tracks[0].likes).toBe(1);
   });
 
   it('should remove like if user already likes the track', async () => {
-    // make the user terence like ale song
+    // make the user test2 like ale song
     const res = await request(app)
       .put('/track/like')
       .send({
@@ -271,7 +271,7 @@ describe('interact with user functionalities', () => {
       .get('/user')
       .set('Authorization', `Bearer ${tokenOfUser1}`);
     expect(res2.status).toBe(200);
-    expect(res2.body.name).toBe('ale');
+    expect(res2.body.name).toBe('test');
     expect(res2.body.tracks[0].likes).toBe(0);
   });
 
@@ -298,12 +298,12 @@ describe('interact with user functionalities', () => {
       .get('/user')
       .set('Authorization', `Bearer ${tokenOfUser1}`);
     expect(buff.status).toBe(200);
-    expect(buff.body.name).toBe('ale');
+    expect(buff.body.name).toBe('test');
     expect(buff.body.followers.length).toBe(1)
-    // expect ale's song lieks to be 0
+    // expect test's song lieks to be 0
     expect(buff.body.tracks[0].likes).toBe(1);
 
-    // delete terence
+    // delete test2
     const res3 = await request(app)
       .delete('/user')
       .set('Authorization', `Bearer ${tokenOfUser2}`)
@@ -312,14 +312,14 @@ describe('interact with user functionalities', () => {
       });
     expect(res3.status).toBe(204);
 
-    // expect ale followers to be 0
+    // expect test followers to be 0
     const res4 = await request(app)
       .get('/user')
       .set('Authorization', `Bearer ${tokenOfUser1}`);
     expect(res4.status).toBe(200);
-    expect(res4.body.name).toBe('ale');
+    expect(res4.body.name).toBe('test');
     expect(res4.body.followers.length).toBe(0)
-    // expect ale's song lieks to be 0
+    // expect test's song lieks to be 0
     expect(res4.body.tracks[0].likes).toBe(0);
 
   });
@@ -338,7 +338,7 @@ describe('interact with user functionalities', () => {
       .get('/user')
       .set('Authorization', `Bearer ${tokenOfUser1}`);
     expect(res2.status).toBe(200);
-    expect(res2.body.name).toBe('ale');
+    expect(res2.body.name).toBe('test');
     expect(res2.body.tracks.length).toBe(0);
   });
 });
@@ -349,19 +349,19 @@ describe('Server cronJob functionalities', () => {
     await startServer();
 
     await request(app).post('/register').send({
-      email: 'ale@gmail.com',
+      email: 'test@gmail.com',
       password: '12345689',
-      username: 'ale',
+      username: 'test',
     });
     const res = await request(app).post('/login').send({
-      email: 'ale@gmail.com',
+      email: 'test@gmail.com',
       password: '12345689',
     });
     tokenOfUser1 = res.body.token;
   });
 
   afterAll(async () => {
-    // delete ale
+    // delete test
     await request(app)
       .delete('/user')
       .set('Authorization', `Bearer ${tokenOfUser1}`)
