@@ -24,7 +24,7 @@ export default function Track(props: {
   const waveformRef: any = useRef('waveform');
 
   const { path, title, date, uploaded_by } = props.trackMetaData;
-  const hoursUntilDeletion = millisecondsToHours(Number(Date.now() - date)) + 24;
+  const hoursUntilDeletion = (-millisecondsToHours(Number(Date.now() - date)) + 24);
 
   useEffect(() => {
     const options = {
@@ -84,7 +84,7 @@ export default function Track(props: {
     if (hoursUntilDeletion <= 1) {
       setSoonDeleted(true);
   }
-}, [hoursUntilDeletion]);
+}, [ ,hoursUntilDeletion]);
 
   if (props.track) {
     if (props.track.isPlaying) {
