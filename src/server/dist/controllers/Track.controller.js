@@ -27,19 +27,13 @@ const getAllTracks = async (req, res) => {
             const now = Date.now();
             switch (sort) {
                 case 'date':
-                    arrOfTracks.sort((a, b) => {
-                        now - b.date - (now - a.date);
-                    });
+                    arrOfTracks.sort((a, b) => (now - b.date) - (now - a.date));
                     break;
                 case 'likes':
-                    arrOfTracks.sort((a, b) => {
-                        b.likes - a.likes;
-                    });
+                    arrOfTracks.sort((a, b) => b.likes - a.likes);
                     break;
                 default:
-                    arrOfTracks.sort((a, b) => {
-                        b.likes - a.likes;
-                    });
+                    arrOfTracks.sort((a, b) => b.likes - a.likes);
                     break;
             }
         }
