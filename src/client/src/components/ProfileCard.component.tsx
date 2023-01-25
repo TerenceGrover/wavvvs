@@ -1,5 +1,4 @@
 import React from 'react';
-import { BsFillPersonPlusFill, BsFillPersonCheckFill } from 'react-icons/bs';
 import { Context } from '../Utils/Context';
 import FollowButton from './FollowButton.component';
 

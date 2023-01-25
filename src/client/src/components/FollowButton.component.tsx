@@ -1,6 +1,7 @@
 import React from 'react';
 import { Context } from '../Utils/Context';
 import { BsFillPersonPlusFill, BsFillPersonCheckFill } from 'react-icons/bs';
+import { followUser } from '../apiService/api-service';
 
 
 export default function FollowButton() {
@@ -18,9 +19,8 @@ export default function FollowButton() {
   }, [followed]);
 
   const handleFollow = () => {
-    if (!followed){
-      
-    }
+    console.log(selectedUser)
+    followUser(selectedUser._id);
     setFollowed(following => !following);
   }
 

@@ -183,6 +183,23 @@ const getIndividualUser = async (id: string) => {
   }
 };
 
+const followUser = async (id: string) => {
+  try {
+    console.log(id)
+    return fetch(baseURL + `/user/follow`, {
+      method: 'PUT',
+      headers: {
+        'Content-type': 'Application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+      body: JSON.stringify({ id: id }),
+    }).then((res) => res.json());
+  } catch (error) {
+    console.log({ error });
+    return error;
+  }
+};
+
 export {
   postTrack,
   deleteTrack,
@@ -193,5 +210,6 @@ export {
   getAllUsers,
   deleteAccount,
   getAllTracks,
-  getIndividualUser
+  getIndividualUser,
+  followUser
 };
