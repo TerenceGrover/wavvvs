@@ -11,7 +11,7 @@ import { Context } from '../Utils/Context';
 import { HomeContext } from '../Utils/Context';
 
 function Home() {
-  const { currentUser, setCurrentUser } = React.useContext(Context);
+  const { currentUser, setCurrentUser, mobile } = React.useContext(Context);
 
   const [isLoading, setIsLoading] = useState(true);
   const [centralHome, setCentralHome] = useState('Home');
@@ -38,13 +38,18 @@ function Home() {
           <Logo />
         </main>
       ) : (
-        <div className="grid grid-cols-3 w-screen h-screen justify-items-center">
-          <HomeContext.Provider value={{ centralHome, setCentralHome }}>
-            <SideBar />
+        <HomeContext.Provider value={{ centralHome, setCentralHome }}>
+          {mobile
+            ?
             <CentralHome />
-            <ProfileCard />
+            :
+            <div className="grid grid-cols-3 w-screen h-screen justify-items-center">
+              <SideBar />
+              <CentralHome />
+              <ProfileCard />
+            </div>
+            }
           </HomeContext.Provider>
-        </div>
       )}
     </div>
   );

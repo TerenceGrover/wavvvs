@@ -224,6 +224,7 @@ export default function App() {
           )}
         </Router>
         {valid && !isNewUser && (
+          //TODO : MAKE THE MEDIA CONTROLLER CONSUME PLAYING FROM THE CONTEXT
           <MediaController
             activeTrack={activeTrack}
             playNextTrack={playNextTrack}

@@ -59,7 +59,6 @@ export default function Track(props: {
       ...tracks,
       { waveformRef, isPlaying: false, isActive: false, isFinished: false },
     ]);
-
     
     return () => {
       // clean up function
@@ -171,6 +170,7 @@ export default function Track(props: {
           />
         }
         </button>
+        <span className='text-xs pl-2 text-neutral-600'>{props.trackMetaData.likes + (liked ? 1 : 0)}</span>
       </div>
     </div>
   );
