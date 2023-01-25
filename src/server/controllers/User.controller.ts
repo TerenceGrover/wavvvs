@@ -245,7 +245,14 @@ const followUser = async (req: Request, res: Response) => {
       const { id } = req.body;
       const userToFollow = await User.findOne({ _id: id });
       if (userToFollow) {
-        userToFollow.followers.push(decoded.id);
+        const idx = userToFollow.followers.indexOf(decoded.id)
+        if ( idx !== -1 ) {
+          // we dont follow the user 
+          userToFollow.followers.push(decoded.id);
+        } else {
+          // we already follow the user so we splice 
+          userToFollow.followers.splice(idx, 1)
+        }
         await userToFollow.save();
         return res.sendStatus(204);
       } else {
