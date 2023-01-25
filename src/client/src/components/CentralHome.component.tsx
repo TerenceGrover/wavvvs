@@ -24,7 +24,7 @@ export default function CentralHome() {
 
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="col-span-3 flex flex-col justify-center items-center">
       {centralHome ==='Home'
       &&
       <TrackCollection sort={'home'} homeTracks={homeTracks} />

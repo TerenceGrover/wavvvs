@@ -43,7 +43,7 @@ function Home() {
             ?
             <CentralHome />
             :
-            <div className="grid grid-cols-3 w-screen h-screen justify-items-center">
+            <div className="grid grid-cols-5 w-screen h-screen">
               <SideBar />
               <CentralHome />
               <ProfileCard />

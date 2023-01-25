@@ -119,7 +119,7 @@ export default function Track(props: {
           setSelectedUser(res);
         })};
       }}
-      className={`${mobile ? "min-w-full" : "min-w-[40%]"} max-w-full px-2 rounded-md h-16 mb-10` + (soonDeleted ? " bg-red-600 bg-opacity-50" : "")}
+      className={`${mobile ? "min-w-full" : "min-w-[50%]"} max-w-full px-2 rounded-md h-16 mb-10` + (soonDeleted ? " bg-red-600 bg-opacity-50" : "")}
     >
       <DeleteWarningModal setOpen={setOpen} open={open} track={props.track!} />
       <div className=" relative flex justify-between w-full">

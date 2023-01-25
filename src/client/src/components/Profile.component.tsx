@@ -32,8 +32,6 @@ export default function Profile() {
     }
   }, [currentUser]);
 
-  const handleAccountDelete = () => {};
-
   return (
     <div className="h-[120vh] w-screen">
       <DeleteAccount setOpen={setOpen} open={open} />
@@ -42,13 +40,14 @@ export default function Profile() {
           <div className="">
             <section className="flex flex-col justify-center items-center mt-3">
               <ProfilePic path={currentUser.profile_pic_path} />
-              <h1 className="text-white text-2xl mt-7 mb-1">
-                {currentUser.name}
+              <h1 className="text-white text-2xl mt-7 mb-1 font-bold inline-flex items-center content-center text-center gap-x-2 pr-3">
+                {currentUser.isPremium && <AiFillStar className={`text-2xl text-amber-400`} />}
+                {currentUser.name} 
               </h1>
               <p
                 id="username"
                 className="text-neutral-400"
-              >{`@${currentUser.username}`}</p>
+              >{`@${currentUser.username}`} </p>
             </section>
             <hr className="w-96 border-neutral-800 my-6" />
             <Bio bio={currentUser.bio} />
