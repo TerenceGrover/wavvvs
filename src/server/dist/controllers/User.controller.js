@@ -228,7 +228,7 @@ const deleteUser = async (req, res) => {
         }
         if (deleted) {
             // dont await this. its gonna take a while.
-            (0, general_util_1.deleteUserBelongings)(decoded.id);
+            await (0, general_util_1.deleteUserBelongings)(decoded.id);
             return res.sendStatus(204);
         }
         else
