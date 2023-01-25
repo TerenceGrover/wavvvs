@@ -7,6 +7,7 @@ import React from 'react';
 import Logo from './Logo.component';
 import { Context } from '../Utils/Context';
 import DeleteAccount from './DeleteAccount.component';
+import Payment from './PaymentModal.component';
 import { AiFillStar } from 'react-icons/ai';
 
 export default function Profile() {
@@ -15,6 +16,7 @@ export default function Profile() {
   const [tracksto3, setTracksto3] = useState([1, 2, 3]);
   const [isLoading, setIsLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const [payment, setPayment] = useState(false);
 
   useEffect(() => {
     if (currentUser) {
@@ -34,6 +36,7 @@ export default function Profile() {
 
   return (
     <div className="h-[120vh] w-screen">
+      {payment && <Payment money={12} />}
       <DeleteAccount setOpen={setOpen} open={open} />
       {!isLoading ? (
         <div className="flex flex-col justify-start mt-14 items-center content-start p-6">
@@ -75,6 +78,9 @@ export default function Profile() {
             <button
               id="premium"
               className=" bg-yellow-500 rounded-xl px-4 py-2 mt-4"
+              onClick={() => {
+                setPayment(true);
+              }}
             >
               <span className=" text-white font-bold text-lg inline-flex items-center content-center text-center gap-x-2 pr-3">
               <AiFillStar className='text-2xl' /> Get Premium

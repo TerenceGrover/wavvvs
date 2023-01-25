@@ -221,13 +221,12 @@ const likeTrack = async (id: string) => {
 
 const searchUsers = async (search : string) => {
   try {
-    return fetch(baseURL + `/users/search`, {
-      method: 'POST',
+    return fetch(baseURL + `/search/${search}`, {
+      method: 'GET',
       headers: {
         'Content-type': 'Application/json',
         Authorization: 'Bearer ' + localStorage.getItem('token'),
-      },
-      body : JSON.stringify({search})
+      }
     }).then((res) => res.json());
   } catch (error) {
     console.log({ error });
@@ -248,5 +247,5 @@ export {
   getIndividualUser,
   followUser,
   likeTrack,
-  searchUsers
+  searchUsers,
 };
