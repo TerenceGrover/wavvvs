@@ -1,4 +1,4 @@
-import { CurrentUser, InfoObject, AdditionalInfoObject } from '../Interfaces';
+import type { InfoObject, AdditionalInfoObject } from '../Interfaces';
 const baseURL = 'http://localhost:3001';
 
 
@@ -168,6 +168,21 @@ const getAllTracks = async () => {
   }
 };
 
+const getIndividualUser = async (id: string) => {
+  try {
+    return fetch(baseURL + `/user/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'Application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+    }).then((res) => res.json());
+  } catch (error) {
+    console.log({ error });
+    return error;
+  }
+};
+
 export {
   postTrack,
   deleteTrack,
@@ -177,5 +192,6 @@ export {
   checkUser,
   getAllUsers,
   deleteAccount,
-  getAllTracks
+  getAllTracks,
+  getIndividualUser
 };

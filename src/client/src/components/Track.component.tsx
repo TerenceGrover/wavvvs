@@ -8,6 +8,7 @@ import DeleteWarningModal from './DeleteWarningModal.component';
 import React from 'react';
 import { Context } from '../Utils/Context';
 import {BsFillSuitHeartFill, BsSuitHeart } from 'react-icons/bs';
+import { getIndividualUser } from '../apiService/api-service';
 
 export default function Track(props: {
   trackMetaData: TrackType;
@@ -17,9 +18,6 @@ export default function Track(props: {
   const [isHovering, setIsHovering] = useState(false);
   const [soonDeleted, setSoonDeleted] = useState(false);
   const [liked, setLiked] = useState(false);
-
-  console.log('track', props.track);
-  console.log('trackMeta', props.trackMetaData);
 
   const { currentUser, setTrackList, playOrPauseTrackByID, setSelectedUser } = React.useContext(Context);
 
@@ -107,6 +105,11 @@ export default function Track(props: {
       }}
       onMouseOut={() => {
         setIsHovering(false);
+      }}
+      onClick={() => {
+        getIndividualUser(uploaded_by).then((res) => {
+          setSelectedUser(res);
+        });
       }}
       className={"min-w-[40%] px-2 rounded-md h-16 mb-10" + (soonDeleted ? " bg-red-600 bg-opacity-50" : "")}
     >
