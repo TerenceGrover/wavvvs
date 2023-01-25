@@ -153,14 +153,16 @@ const deleteAccount  = async (password : string) => {
   }
 };
 
-const getAllTracks = async () => {
+const getAllTracks = async (sort : string) => {
+  console.log(sort)
   try {
     return fetch(baseURL + `/tracks/all`, {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-type': 'Application/json',
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       },
+      body : JSON.stringify( sort !== '' ? {sort, limit : 10} : {limit : 10})
     }).then((res) => res.json());
   } catch (error) {
     console.log({ error });
@@ -200,6 +202,22 @@ const followUser = async (id: string) => {
   }
 };
 
+const likeTrack = async (id: string) => {
+  try {
+    return fetch(baseURL + `/track/like`, {
+      method: 'PUT',
+      headers: {
+        'Content-type': 'Application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+      body: JSON.stringify({ trackId: id }),
+    }).then((res) => res.status);
+  } catch (error) {
+    console.log({ error });
+    return error;
+  }
+};
+
 export {
   postTrack,
   deleteTrack,
@@ -211,5 +229,6 @@ export {
   deleteAccount,
   getAllTracks,
   getIndividualUser,
-  followUser
+  followUser,
+  likeTrack
 };

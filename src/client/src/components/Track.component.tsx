@@ -8,7 +8,7 @@ import DeleteWarningModal from './DeleteWarningModal.component';
 import React from 'react';
 import { Context } from '../Utils/Context';
 import {BsFillSuitHeartFill, BsSuitHeart } from 'react-icons/bs';
-import { getIndividualUser } from '../apiService/api-service';
+import { getIndividualUser, likeTrack } from '../apiService/api-service';
 
 export default function Track(props: {
   trackMetaData: TrackType;
@@ -37,7 +37,7 @@ export default function Track(props: {
       progressColor: '#CCC',
       cursorColor: 'transparent',
     };
-
+    
     const wavesurfer = WaveSurfer.create(options);
 
     //The load method handles the actual fetching of the audio
@@ -60,6 +60,7 @@ export default function Track(props: {
       { waveformRef, isPlaying: false, isActive: false, isFinished: false },
     ]);
 
+    
     return () => {
       // clean up function
       setTrackList((tracks: TrackListItemType[]) => {
@@ -68,24 +69,25 @@ export default function Track(props: {
       // remove event listener
       wavesurfer.un('finish', () => {
         setTrackList((tracks: TrackListItemType[]) =>
-          tracks.map((track) =>
-            track.waveformRef.id === path
-              ? { ...track, isFinished: false }
-              : track
-          )
+        tracks.map((track) =>
+        track.waveformRef.id === path
+        ? { ...track, isFinished: false }
+        : track
+        )
         );
       });
       // destroy the instance
       wavesurfer.destroy();
     };
   }, [path, setTrackList]);
-
+  
   useEffect(() => {
     if (hoursUntilDeletion <= 1) {
       setSoonDeleted(true);
-  }
-}, [ ,hoursUntilDeletion]);
+    }
+  }, [hoursUntilDeletion]);
 
+  
   if (props.track) {
     if (props.track.isPlaying) {
       props.track.waveformRef?.wavesurfer.play();
@@ -93,6 +95,11 @@ export default function Track(props: {
       props.track.waveformRef?.wavesurfer.stop();
     }
   }
+
+  const handleLiked = () => {
+    likeTrack(props.trackMetaData._id);
+    setLiked(!liked);
+  };
 
   const handleClick = () => {
     playOrPauseTrackByID(path);
@@ -148,7 +155,7 @@ export default function Track(props: {
         </div>
         <div id='waveForm-container' className="w-[100%] overflow-hidden mx-3" ref={waveformRef}></div>
         <button
-        onClick={() => {setLiked(!liked);}}
+        onClick={handleLiked}
         >
           {liked 
           ?

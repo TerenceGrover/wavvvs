@@ -26,6 +26,7 @@ export interface TrackType {
   title: string;
   size: number;
   date: number;
+  _id: string;
 }
 
 export interface TrackListItemType {
