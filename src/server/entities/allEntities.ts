@@ -20,3 +20,10 @@ export interface IUser {
   followers: string[];
   isPremium: boolean;
 }
+
+export interface IPremium {
+  email: string;
+  start_date: number;
+  end_date: number;
+}
+

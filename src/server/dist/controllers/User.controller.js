@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.search = exports.getAllUsers = exports.followUser = exports.getUserFromSongId = exports.deleteUser = exports.getAnotherUser = exports.updateOne = exports.registerOne = exports.loginOne = exports.getUser = void 0;
+exports.buyPremium = exports.search = exports.getAllUsers = exports.followUser = exports.getUserFromSongId = exports.deleteUser = exports.getAnotherUser = exports.updateOne = exports.registerOne = exports.loginOne = exports.getUser = void 0;
 const models_1 = require("../models/models");
 const userServices = __importStar(require("../services/User.service"));
 const general_util_1 = require("../utils/general.util");
@@ -402,3 +402,43 @@ const search = async (req, res) => {
     }
 };
 exports.search = search;
+const buyPremium = async (req, res) => {
+    try {
+        let duration = req.body.duration;
+        if (!duration)
+            duration = 1; // if no duration is passed, set it to 1 month
+        const decoded = (0, general_util_1.getIdOfUserFromJWT)(req);
+        if (decoded) {
+            // check if the user is already premium
+            const user = await models_1.User.findOne({ _id: decoded.id });
+            // if yes, add the duration to the current date
+            if (user === null || user === void 0 ? void 0 : user.isPremium) {
+                const premiumUser = await models_1.Premium.findOne({ email: user.email });
+                if (premiumUser) {
+                    // take the current date and add the duration to it
+                    premiumUser.end_date = new Date(premiumUser.end_date).setDate(new Date(premiumUser.end_date).getDate() + duration);
+                    // save the user
+                    await premiumUser.save();
+                    return res.sendStatus(204);
+                }
+            }
+            else {
+                // if no, set the date to the current date + duration
+                const premiumUser = new models_1.Premium({
+                    email: user === null || user === void 0 ? void 0 : user.email,
+                    start_date: new Date(),
+                    end_date: new Date().setDate(new Date().getDate() + duration),
+                });
+                // save the user
+                await premiumUser.save();
+                return res.sendStatus(204);
+            }
+        }
+        return res.sendStatus(401);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).send({ error });
+    }
+};
+exports.buyPremium = buyPremium;

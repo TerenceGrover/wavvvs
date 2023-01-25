@@ -1,4 +1,4 @@
-import { User, Track } from '../models/models';
+import { User, Track, Premium } from '../models/models';
 import { IUser } from '../entities/allEntities';
 import { Request, Response } from 'express';
 import * as userServices from '../services/User.service';
@@ -361,6 +361,44 @@ const search = async (req: Request, res: Response) => {
   }
 };
 
+const buyPremium = async (req: Request, res: Response) => {
+  try {
+    let duration = req.body.duration;
+    if(!duration) duration=1; // if no duration is passed, set it to 1 month
+
+    const decoded = getIdOfUserFromJWT(req);
+    if (decoded) {
+      // check if the user is already premium
+      const user = await User.findOne({ _id: decoded.id });
+      // if yes, add the duration to the current date
+      if(user?.isPremium){
+        const premiumUser = await Premium.findOne({email: user.email});
+        if(premiumUser){
+          // take the current date and add the duration to it
+          premiumUser.end_date = new Date(premiumUser.end_date).setDate(new Date(premiumUser.end_date).getDate() + duration);
+          // save the user
+          await premiumUser.save();
+          return res.sendStatus(204);
+        }
+      } else {
+        // if no, set the date to the current date + duration
+        const premiumUser = new Premium({
+          email: user?.email,
+          start_date: new Date(),
+          end_date: new Date().setDate(new Date().getDate() + duration),
+        });
+        // save the user
+        await premiumUser.save();
+        return res.sendStatus(204);
+      }
+    }
+    return res.sendStatus(401);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error });
+  }
+};
+
 export {
   getUser,
   loginOne,
@@ -372,4 +410,5 @@ export {
   followUser,
   getAllUsers,
   search,
+  buyPremium,
 };

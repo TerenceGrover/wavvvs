@@ -408,7 +408,7 @@ describe('Server cronJob functionalities', () => {
   }, 20000);
 })
 
-// describe('Fontend needs functionalities', async() => {
+// describe('Frontend needs functionalities', async() => {
 //   it('should retrieve top 10 users based on followers or total likes') {
 //     // implement 
 //   }
