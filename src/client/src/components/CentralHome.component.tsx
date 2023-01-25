@@ -15,8 +15,6 @@ export default function CentralHome() {
     getAllTracks().then((res) => {
       console.log(res)
       if (res !== homeTracks && res.length > 0){
-        console.log('res', res)
-        console.log('homeTracks', homeTracks)
         setHomeTracks(res);
       }
     }

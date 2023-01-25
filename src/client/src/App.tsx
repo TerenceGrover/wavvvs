@@ -133,7 +133,6 @@ export default function App() {
   }, [valid]);
 
   React.useEffect(() => {
-    console.log(localStorage.getItem('token'))
     if (localStorage.getItem('token') === null || localStorage.getItem('token') === undefined) {
       console.log('no token');
       setIsAuth(false);
@@ -142,7 +141,6 @@ export default function App() {
     } else {
       const token = localStorage.getItem('token')!;
       const decodedJwt = parseJWT(token);
-      console.log(decodedJwt);
 
       if (decodedJwt.exp * 1000 < Date.now()) {
         console.log('token expired');

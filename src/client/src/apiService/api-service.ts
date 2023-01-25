@@ -82,7 +82,6 @@ const checkUser = async () => {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
         return data;
       });
   }
