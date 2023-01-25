@@ -242,11 +242,11 @@ const followUser = async (req: Request, res: Response) => {
             error: 'What a fool. You cannot follow yourself. Nice try.',
           });
       }
-      const { id } = req.body;
-      const userToFollow = await User.findOne({ _id: id });
+      const idOfUserToFollow = req.body.id;
+      const userToFollow = await User.findOne({ _id: idOfUserToFollow });
       if (userToFollow) {
         const idx = userToFollow.followers.indexOf(decoded.id)
-        if ( idx !== -1 ) {
+        if ( idx === -1 ) {
           // we dont follow the user 
           userToFollow.followers.push(decoded.id);
         } else {
