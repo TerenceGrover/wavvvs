@@ -48,7 +48,7 @@ const Bio = (props: { bio: string }) => {
           }}
           suppressContentEditableWarning={true}
           id="bio"
-          className="text-xs text-neutral-400 text-left w-full focus:bg-neutral-800 focus:text-neutral-300 focus:outline-neutral-200"
+          className="text-sm text-center text-neutral-400 w-full focus:bg-neutral-800 focus:text-neutral-300 focus:outline-neutral-200"
         >
           {bio}
         </p>

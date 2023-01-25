@@ -51,7 +51,7 @@ export default function Header() {
           {search && (
             <input
               autoFocus
-              className=" focus:outline-neutral-200 pr-3 pl-3 self-center justify-self-center w-[60%] rounded-full h-[100%] bg-neutral-600"
+              className=" focus:outline-neutral-200 pr-3 pl-3 self-center justify-self-center w-[60%] rounded-xl h-[100%] bg-neutral-600"
               onBlur={() => {
                 setSearch(false);
               }}
