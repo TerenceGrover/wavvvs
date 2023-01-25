@@ -55,6 +55,8 @@ router.post('/register', User.registerOne);
 router.get('/user/:id', User.getAnotherUser);
 /** ------------ PROTECTED ROUTES ------------ **/
 /* -- USER RELATED ROUTES --*/
+// SEARCH USER BY USERNAME AND NAME
+router.get('/search/:query', User.search);
 // UPDATE PROFILE INFO
 router.put('/me', auth_1.auth, User.updateOne);
 // DELETE USER

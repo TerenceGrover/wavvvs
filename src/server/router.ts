@@ -40,6 +40,9 @@ router.get('/user/:id', User.getAnotherUser);
 
 /* -- USER RELATED ROUTES --*/
 
+// SEARCH USER BY USERNAME AND NAME
+router.get('/search/:query', User.search)
+
 // UPDATE PROFILE INFO
 router.put('/me', auth, User.updateOne);
 
