@@ -156,7 +156,15 @@ exports.updateOne = updateOne;
 const getAnotherUser = async (req, res) => {
     try {
         const id = req.params.id;
-        const userToFind = await models_1.User.findOne({ _id: id });
+        let userToFind;
+        if (id.length >= 24) {
+            userToFind = await models_1.User.findOne({ _id: id });
+        }
+        // here first i search in the db dearching for the id
+        // if i dont get anything, i try with username.
+        if (!userToFind) {
+            userToFind = await models_1.User.findOne({ username: id });
+        }
         if (!userToFind)
             throw new Error('User not found');
         const userToSend = {
