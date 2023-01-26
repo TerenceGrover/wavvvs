@@ -5,11 +5,11 @@ import { dummy_profile_pic_path } from '../../cypress/fixtures/dummyUser';
 describe('<ProfilePic />', () => {
   it('renders', () => {
     // see: https://on.cypress.io/mounting-react
-    cy.mount(<ProfilePic path={'./cypress/fixtures/Profile.png'} />);
+    cy.mount(<ProfilePic self={true} path={'./cypress/fixtures/Profile.png'} />);
   });
 
   beforeEach(() => {
-    cy.mount(<ProfilePic path={'./cypress/fixtures/Profile.png'} />);
+    cy.mount(<ProfilePic self={true} path={'./cypress/fixtures/Profile.png'} />);
   });
 
   it('should render a profile picture', () => {

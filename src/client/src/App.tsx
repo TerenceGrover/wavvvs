@@ -222,12 +222,16 @@ export default function App() {
 
               <Route
                 path="/profile"
-                element={valid ? <ProfilePage /> : <Navigate to="/" />}
-              />
-              <Route
-                path="/profile/:username"
+              >
+                <Route
+                path=":username"
                 element={valid ? <OtherProfilePage /> : <Navigate to="/" />}
-              />
+                />
+                <Route
+                  index 
+                  element={valid ? <ProfilePage /> : <Navigate to="/" />}
+                />
+              </Route>
               <Route
                 path="/payment-complete"
                 element={valid ? <PaymentComplete /> : <Navigate to="/" />}

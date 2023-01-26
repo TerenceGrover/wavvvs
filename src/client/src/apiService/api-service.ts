@@ -1,5 +1,5 @@
 import type { InfoObject, AdditionalInfoObject } from '../Interfaces';
-const baseURL = 'http://localhost:3001';
+const baseURL = 'http://192.168.1.187:3001';
 
 
 const login = async (infoObject: InfoObject): Promise<any> => {

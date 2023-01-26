@@ -28,6 +28,7 @@ export interface TrackType {
   date: number;
   likes: number;
   _id: string;
+  liked_by: Array<string>;
 }
 
 export interface TrackListItemType {

@@ -42,7 +42,7 @@ export default function Profile() {
         <div className="flex flex-col justify-start mt-14 items-center content-start p-6">
           <div className="">
             <section className="flex flex-col justify-center items-center mt-3">
-              <ProfilePic path={currentUser.profile_pic_path} />
+              <ProfilePic path={currentUser.profile_pic_path} self={true} />
               <h1 className="text-white text-2xl mt-7 mb-1 font-bold inline-flex items-center content-center text-center gap-x-2 pr-3">
                 {currentUser.isPremium && <AiFillStar className={`text-2xl text-amber-400`} />}
                 {currentUser.name} 
@@ -83,7 +83,8 @@ export default function Profile() {
               }}
             >
               <span className=" text-white font-bold text-lg inline-flex items-center content-center text-center gap-x-2 pr-3">
-              <AiFillStar className='text-2xl' /> Get Premium
+              <AiFillStar className='text-2xl' /> 
+              <p>{currentUser.isPremium ? 'Extend Premium' : 'Get Premium'}</p>
               </span>
             </button>
             <div id="dangerous-button-containers" className="flex gap-6">

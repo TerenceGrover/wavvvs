@@ -23,7 +23,7 @@ export default function Profile() {
 
 
   useEffect(() => {
-    if (selectedUser === currentUser && username !== undefined) {
+    if (selectedUser === currentUser || selectedUser!.id === undefined || selectedUser!.username !== username) {
       getIndividualUser(username!).then(
         (res) => {
           if (res) {
@@ -39,16 +39,13 @@ export default function Profile() {
         setIsLoading(false);
       })
     }
-  }, [username]);
-
-  useEffect(() => {
     if (selectedUser.tracks && selectedUser.tracks.length > 0) {
       const buff: any[] = [...selectedUser.tracks];
       setTracksto3(buff.concat([1, 2, 3]).slice(0, 3));
     } else {
       setTracksto3([1, 2, 3]);
     }
-  }, []);
+  }, [selectedUser, username]);
 
   return (
     <div className="h-[105vh] w-screen">
@@ -57,7 +54,7 @@ export default function Profile() {
         <div className="flex flex-col justify-start mt-14 items-center content-start p-6">
           <div className="">
             <section className="flex flex-col justify-center items-center mt-3">
-              <ProfilePic path={selectedUser.profile_pic_path} />
+              <ProfilePic path={selectedUser.profile_pic_path} self={false } />
               <h1 className="text-white text-2xl mt-7 mb-1 font-bold inline-flex items-center content-center text-center gap-x-2 pr-3">
                 {selectedUser.isPremium && <AiFillStar className={`text-2xl text-amber-400`} />}
                 {selectedUser.name} 
