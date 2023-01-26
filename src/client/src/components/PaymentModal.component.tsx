@@ -34,10 +34,11 @@ export default function Payment(props : {money : Number}) {
       body: JSON.stringify({amount: props.money}),
     })
     .then(async (res : any) => {
-      const { client_secret } = await res.json();
-      setClientSecret(client_secret);
+      const {clientSecret} = await res.json();
+      console.log(clientSecret);
+      setClientSecret(clientSecret);
     });
-  })
+  }, [])
 
   return (
     <div>

@@ -32,8 +32,11 @@ const Track = __importStar(require("./controllers/Track.controller"));
 const User = __importStar(require("./controllers/User.controller"));
 const auth_1 = require("./middle-ware/auth");
 const fs_1 = __importDefault(require("fs"));
-const index_1 = require("./index");
-const { STRIPE_PUBLISHABLE_KEY } = process.env;
+const { STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY } = process.env;
+const stripe_1 = __importDefault(require("stripe"));
+const stripe = new stripe_1.default(STRIPE_SECRET_KEY, {
+    apiVersion: '2022-11-15',
+});
 const storage = multer_1.default.diskStorage({
     destination: (req, _, cb) => {
         const { username } = req.body;
@@ -65,7 +68,7 @@ router.get('/checkout', auth_1.auth, (req, res) => {
 router.post('/create-payment-intent', auth_1.auth, async (req, res) => {
     try {
         const { amount } = req.body;
-        const paymentIntent = await index_1.stripe.paymentIntents.create({
+        const paymentIntent = await stripe.paymentIntents.create({
             amount,
             currency: 'eur',
             automatic_payment_methods: {
