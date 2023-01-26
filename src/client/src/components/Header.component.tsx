@@ -7,7 +7,7 @@ import SearchBar from './SearchBar.component';
 import { Context } from '../Utils/Context';
 
 export default function Header() {
-  const { currentUser, mobile } = React.useContext(Context);
+  const { currentUser, mobile, setSelectedUser } = React.useContext(Context);
 
   const [search, setSearch] = React.useState(false);
   const [menu, setMenu] = React.useState(false);
@@ -43,7 +43,7 @@ export default function Header() {
             onClick={e => handleClick(e)}
             />
           }
-            <div className="mb-1">
+            <div className="mb-1" onClick={() => setSelectedUser(currentUser)}>
               <Link to="/">
                 <Logo />
               </Link>

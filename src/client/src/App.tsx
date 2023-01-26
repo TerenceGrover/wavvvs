@@ -16,6 +16,7 @@ import type { CurrentUser, TrackListItemType } from './Interfaces';
 import ProfilePage from './pages/ProfilePage';
 import { compressAndStoreFromUrl, parseJWT } from './Utils/functions';
 import { Context } from './Utils/Context';
+import OtherProfilePage from './pages/OtherProfilePage';
 
 export default function App() {
   const emptyUser: CurrentUser = {
@@ -221,6 +222,10 @@ export default function App() {
               <Route
                 path="/profile"
                 element={valid ? <ProfilePage /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/profile/*"
+                element={valid ? <OtherProfilePage /> : <Navigate to="/" />}
               />
             </Routes>
           ) : (

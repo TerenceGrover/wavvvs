@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { searchUsers } from '../apiService/api-service';
+import { Context } from '../Utils/Context';
 
 export default function SearchBar(props: {
   setSearch: (arg: boolean) => void;
 }) {
   const { setSearch } = props;
+  const { setSelectedUser } = React.useContext(Context);
   const [searchResponse, setSearchResponse] = React.useState([]);
 
   React.useEffect(() => {
@@ -35,25 +37,30 @@ export default function SearchBar(props: {
           className=" focus:outline-neutral-200 pr-3 pl-3 self-center justify-self-center w-[100%] rounded-md h-[100%] bg-neutral-600"
           onBlur={() => {
             setTimeout(() => {
-            setSearch(false);
+              setSearch(false);
             }, 100);
           }}
           onChange={(e) => handleSearch(e)}
         ></input>
       </div>
-      <div className="fixed top-10 bg-neutral-800 w-[15%] px-3 py-2">
+      <div className="fixed top-10 bg-neutral-800 w-[15%] min-w-[220px] px-3 py-2">
         {searchResponse.map((user: any) => {
           return (
-            <Link to={`/profile/${user.username}`} className="flex flex-row items-center content-center gap-x-4">
-              <img
-                src={user.profile_pic_path}
-                className="w-10 h-10 rounded-full"
-              />
-              <div className="flex flex-col">
-                <p className='font-semibold'>@{user.username}</p>
-                <p>{user.name}</p>
-              </div>
-            </Link>
+            <div onClick={() => setSelectedUser(user)}>
+              <Link
+                to={`/profile/${user.username}`}
+                className="flex flex-row items-center content-center gap-x-4"
+              >
+                <img
+                  src={user.profile_pic_path}
+                  className="w-10 h-10 rounded-full"
+                />
+                <div className="flex flex-col">
+                  <p className="font-semibold">@{user.username}</p>
+                  <p>{user.name}</p>
+                </div>
+              </Link>
+            </div>
           );
         })}
       </div>
