@@ -224,7 +224,7 @@ export default function App() {
                 element={valid ? <ProfilePage /> : <Navigate to="/" />}
               />
               <Route
-                path="/profile/*"
+                path="/profile/:username"
                 element={valid ? <OtherProfilePage /> : <Navigate to="/" />}
               />
             </Routes>

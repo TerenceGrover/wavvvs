@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from '../components/Header.component';
 import OtherProfile from '../components/OtherProfile.component';
 
 export default function ProfilePage() {
+
+
   return (
     <div id="profile-container">
-      <Header />
-      <OtherProfile />
+          <Header />
+          <OtherProfile />
     </div>
   );
 }

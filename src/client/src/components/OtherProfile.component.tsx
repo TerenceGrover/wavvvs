@@ -7,26 +7,41 @@ import React from 'react';
 import Logo from './Logo.component';
 import { Context } from '../Utils/Context';
 import DeleteAccount from './DeleteAccount.component';
-import Payment from './PaymentModal.component';
 import { AiFillStar } from 'react-icons/ai';
 import { getIndividualUser } from '../apiService/api-service';
 import EmptyTrack from './EmptyTrack.component';
+import { useParams } from 'react-router-dom';
+
 
 export default function Profile() {
-  const { trackList, selectedUser, setSelectedUser } = React.useContext(Context);
+  const { trackList, selectedUser, setSelectedUser , currentUser} = React.useContext(Context);
 
   const [tracksto3, setTracksto3] = useState([1, 2, 3]);
   const [isLoading, setIsLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const { username } = useParams<{ username: string }>();
+
 
   useEffect(() => {
-    if (selectedUser !== undefined) {
+    if (selectedUser === currentUser && username !== undefined) {
+      getIndividualUser(username!).then(
+        (res) => {
+          if (res) {
+            setSelectedUser(res);
+            setIsLoading(false);
+          }
+        }
+      )
+    } else {
       getIndividualUser(selectedUser!.id!)
-        .then((res) => {
-          setSelectedUser(res);
-          setIsLoading(false);
-        })
+      .then((res) => {
+        setSelectedUser(res);
+        setIsLoading(false);
+      })
     }
+  }, [username]);
+
+  useEffect(() => {
     if (selectedUser.tracks && selectedUser.tracks.length > 0) {
       const buff: any[] = [...selectedUser.tracks];
       setTracksto3(buff.concat([1, 2, 3]).slice(0, 3));
