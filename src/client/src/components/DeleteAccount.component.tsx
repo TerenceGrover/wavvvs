@@ -1,9 +1,7 @@
 import React, { Fragment } from 'react';
-import { Context } from '../Utils/Context';
 import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { deleteAccount } from '../apiService/api-service';
-import { parseJWT } from '../Utils/functions';
 
 
 export default function DeleteAccount(props: {
@@ -121,11 +119,6 @@ export default function DeleteAccount(props: {
                   >
                     Cancel
                   </button>
-                  {/* {thereIsAnError && (
-                    <p className="text-neutral-500 text-xs italic mr-7 mt-4">
-                      An error ocurred, please try again later
-                    </p>
-                  )} */}
                 </div>
               </Dialog.Panel>
             </Transition.Child>

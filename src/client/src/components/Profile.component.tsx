@@ -36,7 +36,7 @@ export default function Profile() {
 
   return (
     <div className="h-[120vh] w-screen">
-      {payment && <Payment money={12} />}
+      {payment && <Payment money={12} setPayment={setPayment} payment={payment} />}
       <DeleteAccount setOpen={setOpen} open={open} />
       {!isLoading ? (
         <div className="flex flex-col justify-start mt-14 items-center content-start p-6">
