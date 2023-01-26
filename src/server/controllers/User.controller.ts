@@ -123,8 +123,11 @@ const updateOne = async (req: Request, res: Response) => {
 const getAnotherUser = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
+    let userToFind: any;
+    if(id.length >= 24) {
+      userToFind = await User.findOne({ _id: id });
+    }
     // here first i search in the db dearching for the id
-    let userToFind = await User.findOne({ _id: id });
     // if i dont get anything, i try with username.
     if (!userToFind) {
       userToFind = await User.findOne({ username: id });
