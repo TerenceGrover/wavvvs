@@ -3,18 +3,17 @@ import type { CurrentUser } from '../Interfaces';
 
 export default function UserIcon(props: { user: CurrentUser }) {
   const { user } = props;
-  const { username, profile_pic_path } = user;
-
-  console.log(username)
+  const { username, profile_pic_path, name } = user;
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center p-4 py-6 bg-neutral-800 drop-shadow-md shadow-black rounded-2xl flex-col gap-y-3">
       <img
         className="h-8 w-8 rounded-full"
         src={profile_pic_path}
         alt={username}
       />
-      <p className="ml-2 text-sm font-medium text-white">{username}</p>
+      <p className="text-sm font-medium text-neutral-200">{'@'+username}</p>
+      <p className="text-xs font-sm text-neutral-100">{name}</p>
     </div>
   );
 }

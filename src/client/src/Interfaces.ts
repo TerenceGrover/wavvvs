@@ -17,7 +17,7 @@ export interface CurrentUser {
   isPremium: boolean;
   isPrivate: boolean;
   followers: Array<string>;
-  NumberOffollowers: number;
+  numberOfFollowers: number;
 }
 
 export interface TrackType {

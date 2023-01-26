@@ -119,14 +119,15 @@ const deleteTrack = async (id: string) => {
   }
 };
 
-const getAllUsers = async () => {
+const getAllUsers = async (sort : string) => {
   try {
-    return fetch(baseURL + `/users`, {
-      method: 'GET',
+    return fetch(baseURL + `/users/all`, {
+      method: 'POST',
       headers: {
         'Content-type': 'Application/json',
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       },
+      body : JSON.stringify({sort})
     }).then((res) => res.json());
   } catch (error) {
     console.log({ error });
@@ -218,6 +219,21 @@ const likeTrack = async (id: string) => {
   }
 };
 
+const searchUsers = async (search : string) => {
+  try {
+    return fetch(baseURL + `/search/${search}`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'Application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      }
+    }).then((res) => res.json());
+  } catch (error) {
+    console.log({ error });
+    return error;
+  }
+};
+
 export {
   postTrack,
   deleteTrack,
@@ -230,5 +246,6 @@ export {
   getAllTracks,
   getIndividualUser,
   followUser,
-  likeTrack
+  likeTrack,
+  searchUsers,
 };

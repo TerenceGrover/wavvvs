@@ -11,7 +11,7 @@ export default function SideBarButton(props: { icon: JSX.Element, text: string }
         <button onClick={() => setCentralHome(props.text)}>
           {props.icon}
         </button>
-        <span>{props.text}</span>
+        <span className='text-white font-semibold mt-1'>{props.text}</span>
     </div>
   );
 }
