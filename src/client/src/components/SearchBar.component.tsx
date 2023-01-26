@@ -7,7 +7,6 @@ export default function SearchBar(props: {
   setSearch: (arg: boolean) => void;
 }) {
   const { setSearch } = props;
-  const { setSelectedUser } = React.useContext(Context);
   const [searchResponse, setSearchResponse] = React.useState([]);
 
   React.useEffect(() => {
@@ -46,7 +45,6 @@ export default function SearchBar(props: {
       <div className="fixed top-10 bg-neutral-800 w-[15%] min-w-[220px] px-3 py-2">
         {searchResponse.map((user: any) => {
           return (
-            <div onClick={() => setSelectedUser(user)}>
               <Link
                 to={`/profile/${user.username}`}
                 className="flex flex-row items-center content-center gap-x-4"
@@ -60,7 +58,6 @@ export default function SearchBar(props: {
                   <p>{user.name}</p>
                 </div>
               </Link>
-            </div>
           );
         })}
       </div>

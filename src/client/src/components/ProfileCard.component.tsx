@@ -2,6 +2,7 @@ import React from 'react';
 import { Context } from '../Utils/Context';
 import FollowButton from './FollowButton.component';
 import { AiFillStar } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
 
 export default function ProfileCard() {
   const { selectedUser } = React.useContext(Context);
@@ -9,11 +10,13 @@ export default function ProfileCard() {
   return (
     <div className="place-self-start flex flex-col max-w-[275px] min-w-[175px] w-[80%] h-[60%] bg-neutral-800 shadow-sm shadow-black self-center justify-around items-center py-[10%] rounded-xl">
       <div className="flex flex-col items-center">
-        <img
-          className="w-24 h-24 rounded-2xl"
-          src={selectedUser.profile_pic_path}
-          alt="Profile"
-        />
+        <Link to={`/profile/${selectedUser.username}`}>
+          <img
+            className="w-24 h-24 rounded-2xl"
+            src={selectedUser.profile_pic_path}
+            alt="Profile"
+            />
+        </Link>
         <span className="text-neutral-200 text-xl">
           {'@' + selectedUser.username}
         </span>

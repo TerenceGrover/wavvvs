@@ -4,11 +4,13 @@ import { TbDotsVertical } from 'react-icons/tb';
 import { uploadProfilePic } from '../Utils/functions';
 import { Context } from '../Utils/Context';
 
-const ProfilePic = (props: { path: string }) => {
+const ProfilePic = (props: { path: string, self: boolean }) => {
   const [isHovering, setIsHovering] = useState(false);
   const [editing, setEditing] = useState(false);
 
-  const { currentUser } = React.useContext(Context);
+  const { currentUser, selectedUser } = React.useContext(Context);
+
+  const user = props.self ? currentUser : selectedUser;
 
   const handleUpload = (e: any) => {
     const file = e.target.files[0];
@@ -60,7 +62,7 @@ const ProfilePic = (props: { path: string }) => {
       )}
       <img
         className={`${
-          currentUser.isPremium ? 'shadow-[0_0px_35px_-7px_rgba(0,0,0,0.25)] shadow-amber-300' : ''
+          user.isPremium ? 'shadow-[0_0px_35px_-7px_rgba(0,0,0,0.25)] shadow-amber-300' : ''
         } relative right-5 w-60 h-60 rounded-2xl object-cover`}
         src={props.path}
         alt=""

@@ -61,8 +61,9 @@ export default function CheckoutForm(props : {clientSecret : string}) {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: "http://localhost:3000",
+        return_url: window.location.origin + '/payment-complete',
       },
+      redirect : 'always'
     });
 
     // This point will only be reached if there is an immediate error when
@@ -84,15 +85,17 @@ export default function CheckoutForm(props : {clientSecret : string}) {
   }
 
   return (
-    <form id="payment-form" onSubmit={handleSubmit}>
+    <form id="payment-form" onSubmit={handleSubmit} className='bg-neutral-100 p-6 rounded-2xl'>
       <LinkAuthenticationElement
         id="link-authentication-element"
         onChange={(e : any) => setEmail(e.target.value)}
       />
       <PaymentElement id="payment-element" options={paymentElementOptions} />
-      <button disabled={isLoading || !stripe || !elements} id="submit">
-        <span id="button-text">
-          {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
+      <button disabled={isLoading || !stripe || !elements} id="submit" className="bg-amber-500 py-2 px-4 rounded-xl mt-6  ml-[32%]">
+        <span id="button-text" className="text-white font-bold">
+          {isLoading ? <div className="spinner" id="spinner"></div> 
+          : 
+          "9.99€ | 1 Year"}
         </span>
       </button>
       {/* Show any error or success messages */}

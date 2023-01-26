@@ -23,7 +23,7 @@ export default function Track(props: {
 
   const waveformRef: any = useRef('waveform');
 
-  const { path, title, date, uploaded_by } = props.trackMetaData;
+  const { path, title, date, uploaded_by, liked_by } = props.trackMetaData;
   const hoursUntilDeletion = (-millisecondsToHours(Number(Date.now() - date)) + 24);
 
   useEffect(() => {
@@ -59,6 +59,12 @@ export default function Track(props: {
       ...tracks,
       { waveformRef, isPlaying: false, isActive: false, isFinished: false },
     ]);
+
+    liked_by.forEach((user) => {
+      if (user === currentUser._id) {
+        setLiked(true);
+      }
+    });
     
     return () => {
       // clean up function
@@ -78,6 +84,7 @@ export default function Track(props: {
       // destroy the instance
       wavesurfer.destroy();
     };
+
   }, [path, setTrackList]);
   
   useEffect(() => {
@@ -119,7 +126,7 @@ export default function Track(props: {
           setSelectedUser(res);
         })};
       }}
-      className={`${mobile ? "min-w-full" : "min-w-[50%]"} max-w-full px-2 rounded-md h-16 mb-10` + (soonDeleted ? " bg-red-600 bg-opacity-50" : "")}
+      className={`${mobile ? "min-w-full" : "min-w-[50%]"} max-w-full px-2 rounded-md h-16 mb-10 pt-1` + (soonDeleted ? " bg-red-600 bg-opacity-10" : "")}
     >
       <DeleteWarningModal setOpen={setOpen} open={open} track={props.track!} />
       <div className=" relative flex justify-between w-full">
@@ -161,7 +168,7 @@ export default function Track(props: {
           {liked 
           ?
           <BsFillSuitHeartFill 
-          className='text-pink-800 text-lg hover:cursor-pointer'
+          className='text-pink-500 text-lg hover:cursor-pointer'
           />
           :
           <BsSuitHeart 
@@ -170,7 +177,7 @@ export default function Track(props: {
           />
         }
         </button>
-        <span className='text-xs pl-2 text-neutral-600'>{props.trackMetaData.likes + (liked ? 1 : 0)}</span>
+        <span className='text-xs pl-2 text-neutral-600'>{props.trackMetaData.likes}</span>
       </div>
     </div>
   );

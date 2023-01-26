@@ -17,6 +17,7 @@ import ProfilePage from './pages/ProfilePage';
 import { compressAndStoreFromUrl, parseJWT } from './Utils/functions';
 import { Context } from './Utils/Context';
 import OtherProfilePage from './pages/OtherProfilePage';
+import PaymentComplete from './pages/PaymentComplete';
 
 export default function App() {
   const emptyUser: CurrentUser = {
@@ -221,11 +222,19 @@ export default function App() {
 
               <Route
                 path="/profile"
-                element={valid ? <ProfilePage /> : <Navigate to="/" />}
-              />
-              <Route
-                path="/profile/*"
+              >
+                <Route
+                path=":username"
                 element={valid ? <OtherProfilePage /> : <Navigate to="/" />}
+                />
+                <Route
+                  index 
+                  element={valid ? <ProfilePage /> : <Navigate to="/" />}
+                />
+              </Route>
+              <Route
+                path="/payment-complete"
+                element={valid ? <PaymentComplete /> : <Navigate to="/" />}
               />
             </Routes>
           ) : (

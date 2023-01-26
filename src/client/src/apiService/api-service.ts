@@ -1,5 +1,5 @@
 import type { InfoObject, AdditionalInfoObject } from '../Interfaces';
-const baseURL = 'http://localhost:3001';
+const baseURL = 'http://192.168.1.187:3001';
 
 
 const login = async (infoObject: InfoObject): Promise<any> => {
@@ -234,6 +234,22 @@ const searchUsers = async (search : string) => {
   }
 };
 
+const buyPremium = async () => {
+  try {
+    return fetch(baseURL + `/premium`, {
+      method: 'PUT',
+      headers: {
+        'Content-type': 'Application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+      body : JSON.stringify({duration : 12})
+    }).then((res) => res.status);
+  } catch (error) {
+    console.log({ error });
+    return error;
+  }
+};
+
 export {
   postTrack,
   deleteTrack,
@@ -248,4 +264,5 @@ export {
   followUser,
   likeTrack,
   searchUsers,
+  buyPremium
 };

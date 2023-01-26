@@ -7,25 +7,37 @@ import React from 'react';
 import Logo from './Logo.component';
 import { Context } from '../Utils/Context';
 import DeleteAccount from './DeleteAccount.component';
-import Payment from './PaymentModal.component';
 import { AiFillStar } from 'react-icons/ai';
 import { getIndividualUser } from '../apiService/api-service';
 import EmptyTrack from './EmptyTrack.component';
+import { useParams } from 'react-router-dom';
+
 
 export default function Profile() {
-  const { trackList, selectedUser, setSelectedUser } = React.useContext(Context);
+  const { trackList, selectedUser, setSelectedUser , currentUser} = React.useContext(Context);
 
   const [tracksto3, setTracksto3] = useState([1, 2, 3]);
   const [isLoading, setIsLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const { username } = useParams<{ username: string }>();
+
 
   useEffect(() => {
-    if (selectedUser !== undefined) {
+    if (selectedUser === currentUser || selectedUser!.id === undefined || selectedUser!.username !== username) {
+      getIndividualUser(username!).then(
+        (res) => {
+          if (res) {
+            setSelectedUser(res);
+            setIsLoading(false);
+          }
+        }
+      )
+    } else {
       getIndividualUser(selectedUser!.id!)
-        .then((res) => {
-          setSelectedUser(res);
-          setIsLoading(false);
-        })
+      .then((res) => {
+        setSelectedUser(res);
+        setIsLoading(false);
+      })
     }
     if (selectedUser.tracks && selectedUser.tracks.length > 0) {
       const buff: any[] = [...selectedUser.tracks];
@@ -33,7 +45,7 @@ export default function Profile() {
     } else {
       setTracksto3([1, 2, 3]);
     }
-  }, []);
+  }, [selectedUser, username]);
 
   return (
     <div className="h-[105vh] w-screen">
@@ -42,7 +54,7 @@ export default function Profile() {
         <div className="flex flex-col justify-start mt-14 items-center content-start p-6">
           <div className="">
             <section className="flex flex-col justify-center items-center mt-3">
-              <ProfilePic path={selectedUser.profile_pic_path} />
+              <ProfilePic path={selectedUser.profile_pic_path} self={false } />
               <h1 className="text-white text-2xl mt-7 mb-1 font-bold inline-flex items-center content-center text-center gap-x-2 pr-3">
                 {selectedUser.isPremium && <AiFillStar className={`text-2xl text-amber-400`} />}
                 {selectedUser.name} 
