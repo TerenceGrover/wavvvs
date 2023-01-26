@@ -18,7 +18,6 @@ import { compressAndStoreFromUrl, parseJWT } from './Utils/functions';
 import { Context } from './Utils/Context';
 
 export default function App() {
-
   const emptyUser: CurrentUser = {
     username: '',
     _v: 0,
@@ -34,7 +33,7 @@ export default function App() {
     isPrivate: false,
     followers: [],
     numberOfFollowers: 0,
-  }
+  };
 
   const [mobile, setMobile] = React.useState(false);
   const [valid, setValid] = React.useState(false);
@@ -44,7 +43,8 @@ export default function App() {
   const [trackList, setTrackList] = React.useState<TrackListItemType[]>([]);
   const [isAudioMuted, setIsAudioMuted] = React.useState(false);
   const [repeat, setRepeat] = React.useState(false);
-  const [selectedUser, setSelectedUser] = React.useState<CurrentUser>(emptyUser);
+  const [selectedUser, setSelectedUser] =
+    React.useState<CurrentUser>(emptyUser);
   const [currentUser, setCurrentUser] = React.useState<CurrentUser>(emptyUser);
 
   React.useEffect(() => {
@@ -142,7 +142,19 @@ export default function App() {
   }, [valid]);
 
   React.useEffect(() => {
-    if (localStorage.getItem('token') === null || localStorage.getItem('token') === undefined) {
+    checkUser().then((res: CurrentUser) => {
+      if (res) {
+        setCurrentUser(res);
+        setSelectedUser(res);
+      }
+    });
+  }, [isNewUser]);
+
+  React.useEffect(() => {
+    if (
+      localStorage.getItem('token') === null ||
+      localStorage.getItem('token') === undefined
+    ) {
       console.log('no token');
       setIsAuth(false);
       setLoading(false);
@@ -208,13 +220,7 @@ export default function App() {
 
               <Route
                 path="/profile"
-                element={
-                  valid ? (
-                    <ProfilePage />
-                  ) : (
-                    <Navigate to="/" />
-                  )
-                }
+                element={valid ? <ProfilePage /> : <Navigate to="/" />}
               />
             </Routes>
           ) : (
