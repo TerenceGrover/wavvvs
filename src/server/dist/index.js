@@ -26,7 +26,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.stripe = void 0;
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const express_1 = __importDefault(require("express"));
@@ -35,7 +34,6 @@ const router_1 = __importDefault(require("./router"));
 const index_1 = __importDefault(require("./models/index"));
 const cronJob_1 = require("./cronJob");
 const { PORT, HOST_NAME, STRIPE_SECRET_KEY } = process.env;
-exports.stripe = require('stripe')(STRIPE_SECRET_KEY);
 const app = (0, express_1.default)();
 (async function () {
     try {
