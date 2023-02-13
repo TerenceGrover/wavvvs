@@ -14,7 +14,6 @@ export default function CentralHome() {
   React.useEffect(() => {
     let sort = centralHome === 'Home' ? '' : centralHome === 'Soon' ? 'date' : centralHome === 'Top' ? 'likes' : '';
     getAllTracks(sort).then((res) => {
-      console.log(res)
       if (res !== homeTracks && res.length > 0){
         setHomeTracks(res);
       }

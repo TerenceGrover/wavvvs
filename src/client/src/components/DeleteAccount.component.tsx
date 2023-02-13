@@ -21,7 +21,6 @@ export default function DeleteAccount(props: {
   }, [props.open]);
 
   const checkIfPasswordIsCorrect = (password: string) => {
-    console.log('clicked')
     deleteAccount(password).then(
       (response) => {
         if(response === 401) {

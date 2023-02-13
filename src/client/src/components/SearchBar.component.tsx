@@ -11,7 +11,6 @@ export default function SearchBar(props: {
 
   React.useEffect(() => {
     if (searchResponse.length > 0) {
-      console.log(searchResponse);
     }
   }, [searchResponse]);
 

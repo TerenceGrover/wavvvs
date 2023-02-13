@@ -35,7 +35,6 @@ const UserForm = () => {
 
     if (clicked === 'login') {
         login(info).then((res) => {
-          console.log(res)
           if (res.token) {
             setCurrentUser(res);
             if (res.user.isNewUser === true) {
@@ -54,7 +53,6 @@ const UserForm = () => {
     if (clicked === 'register') {
       register(info).then((res) => {
         if (res) {
-          console.log(res);
           setClicked('login');
         } else {
           alert('User already exists');

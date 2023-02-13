@@ -19,6 +19,7 @@ const getAllTracks = async (req, res) => {
                 title: track.title,
                 size: track.size,
                 date: track.date,
+                liked_by: track.liked_by,
                 likes: track.liked_by.length,
                 uploaded_by: track.uploaded_by,
             });

@@ -20,7 +20,6 @@ export default function Profile() {
 
   useEffect(() => {
     if (currentUser) {
-      console.log(currentUser);
       setIsLoading(false);
     }
   }, [currentUser]);

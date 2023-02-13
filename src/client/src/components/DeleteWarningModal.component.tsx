@@ -18,7 +18,6 @@ export default function DeleteWarningModal(props: {
 
   
   const handleDeleteInModal = async () => {
-    console.log('delete',props.track)
     const selectedtrack = currentUser.tracks.find(
       (track) => track.path === props.track.waveformRef.id
     );

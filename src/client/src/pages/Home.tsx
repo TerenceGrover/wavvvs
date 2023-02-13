@@ -11,10 +11,14 @@ import { Context } from '../Utils/Context';
 import { HomeContext } from '../Utils/Context';
 
 function Home() {
-  const { currentUser, setCurrentUser, mobile } = React.useContext(Context);
+  const { currentUser, setCurrentUser, mobile , setSelectedUser} = React.useContext(Context);
 
   const [isLoading, setIsLoading] = useState(true);
   const [centralHome, setCentralHome] = useState('Home');
+
+  React.useEffect(() => {
+    setSelectedUser(currentUser)
+  }, [])
 
   React.useEffect(() => {
     if (currentUser.name) return setIsLoading(false);
@@ -27,8 +31,6 @@ function Home() {
       });
     }, 1000);
   }, [currentUser.name, setCurrentUser]);
-
-  //TODO : Conditional rendering based on user's device size with mobile context provider
 
   return (
     <div id="home-wrapper">

@@ -17,12 +17,10 @@ export default function UploadTrack() {
       e.preventDefault();
       if (selectedFile) {
         const name = selectedFile.name.replace(/\.[^/.]+$/, "");
-        console.log(selectedFile)
         // Wait for the uploadTrack function to return the url of the uploaded file
         uploadTrack(selectedFile).then((res) => {
           postTrack(res.url, name);
           checkUser().then((res) => {
-            console.log(res)
             setCurrentUser(res);
           });
         });

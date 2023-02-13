@@ -40,10 +40,8 @@ export default function CreateUser() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(bio, name);
     if (path_pre_upload && name && bio) {
       uploadProfilePic(path_pre_upload).then((res) => {
-        console.log(res.url);
         updateUser({ name, bio, profile_pic_path: res.url });
       });
       setIsNewUser(false);

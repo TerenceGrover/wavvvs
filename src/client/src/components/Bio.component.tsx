@@ -43,7 +43,6 @@ const Bio = (props: { bio: string }) => {
           onBlur={(e) => {
             setediting(false);
             const input = e.target as HTMLInputElement;
-            console.log(input.innerText);
             setBio(input.innerText);
           }}
           suppressContentEditableWarning={true}
